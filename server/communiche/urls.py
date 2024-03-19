@@ -21,4 +21,5 @@ from communiche import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/', views.user_list),
+    path('users/<int:id>/', views.user_detail, name='user-detail'),
 ]
