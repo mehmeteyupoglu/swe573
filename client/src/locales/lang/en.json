@@ -1,29 +1,94 @@
 {
     "application": {
-        "featuresExplanation": "Communiche makes meal planning easy with features like weekly menu creation, kitchen ingredient tracking, meal and diet monitoring. Additionally, it provides instant menu suggestions based on your kitchen supplies to quickly decide your dinner. 🍽️🚀",
+        "featuresExplanation": "Communicate, create and join communities, and connect with other friends in your interest area. ",
         "terms_conditions": "Terms & Conditions",
-        "privacy_policy": "Privacy Policy"
+        "privacy_policy": "Privacy Policy",
+        "select": {
+            "placeholder": "Select"
+        },
+        "user": {
+            "firstName": "First Name",
+            "lastName": "Last Name",
+            "email": "Email",
+            "phone": "Phone Number",
+            "gender": "Gender",
+            "avatar": "Photo",
+            "username": "Username"
+        },
+        "email": "Email"
     },
     "nav": {
         "home": "Home",
-        "singleMenuItem": "Single Menu Item...",
+        "singleMenuItem": "Create Menu",
         "collapseMenu": {
-            "collapseMenu": "Collapse Menu Item",
-            "item1": "Collapse Menu Item 1",
-            "item2": "Collapse Menu Item 2"
+            "collapseMenu": "Collapse menu item",
+            "item1": "Collapse menu item 1",
+            "item2": "Collapse menu item 2"
         },
         "groupMenu": {
-            "groupMenu": "Group Menu",
-            "single": "Group Single Menu Item",
+            "groupMenu": "Group menu",
+            "single": "Group single menu item",
             "collapse": {
-                "collapse": "Group Collapse Menu",
-                "item1": "Group Collapse Menu Item 1",
-                "item2": "Group Collapse Menu Item 2"
+                "collapse": "Group collapse menu",
+                "item1": "Group collapse menu item 1",
+                "item2": "Group collapse menu item 2"
             }
         },
         "profile": "Profile",
-        "settings": "Account Settings",
-        "signOut": "Sign Out"
+        "meals": "Meals",
+        "ingredients": "Ingredients",
+        "settings": "Settings",
+        "signOut": "Sign Out",
+        "password": "Password Settings"
+    },
+    "settings": {
+        "title": "General",
+        "description": "Basic information like your name, address",
+        "profile": {
+            "title": "My Account",
+            "updateMessage": {
+                "success": "Information updated successfully",
+                "error": "Update failed"
+            },
+            "genders": {
+                "Male": "Male",
+                "Female": "Female",
+                "Other": "Other"
+            },
+            "buttons": {
+                "update": "Update",
+                "reset": "Reset",
+                "updating": "Updating"
+            }
+        },
+        "meals": {
+            "title": "My Meals"
+        },
+        "ingredients": {
+            "title": "My Ingredients"
+        },
+        "password": {
+            "title": "Password"
+        }
+    },
+    "signUp": {
+        "credentials": "Please enter your credentials to sign in!",
+        "username": "Username",
+        "email": "Email",
+        "password": "Password",
+        "rememberMe": "Remember Me",
+        "forgotPassword": "Forgot password?",
+        "signUpMessage": "And let's start your free trial ",
+        "createAccount": "Creating account...",
+        "haveAccount": "Already have an account?",
+        "errors": {
+            "username": "Please enter your username",
+            "password": "Please enter your password",
+            "failedSignIn": "Invalid email or password!",
+            "invalidEmail": "Invalid email",
+            "email": "Please enter your email address",
+            "confirmPassword": "Passwords do not match"
+        }
     },
     "signIn": {
         "welcomeMessage": "Welcome back!",
@@ -31,10 +96,11 @@
         "username": "Username",
         "email": "Email",
         "password": "Password",
+        "confirmPassword": "Confirm Password",
         "rememberMe": "Remember Me",
-        "forgotPassword": "Forgot your password?",
+        "forgotPassword": "Forgot password?",
         "signIn": "Sign In",
-        "signingIn": "Signing In",
+        "signingIn": "Signing in...",
         "noAccountYet": "Don't have an account yet?",
         "signUp": "Sign Up",
         "errors": {
@@ -47,8 +113,11 @@
         "title": "Forgot Password",
         "message": "Please enter your email address to receive a verification code",
         "buttonTitle": "Send Email",
-        "back": "Back to",
-        "successMessage": "Please enter your email address to receive a verification code"
+        "back": "",
+        "checkEmail": "Check your email",
+        "successMessage": "Verification code sent to email address",
+        "send": "Send",
+        "resend": "Resend"
     },
     "footer": {
         "copyright": "{{year}} All rights reserved."

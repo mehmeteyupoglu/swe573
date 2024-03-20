@@ -13,7 +13,7 @@ const appConfig: AppConfig = {
     authenticatedEntryPath: '/home',
     unAuthenticatedEntryPath: '/sign-in',
     tourPath: '/',
-    locale: 'tr',
+    locale: 'en',
     enableMock: false,
     url: 'http://127.0.0.1:8000/',
 }
