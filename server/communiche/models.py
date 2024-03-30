@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.hashers import check_password
 
 # JSON representation of User model
 """
@@ -19,12 +20,24 @@ class User(models.Model):
     firstname = models.CharField(max_length=200)  # Required
     lastname = models.CharField(max_length=200)  # Required
     username = models.CharField(max_length=50)  # Required
-    password = models.CharField(max_length=50)  # Required
+    password = models.CharField(max_length=128)  # Required
     email = models.CharField(max_length=200, null=True)
     dob = models.DateTimeField(null=True)
     country = models.CharField(max_length=200, null=True)
     phone = models.CharField(max_length=20, null=True)
     short_bio = models.CharField(max_length=600, null=True)
+
+    def check_password(self, raw_password):
+            """
+            Checks if the provided raw password matches the hashed password stored in the model.
+
+            Args:
+                raw_password (str): The raw password to be checked.
+
+            Returns:
+                bool: True if the raw password matches the hashed password, False otherwise.
+            """
+            return check_password(raw_password, self.password)
 
 class Community(models.Model):
     name = models.CharField(max_length=200)
