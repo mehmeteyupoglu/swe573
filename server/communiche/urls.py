@@ -22,4 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/', views.user_list),
     path('users/<int:id>/', views.user_detail, name='user-detail'),
+    path('communities/', views.community_list),
+    path('communities/<int:pk>/', views.community_list, name='community-detail'),  # Use pk instead of id for clarity
 ]
