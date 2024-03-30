@@ -4,6 +4,9 @@ from .serializers import UserSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
+from django.contrib.auth.hashers import make_password
+import jwt
+from datetime import datetime, timedelta
 
 @api_view(['GET', 'POST'])
 def user_list(request):
@@ -51,3 +54,50 @@ def user_detail(request, id):
     elif request.method == 'DELETE':
         user.delete()
         return Response('No content', status=status.HTTP_204_NO_CONTENT)
+    
+@api_view(['POST'])
+def signup(request):
+    data = request.data.copy()
+    username = data.get('username')
+    email = data.get('email')
+    
+    # Check if username or email is already registered
+    if User.objects.filter(username=username).exists():
+        return Response({'error': 'Username already registered'}, status=status.HTTP_400_BAD_REQUEST)
+    if User.objects.filter(email=email).exists():
+        return Response({'error': 'Email already registered'}, status=status.HTTP_400_BAD_REQUEST)
+    
+    data['password'] = make_password(data['password'])
+    serializer = UserSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save()
+        # Exclude the password field from the serialized data
+        serialized_data = serializer.data.copy()
+        serialized_data.pop('password', None)
+        return Response(serialized_data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+def login(request):
+    data = request.data.copy()
+    username = data.get('username')
+    password = data.get('password')
+    
+    try:
+        user = User.objects.get(username=username)
+    except User.DoesNotExist:
+        return Response({'error': 'Invalid username'}, status=status.HTTP_400_BAD_REQUEST)
+    
+    if not user.check_password(password):
+        return Response({'error': 'Invalid password'}, status=status.HTTP_400_BAD_REQUEST)
+    
+    serializer = UserSerializer(user)
+    # Exclude the password field from the serialized data
+    serialized_data = serializer.data.copy()
+    serialized_data.pop('password', None)
+    
+    # Generate JWT token
+    token = jwt.encode({'user_id': user.id, 'exp': datetime.utcnow() + timedelta(hours=1)}, 'secret_key')
+    
+    return Response({'token': token, 'user': serialized_data}, status=status.HTTP_200_OK)

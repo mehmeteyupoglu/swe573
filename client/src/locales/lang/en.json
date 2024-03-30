@@ -87,7 +87,24 @@
             "failedSignIn": "Invalid email or password!",
             "invalidEmail": "Invalid email",
             "email": "Please enter your email address",
-            "confirmPassword": "Passwords do not match"
+            "confirmPassword": "Passwords do not match",
+            "firstname": "Please enter your firstname",
+            "lastname": "Please enter your lastname",
+            "dob": "Please enter your date of birth",
+            "country": "Please enter your country",
+            "phone": "Please enter your phone number",
+            "shortBio": "Please enter your short bio"
+        },
+        "placeholders": {
+            "firstname": "First Name",
+            "lastname": "Last Name",
+            "username": "Username",
+            "password": "Password",
+            "email": "Email",
+            "dob": "Date of Birth",
+            "country": "Country",
+            "phone": "Phone Number",
+            "short_bio": "Short Bio"
         }
     },
     "signIn": {
