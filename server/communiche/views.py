@@ -56,6 +56,15 @@ def user_detail(request, id):
 @api_view(['POST'])
 def signup(request):
     data = request.data.copy()
+    username = data.get('username')
+    email = data.get('email')
+    
+    # Check if username or email is already registered
+    if User.objects.filter(username=username).exists():
+        return Response({'error': 'Username already registered'}, status=status.HTTP_400_BAD_REQUEST)
+    if User.objects.filter(email=email).exists():
+        return Response({'error': 'Email already registered'}, status=status.HTTP_400_BAD_REQUEST)
+    
     data['password'] = make_password(data['password'])
     serializer = UserSerializer(data=data)
     if serializer.is_valid():
