@@ -1,10 +1,25 @@
 from django.db import models
 
+# JSON representation of User model
+"""
+{
+    "firstname": "string",  # Required
+    "lastname": "string",  # Required
+    "username": "string",  # Required
+    "password": "string",  # Required
+    "email": "string",
+    "dob": "string",
+    "country": "string",
+    "phone": "string",
+    "short_bio": "string"
+}
+"""
+
 class User(models.Model):
-    firstname = models.CharField(max_length=200)
-    lastname = models.CharField(max_length=200)
-    username = models.CharField(max_length=50)
-    password = models.CharField(max_length=50)
+    firstname = models.CharField(max_length=200)  # Required
+    lastname = models.CharField(max_length=200)  # Required
+    username = models.CharField(max_length=50)  # Required
+    password = models.CharField(max_length=50)  # Required
     email = models.CharField(max_length=200, null=True)
     dob = models.DateTimeField(null=True)
     country = models.CharField(max_length=200, null=True)

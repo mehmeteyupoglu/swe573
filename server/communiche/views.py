@@ -4,6 +4,7 @@ from .serializers import UserSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
+from django.contrib.auth.hashers import make_password
 
 @api_view(['GET', 'POST'])
 def user_list(request):
@@ -54,7 +55,9 @@ def user_detail(request, id):
     
 @api_view(['POST'])
 def signup(request):
-    serializer = UserSerializer(data=request.data)
+    data = request.data.copy()
+    data['password'] = make_password(data['password'])
+    serializer = UserSerializer(data=data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
