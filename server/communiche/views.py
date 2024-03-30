@@ -53,7 +53,7 @@ def user_detail(request, id):
         return Response('No content', status=status.HTTP_204_NO_CONTENT)
     
 @api_view(['POST'])
-def register(request):
+def signup(request):
     serializer = UserSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
