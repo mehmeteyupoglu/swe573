@@ -5,6 +5,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.hashers import make_password
+import jwt
+from datetime import datetime, timedelta
 
 @api_view(['GET', 'POST'])
 def user_list(request):
@@ -95,4 +97,7 @@ def login(request):
     serialized_data = serializer.data.copy()
     serialized_data.pop('password', None)
     
-    return Response(serialized_data, status=status.HTTP_200_OK)
+    # Generate JWT token
+    token = jwt.encode({'user_id': user.id, 'exp': datetime.utcnow() + timedelta(hours=1)}, 'secret_key')
+    
+    return Response({'token': token, 'user': serialized_data}, status=status.HTTP_200_OK)
