@@ -16,5 +16,5 @@ class Community(models.Model):
     description = models.CharField(max_length=600)
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField()
-    isPublic = models.BooleanField(default=False, null=True)
-    reputationRating = models.DecimalField(max_digits=10, decimal_places=1, default=0, null=True)
+    is_public = models.BooleanField(default=False, null=True)
+    reputation_rating = models.DecimalField(max_digits=10, decimal_places=1, default=0, null=True)
