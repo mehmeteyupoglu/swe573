@@ -69,7 +69,10 @@ def signup(request):
     serializer = UserSerializer(data=data)
     if serializer.is_valid():
         serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        # Exclude the password field from the serialized data
+        serialized_data = serializer.data.copy()
+        serialized_data.pop('password', None)
+        return Response(serialized_data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -88,4 +91,8 @@ def login(request):
         return Response({'error': 'Invalid password'}, status=status.HTTP_400_BAD_REQUEST)
     
     serializer = UserSerializer(user)
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    # Exclude the password field from the serialized data
+    serialized_data = serializer.data.copy()
+    serialized_data.pop('password', None)
+    
+    return Response(serialized_data, status=status.HTTP_200_OK)
