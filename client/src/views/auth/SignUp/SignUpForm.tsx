@@ -17,33 +17,39 @@ interface SignUpFormProps extends CommonProps {
 }
 
 type SignUpFormSchema = {
-    userName: string
-    password: string
-    email: string
+    [key in
+        | 'firstname'
+        | 'lastname'
+        | 'username'
+        | 'password'
+        | 'email'
+        | 'dob'
+        | 'country'
+        | 'phone'
+        | 'short_bio']: string
 }
 
 const SignUpForm = (props: SignUpFormProps) => {
     const { t } = useTranslation()
 
     const validationSchema = Yup.object().shape({
-        userName: Yup.string().required(
+        firstname: Yup.string().required(
+            t('signUp.errors.firstname') || 'Please enter your firstname'
+        ),
+        lastname: Yup.string().required(
+            t('signUp.errors.lastname') || 'Please enter your lastname'
+        ),
+        username: Yup.string().required(
             t('signUp.errors.username') || 'Please enter your username'
         ),
-        email: Yup.string()
-            .email(t('signUp.errors.invalidEmail') || 'Invalid email')
-            .required(t('signUp.errors.email') || 'Please enter your email'),
         password: Yup.string().required(
             t('signUp.errors.password') || 'Please enter your password'
         ),
-        confirmPassword: Yup.string()
-            .oneOf(
-                [Yup.ref('password')],
-                t('signUp.errors.confirmPassword') ||
-                    'Your passwords do not match'
-            )
-            .required(
-                t('signUp.errors.confirmPassword') || 'Please enter your email'
-            ),
+        email: Yup.string().email().nullable(),
+        dob: Yup.string().nullable(),
+        country: Yup.string().nullable(),
+        phone: Yup.string().nullable(),
+        short_bio: Yup.string().nullable(),
     })
 
     const { disableSubmit = false, className, signInUrl = '/sign-in' } = props
@@ -56,9 +62,29 @@ const SignUpForm = (props: SignUpFormProps) => {
         values: SignUpFormSchema,
         setSubmitting: (isSubmitting: boolean) => void
     ) => {
-        const { userName, password, email } = values
+        const {
+            firstname,
+            lastname,
+            username,
+            password,
+            email,
+            dob,
+            country,
+            phone,
+            short_bio,
+        } = values
         setSubmitting(true)
-        const result = await signUp({ username: userName, password, email }) // update userName with username
+        const result = await signUp({
+            firstname,
+            lastname,
+            username,
+            password,
+            email,
+            dob,
+            country,
+            phone,
+            short_bio,
+        })
 
         if (result?.status === 'failed') {
             setMessage(result.message)
@@ -76,10 +102,15 @@ const SignUpForm = (props: SignUpFormProps) => {
             )}
             <Formik
                 initialValues={{
-                    userName: 'admin1',
-                    password: '123Qwe1',
-                    confirmPassword: '123Qwe1',
-                    email: 'test@testmail.com',
+                    firstname: '',
+                    lastname: '',
+                    username: '',
+                    password: '',
+                    email: '',
+                    dob: '',
+                    country: '',
+                    phone: '',
+                    short_bio: '',
                 }}
                 validationSchema={validationSchema}
                 onSubmit={(values, { setSubmitting }) => {
@@ -94,22 +125,80 @@ const SignUpForm = (props: SignUpFormProps) => {
                     <Form>
                         <FormContainer>
                             <FormItem
-                                label={t('signIn.username') || 'Username'}
-                                invalid={errors.userName && touched.userName}
-                                errorMessage={errors.userName}
+                                label={
+                                    t('signUp.placeholders.firstname') ||
+                                    'First Name'
+                                }
+                                invalid={errors.firstname && touched.firstname}
+                                errorMessage={errors.firstname}
                             >
                                 <Field
                                     type="text"
                                     autoComplete="off"
-                                    name="userName"
+                                    name="firstname"
                                     placeholder={t(
-                                        'signIn.username'
+                                        'signUp.placeholders.firstname'
                                     ).toLowerCase()}
                                     component={Input}
                                 />
                             </FormItem>
                             <FormItem
-                                label={t('signIn.email') || 'Email'}
+                                label={
+                                    t('signUp.placeholders.lastname') ||
+                                    'Last Name'
+                                }
+                                invalid={errors.lastname && touched.lastname}
+                                errorMessage={errors.lastname}
+                            >
+                                <Field
+                                    type="text"
+                                    autoComplete="off"
+                                    name="lastname"
+                                    placeholder={t(
+                                        'signUp.placeholders.lastname'
+                                    ).toLowerCase()}
+                                    component={Input}
+                                />
+                            </FormItem>
+                            <FormItem
+                                label={
+                                    t('signUp.placeholders.username') ||
+                                    'Username'
+                                }
+                                invalid={errors.username && touched.username}
+                                errorMessage={errors.username}
+                            >
+                                <Field
+                                    type="text"
+                                    autoComplete="off"
+                                    name="username"
+                                    placeholder={t(
+                                        'signUp.placeholders.username'
+                                    ).toLowerCase()}
+                                    component={Input}
+                                />
+                            </FormItem>
+                            <FormItem
+                                label={
+                                    t('signUp.placeholders.password') ||
+                                    'Password'
+                                }
+                                invalid={errors.password && touched.password}
+                                errorMessage={errors.password}
+                            >
+                                <Field
+                                    autoComplete="off"
+                                    name="password"
+                                    placeholder={t(
+                                        'signUp.placeholders.password'
+                                    ).toLowerCase()}
+                                    component={PasswordInput}
+                                />
+                            </FormItem>
+                            <FormItem
+                                label={
+                                    t('signUp.placeholders.email') || 'Email'
+                                }
                                 invalid={errors.email && touched.email}
                                 errorMessage={errors.email}
                             >
@@ -118,43 +207,81 @@ const SignUpForm = (props: SignUpFormProps) => {
                                     autoComplete="off"
                                     name="email"
                                     placeholder={t(
-                                        'signIn.email'
+                                        'signUp.placeholders.email'
                                     ).toLowerCase()}
                                     component={Input}
                                 />
                             </FormItem>
                             <FormItem
-                                label={t('signIn.password') || 'Password'}
-                                invalid={errors.password && touched.password}
-                                errorMessage={errors.password}
+                                label={
+                                    t('signUp.placeholders.dob') ||
+                                    'Date of Birth'
+                                }
+                                invalid={errors.dob && touched.dob}
+                                errorMessage={errors.dob}
                             >
                                 <Field
+                                    type="text"
                                     autoComplete="off"
-                                    name="password"
+                                    name="dob"
                                     placeholder={t(
-                                        'signIn.password'
+                                        'signUp.placeholders.dob'
                                     ).toLowerCase()}
-                                    component={PasswordInput}
+                                    component={Input}
                                 />
                             </FormItem>
                             <FormItem
                                 label={
-                                    t('signIn.confirmPassword') ||
-                                    'Confirm Password'
+                                    t('signUp.placeholders.country') ||
+                                    'Country'
                                 }
-                                invalid={
-                                    errors.confirmPassword &&
-                                    touched.confirmPassword
-                                }
-                                errorMessage={errors.confirmPassword}
+                                invalid={errors.country && touched.country}
+                                errorMessage={errors.country}
                             >
                                 <Field
+                                    type="text"
                                     autoComplete="off"
-                                    name="confirmPassword"
+                                    name="country"
                                     placeholder={t(
-                                        'signIn.confirmPassword'
+                                        'signUp.placeholders.country'
                                     ).toLowerCase()}
-                                    component={PasswordInput}
+                                    component={Input}
+                                />
+                            </FormItem>
+                            <FormItem
+                                label={
+                                    t('signUp.placeholders.phone') ||
+                                    'Phone Number'
+                                }
+                                invalid={errors.phone && touched.phone}
+                                errorMessage={errors.phone}
+                            >
+                                <Field
+                                    type="text"
+                                    autoComplete="off"
+                                    name="phone"
+                                    placeholder={t(
+                                        'signUp.placeholders.phone'
+                                    ).toLowerCase()}
+                                    component={Input}
+                                />
+                            </FormItem>
+                            <FormItem
+                                label={
+                                    t('signUp.placeholders.short_bio') ||
+                                    'Short Bio'
+                                }
+                                invalid={errors.short_bio && touched.short_bio}
+                                errorMessage={errors.short_bio}
+                            >
+                                <Field
+                                    type="text"
+                                    autoComplete="off"
+                                    name="short_bio"
+                                    placeholder={t(
+                                        'signUp.placeholders.short_bio'
+                                    ).toLowerCase()}
+                                    component={Input}
                                 />
                             </FormItem>
                             <Button

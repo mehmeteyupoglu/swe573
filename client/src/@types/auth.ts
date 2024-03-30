@@ -23,9 +23,15 @@ export type SignInResponse = {
 export type SignUpResponse = SignInResponse
 
 export type SignUpCredential = {
-    username: string
-    email: string
-    password: string
+    firstname: string // Required
+    lastname: string // Required
+    username: string // Required
+    password: string // Required
+    email?: string
+    dob?: string
+    country?: string
+    phone?: string
+    short_bio?: string
 }
 
 export type ForgotPassword = {

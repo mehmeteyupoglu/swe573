@@ -10,15 +10,16 @@ import type {
 
 export async function apiSignIn(data: SignInCredential) {
     return ApiService.fetchData<SignInResponse>({
-        url: '/login',
+        url: '/login/',
         method: 'post',
         data,
     })
 }
 
 export async function apiSignUp(data: SignUpCredential) {
+    console.log(data)
     return ApiService.fetchData<SignUpResponse>({
-        url: '/signup',
+        url: '/signup/',
         method: 'post',
         data,
     })
@@ -26,14 +27,14 @@ export async function apiSignUp(data: SignUpCredential) {
 
 export async function apiSignOut() {
     return ApiService.fetchData({
-        url: '/logout',
+        url: '/logout/',
         method: 'post',
     })
 }
 
 export async function apiForgotPassword(data: ForgotPassword) {
     return ApiService.fetchData({
-        url: '/forgot-password',
+        url: '/forgot-password/',
         method: 'post',
         data,
     })
@@ -41,7 +42,7 @@ export async function apiForgotPassword(data: ForgotPassword) {
 
 export async function apiResetPassword(data: ResetPassword) {
     return ApiService.fetchData({
-        url: '/reset-password',
+        url: '/reset-password/',
         method: 'post',
         data,
     })
