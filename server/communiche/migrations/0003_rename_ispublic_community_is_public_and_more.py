@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('communiche', '0002_alter_community_ispublic_and_more'),
+        ('communiche', '0002_community_owner_alter_community_created_at_and_more'),
     ]
 
     operations = [
