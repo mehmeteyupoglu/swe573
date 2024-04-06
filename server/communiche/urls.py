@@ -27,4 +27,7 @@ urlpatterns = [
     path('communities/', views.communities, name='communities'),
     path('community/<int:id>/', views.community_detail, name='community-detail'),
     path('add_community/', views.add_community, name='add_community'),
+    path('templates/', views.templates, name='templates'),
+    path('template/<int:id>/', views.template_detail, name='template-detail'),
+    path('add_template/', views.add_template, name='add_template'),
 ]

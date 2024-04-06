@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Community
+from .models import Template, User, Community
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -10,3 +10,8 @@ class CommunitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Community
         fields = ['id', 'name', 'description', 'created_at', 'updated_at', 'is_public', 'reputation_rating']
+
+class TemplateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Template
+        fields = ['id', 'name', 'description', 'created_at', 'updated_at']

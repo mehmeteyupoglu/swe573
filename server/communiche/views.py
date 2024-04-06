@@ -1,6 +1,6 @@
 from django.http import JsonResponse
-from .models import User
-from .serializers import UserSerializer, CommunitySerializer
+from .models import Template, User
+from .serializers import TemplateSerializer, UserSerializer, CommunitySerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -148,4 +148,50 @@ def community_detail(request, id):
 
     elif request.method == 'DELETE':
         community.delete()
+        return Response('Delete successfull', status=status.HTTP_204_NO_CONTENT)
+    
+@api_view(['GET'])
+def templates(request):
+    if request.method == 'GET':
+        templates = Template.objects.all()
+        serializer = TemplateSerializer(templates, many=True)
+        return Response(serializer.data)
+
+@api_view(['POST'])
+def add_template(request):
+    if request.method == 'POST':
+        serializer = TemplateSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'POST', 'PUT', 'DELETE'])
+def template_detail(request, id):
+    try:
+        template = Template.objects.get(pk=id)
+    except Template.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = TemplateSerializer(template)
+        return Response(serializer.data)
+    
+
+    elif request.method == 'PUT':
+        serializer = TemplateSerializer(template, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'POST':
+        serializer = TemplateSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        template.delete()
         return Response('Delete successfull', status=status.HTTP_204_NO_CONTENT)
