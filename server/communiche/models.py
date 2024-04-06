@@ -46,3 +46,4 @@ class Community(models.Model):
     updated_at = models.DateTimeField()
     is_public = models.BooleanField(default=False, null=True)
     reputation_rating = models.DecimalField(max_digits=10, decimal_places=1, default=0, null=True)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owner', default=-1, null=True)
