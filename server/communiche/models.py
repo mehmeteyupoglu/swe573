@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.hashers import check_password
+from .constants import DATA_TYPES
 
 # JSON representation of User model
 """
@@ -56,6 +57,6 @@ class Template(models.Model):
     community = models.ForeignKey(Community, on_delete=models.CASCADE, related_name='community', null=True)
 
 class DataFields(models.Model):
-    data_type = models.CharField(max_length=200)
+    data_type = models.CharField(max_length=200, choices=DATA_TYPES, default='text')
     label = models.CharField(max_length=200)
     template = models.ForeignKey(Template, on_delete=models.CASCADE, related_name='template', null=True)
