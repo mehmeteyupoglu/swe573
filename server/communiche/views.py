@@ -1,12 +1,13 @@
 from django.http import JsonResponse
 from .models import User
-from .serializers import UserSerializer
+from .serializers import UserSerializer, CommunitySerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.hashers import make_password
 import jwt
 from datetime import datetime, timedelta
+from .models import Community
 
 @api_view(['GET', 'POST'])
 def user_list(request):
@@ -101,3 +102,50 @@ def login(request):
     token = jwt.encode({'user_id': user.id, 'exp': datetime.utcnow() + timedelta(hours=1)}, 'secret_key')
     
     return Response({'token': token, 'user': serialized_data}, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def communities(request):
+    if request.method == 'GET':
+        communities = Community.objects.all()
+        serializer = CommunitySerializer(communities, many=True)
+        return Response(serializer.data)
+
+@api_view(['POST'])
+def add_community(request):
+    print(request.data)
+    if request.method == 'POST':
+        serializer = CommunitySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'POST', 'PUT', 'DELETE'])
+def community_detail(request, id):
+    try:
+        community = Community.objects.get(pk=id)
+    except Community.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = CommunitySerializer(community)
+        return Response(serializer.data)
+    
+
+    elif request.method == 'PUT':
+        serializer = CommunitySerializer(community, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'POST':
+        serializer = CommunitySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        community.delete()
+        return Response('Delete successfull', status=status.HTTP_204_NO_CONTENT)
