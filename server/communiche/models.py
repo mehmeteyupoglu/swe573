@@ -42,8 +42,8 @@ class User(models.Model):
 class Community(models.Model):
     name = models.CharField(max_length=200)
     description = models.CharField(max_length=600)
-    created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     is_public = models.BooleanField(default=False, null=True)
     reputation_rating = models.DecimalField(max_digits=10, decimal_places=1, default=0, null=True)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owner', default=-1, null=True)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owner', null=True)
