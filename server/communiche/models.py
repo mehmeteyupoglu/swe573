@@ -55,6 +55,7 @@ class Template(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     field= models.ForeignKey('DataFields', on_delete=models.CASCADE, related_name='field', null=True)
+    field_label = models.CharField(max_length=200, null=True)
 
 class DataFields(models.Model):
     data_type = models.CharField(max_length=200, choices=DATA_TYPES, default='text')
