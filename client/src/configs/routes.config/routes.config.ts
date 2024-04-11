@@ -20,6 +20,12 @@ export const protectedRoutes = [
         authority: [],
     },
     {
+        key: 'addCommunity',
+        path: '/create-community',
+        component: lazy(() => import('@/views/community/CreateCommunity')),
+        authority: [],
+    },
+    {
         key: 'collapseMenu.item1',
         path: '/collapse-menu-item-view-1',
         component: lazy(() => import('@/views/demo/CollapseMenuItemView1')),

@@ -19,7 +19,7 @@ const navigationConfig: NavigationTree[] = [
     /** Example purpose only, please remove */
     {
         key: 'createCommunity',
-        path: '/single-menu-view',
+        path: '/create-community',
         title: 'Single menu item',
         translateKey: 'nav.createCommunity',
         icon: 'singleMenu',
