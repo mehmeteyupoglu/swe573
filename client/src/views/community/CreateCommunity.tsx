@@ -8,13 +8,19 @@ import FormDesription from '../account/Settings/components/FormDesription'
 import FormRow from '../account/Settings/components/FormRow'
 import { Field, Form, Formik } from 'formik'
 import { components } from 'react-select'
-import { HiOutlineBriefcase, HiOutlineUser } from 'react-icons/hi'
+import {
+    HiChevronDown,
+    HiOutlineBriefcase,
+    HiOutlineUser,
+} from 'react-icons/hi'
 import * as Yup from 'yup'
 import type { FormikProps, FieldInputProps, FieldProps } from 'formik'
 import { useNavigate } from 'react-router-dom'
 import { CommunityFormModel } from '@/@types/community'
 import { apiAddCommunity } from '@/services/CommunityService'
 import { t } from 'i18next'
+import { Card } from '@/components/ui'
+import CommunitySpecificTemplates from './components/CommunitySpecificTemplates'
 
 type CommunityProps = {
     data?: CommunityFormModel
@@ -92,57 +98,58 @@ const CreateCommunity = ({
     const navigate = useNavigate()
 
     return (
-        <Formik
-            enableReinitialize
-            initialValues={data}
-            validationSchema={validationSchema}
-            onSubmit={(values, { setSubmitting }) => {
-                setSubmitting(true)
-                setTimeout(() => {
-                    onFormSubmit(values, setSubmitting)
-                }, 1000)
-            }}
-        >
-            {({ values, touched, errors, isSubmitting, resetForm }) => {
-                const validatorProps = { touched, errors }
-                return (
-                    <Form>
-                        <FormContainer>
-                            <FormDesription
-                                title=""
-                                desc="Add community info, like community name, description, avatar, and visibility."
-                            />
-                            <FormRow
-                                name="name"
-                                label="Community Name"
-                                {...validatorProps}
-                            >
-                                <Field
-                                    type="text"
-                                    autoComplete="off"
+        <div>
+            <Formik
+                enableReinitialize
+                initialValues={data}
+                validationSchema={validationSchema}
+                onSubmit={(values, { setSubmitting }) => {
+                    setSubmitting(true)
+                    setTimeout(() => {
+                        onFormSubmit(values, setSubmitting)
+                    }, 1000)
+                }}
+            >
+                {({ values, touched, errors, isSubmitting, resetForm }) => {
+                    const validatorProps = { touched, errors }
+                    return (
+                        <Form>
+                            <FormContainer>
+                                <FormDesription
+                                    title=""
+                                    desc="Add community info, like community name, description, avatar, and visibility."
+                                />
+                                <FormRow
                                     name="name"
-                                    placeholder="Community Name"
-                                    component={Input}
-                                />
-                            </FormRow>
-                            <FormRow
-                                name="description"
-                                label="Description"
-                                {...validatorProps}
-                            >
-                                <Field
-                                    type="text"
-                                    autoComplete="off"
+                                    label="Community Name"
+                                    {...validatorProps}
+                                >
+                                    <Field
+                                        type="text"
+                                        autoComplete="off"
+                                        name="name"
+                                        placeholder="Community Name"
+                                        component={Input}
+                                    />
+                                </FormRow>
+                                <FormRow
                                     name="description"
-                                    placeholder="Description"
-                                    textArea
-                                    component={Input}
-                                    prefix={
-                                        <HiOutlineBriefcase className="text-xl" />
-                                    }
-                                />
-                            </FormRow>
-                            {/* <FormRow
+                                    label="Description"
+                                    {...validatorProps}
+                                >
+                                    <Field
+                                        type="text"
+                                        autoComplete="off"
+                                        name="description"
+                                        placeholder="Description"
+                                        textArea
+                                        component={Input}
+                                        prefix={
+                                            <HiOutlineBriefcase className="text-xl" />
+                                        }
+                                    />
+                                </FormRow>
+                                {/* <FormRow
                                 name="avatar"
                                 label="Avatar"
                                 {...validatorProps}
@@ -185,45 +192,49 @@ const CreateCommunity = ({
                                 </Field>
                             </FormRow> */}
 
-                            <FormRow
-                                name="isPublic"
-                                label="Visibility"
-                                {...validatorProps}
-                                border={false}
-                            >
-                                <div className="flex">
-                                    <Field
-                                        name="isPublic"
-                                        component={Switcher}
-                                    />
-                                    <div className="ml-3">
-                                        {values.isPublic ? 'Public' : 'Private'}
+                                <FormRow
+                                    name="isPublic"
+                                    label="Visibility"
+                                    {...validatorProps}
+                                    border={false}
+                                >
+                                    <div className="flex">
+                                        <Field
+                                            name="isPublic"
+                                            component={Switcher}
+                                        />
+                                        <div className="ml-3">
+                                            {values.isPublic
+                                                ? 'Public'
+                                                : 'Private'}
+                                        </div>
                                     </div>
+                                </FormRow>
+                                <div className="mt-4 ltr:text-right">
+                                    <Button
+                                        className="ltr:mr-2 rtl:ml-2"
+                                        type="button"
+                                        onClick={() => {
+                                            navigate('/home')
+                                        }}
+                                    >
+                                        Cancel
+                                    </Button>
+                                    <Button
+                                        variant="solid"
+                                        loading={isSubmitting}
+                                        type="submit"
+                                    >
+                                        {isSubmitting ? 'Creating' : 'Create'}
+                                    </Button>
                                 </div>
-                            </FormRow>
-                            <div className="mt-4 ltr:text-right">
-                                <Button
-                                    className="ltr:mr-2 rtl:ml-2"
-                                    type="button"
-                                    onClick={() => {
-                                        navigate('/home')
-                                    }}
-                                >
-                                    Cancel
-                                </Button>
-                                <Button
-                                    variant="solid"
-                                    loading={isSubmitting}
-                                    type="submit"
-                                >
-                                    {isSubmitting ? 'Creating' : 'Create'}
-                                </Button>
-                            </div>
-                        </FormContainer>
-                    </Form>
-                )
-            }}
-        </Formik>
+                            </FormContainer>
+                        </Form>
+                    )
+                }}
+            </Formik>
+            <CommunitySpecificTemplates />
+        </div>
     )
 }
 
