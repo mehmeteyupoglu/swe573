@@ -11,34 +11,16 @@ import FormDesription from '../account/Settings/components/FormDesription'
 import FormRow from '../account/Settings/components/FormRow'
 import { Field, Form, Formik } from 'formik'
 import { components } from 'react-select'
-import {
-    HiOutlineUserCircle,
-    HiOutlineMail,
-    HiOutlineBriefcase,
-    HiOutlineUser,
-    HiCheck,
-    HiOutlineGlobeAlt,
-} from 'react-icons/hi'
+import { HiOutlineBriefcase, HiOutlineUser } from 'react-icons/hi'
 import * as Yup from 'yup'
-import type { OptionProps, ControlProps } from 'react-select'
 import type { FormikProps, FieldInputProps, FieldProps } from 'formik'
 import { useNavigate } from 'react-router-dom'
-
-export type CommunityFormModel = {
-    name: string
-    description: string
-    avatar: string
-    isPublic: boolean
-}
+import { CommunityFormModel } from '@/@types/community'
+import { apiAddCommunity } from '@/services/CommunityService'
+import { t } from 'i18next'
 
 type CommunityProps = {
     data?: CommunityFormModel
-}
-
-type LanguageOption = {
-    value: string
-    label: string
-    imgPath: string
 }
 
 const { Control } = components
@@ -69,15 +51,45 @@ const Profile = ({
         form.setFieldValue(field.name, URL.createObjectURL(file[0]))
     }
 
-    const onFormSubmit = (
+    const onFormSubmit = async (
         values: CommunityFormModel,
         setSubmitting: (isSubmitting: boolean) => void
     ) => {
-        console.log('values', values)
-        toast.push(<Notification title={'Profile updated'} type="success" />, {
-            placement: 'top-center',
-        })
-        setSubmitting(false)
+        try {
+            const resp = await apiAddCommunity(values)
+
+            if (resp.status == 200) {
+                // TODO: add english i18n version
+                toast.push(
+                    <Notification
+                        title={
+                            t('settings.profile.updateMessage.success') ||
+                            'Update successful'
+                        }
+                        type="success"
+                    />,
+                    {
+                        placement: 'top-center',
+                    }
+                )
+            }
+        } catch (error) {
+            console.log('error', error)
+            toast.push(
+                <Notification
+                    title={
+                        t('settings.profile.updateMessage.error') ||
+                        'Update not successful'
+                    }
+                    type="danger"
+                />,
+                {
+                    placement: 'top-center',
+                }
+            )
+        } finally {
+            setSubmitting(false)
+        }
     }
 
     const navigate = useNavigate()
@@ -124,7 +136,7 @@ const Profile = ({
                                 <Field
                                     type="text"
                                     autoComplete="off"
-                                    name="title"
+                                    name="description"
                                     placeholder="Description"
                                     textArea
                                     component={Input}
@@ -133,7 +145,7 @@ const Profile = ({
                                     }
                                 />
                             </FormRow>
-                            <FormRow
+                            {/* <FormRow
                                 name="avatar"
                                 label="Avatar"
                                 {...validatorProps}
@@ -174,7 +186,7 @@ const Profile = ({
                                         )
                                     }}
                                 </Field>
-                            </FormRow>
+                            </FormRow> */}
 
                             <FormRow
                                 name="isPublic"
