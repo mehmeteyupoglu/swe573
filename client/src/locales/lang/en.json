@@ -73,6 +73,12 @@
             "title": "Password"
         }
     },
+    "community": {
+        "messages": {
+            "success": "Community added successfully",
+            "error": "Community added failed"
+        }
+    },
     "signUp": {
         "credentials": "Please enter your credentials to sign in!",
         "username": "Username",

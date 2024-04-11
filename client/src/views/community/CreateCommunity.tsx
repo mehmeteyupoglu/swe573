@@ -55,13 +55,13 @@ const CreateCommunity = ({
         try {
             const resp = await apiAddCommunity(values)
 
-            if (resp.status == 200) {
+            if (resp.status == 201) {
                 // TODO: add english i18n version
                 toast.push(
                     <Notification
                         title={
-                            t('settings.profile.updateMessage.success') ||
-                            'Update successful'
+                            t('community.messages.success') ||
+                            'Addition successful'
                         }
                         type="success"
                     />,
@@ -75,8 +75,8 @@ const CreateCommunity = ({
             toast.push(
                 <Notification
                     title={
-                        t('settings.profile.updateMessage.error') ||
-                        'Update not successful'
+                        t('community.messages.error') ||
+                        'Addition not successful'
                     }
                     type="danger"
                 />,
