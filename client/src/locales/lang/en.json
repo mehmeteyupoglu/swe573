@@ -19,7 +19,9 @@
     },
     "nav": {
         "home": "Home",
-        "singleMenuItem": "Create Menu",
+        "createCommunity": "Create Community",
+        "post": "Post",
+        "communities": "Communities",
         "collapseMenu": {
             "collapseMenu": "Collapse menu item",
             "item1": "Collapse menu item 1",
