@@ -32,7 +32,7 @@ const validationSchema = Yup.object().shape({
     isPublic: Yup.boolean(),
 })
 
-const Profile = ({
+const CreateCommunity = ({
     data = {
         name: '',
         description: '',
@@ -227,4 +227,4 @@ const Profile = ({
     )
 }
 
-export default Profile
+export default CreateCommunity
