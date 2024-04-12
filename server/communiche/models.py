@@ -1,5 +1,7 @@
 from django.db import models
+from django.db.models import JSONField
 from django.contrib.auth.hashers import check_password
+
 from .constants import DATA_TYPES
 
 # JSON representation of User model
@@ -54,9 +56,4 @@ class Template(models.Model):
     description = models.CharField(max_length=600)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    field= models.ForeignKey('DataFields', on_delete=models.CASCADE, related_name='field', null=True)
-    field_label = models.CharField(max_length=200, null=True)
-
-class DataFields(models.Model):
-    data_type = models.CharField(max_length=200, choices=DATA_TYPES, default='text')
-    label = models.CharField(max_length=200)
+    fields = JSONField(default=list)
