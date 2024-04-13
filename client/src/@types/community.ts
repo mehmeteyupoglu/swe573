@@ -5,7 +5,7 @@ export type CommunityFormModel = {
     isPublic: boolean
 }
 
-export type DefaultTemplateType = {
+export type TemplateType = {
     id: number
     name: string
     description: string
