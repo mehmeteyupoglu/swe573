@@ -43,6 +43,21 @@ class User(models.Model):
             return check_password(raw_password, self.password)
 
 class Community(models.Model):
+    def save(self, *args, **kwargs):
+        is_new = not self.pk  # Check if this is a new instance
+        super().save(*args, **kwargs)  # Call the "real" save() method.
+
+        if is_new:
+            # Find the default template
+            default_template = Template.objects.filter(name='Default Template').first()
+
+            if default_template:
+                # Link the community to the template
+                CommunityTemplates.objects.create(
+                    community=self,
+                    template=default_template
+                )
+                
     name = models.CharField(max_length=200)
     description = models.CharField(max_length=600)
     created_at = models.DateTimeField(auto_now_add=True)
