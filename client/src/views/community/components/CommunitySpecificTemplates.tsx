@@ -1,5 +1,5 @@
 import { TemplateType } from '@/@types/community'
-import { Card } from '@/components/ui'
+import { Card, Button } from '@/components/ui'
 import { apiGetDefaultTemplate } from '@/services/CommunityService'
 import React, { useEffect, useState } from 'react'
 import { HiChevronDown } from 'react-icons/hi'
@@ -26,21 +26,34 @@ export default function CommunitySpecificTemplates() {
                 className="min-w-[320px] md:min-w-[450px] mt-3"
                 bodyClass="md:p-4"
             >
-                <div
-                    className="flex items-center header"
-                    onClick={() => {
-                        setIsOpen(!isOpen)
-                    }}
-                >
-                    {isOpen ? (
-                        <HiChevronDown
-                            size="30"
-                            className="mr-3 transform rotate-180"
-                        />
-                    ) : (
-                        <HiChevronDown size="30" className="mr-3 transform" />
-                    )}
-                    <div className="">Community Specific Templates</div>
+                <div className="flex justify-between items-center header mb-3">
+                    <div
+                        className="flex items-center"
+                        onClick={() => {
+                            setIsOpen(!isOpen)
+                        }}
+                    >
+                        {isOpen ? (
+                            <HiChevronDown
+                                size="30"
+                                className="mr-3 transform rotate-180"
+                            />
+                        ) : (
+                            <HiChevronDown
+                                size="30"
+                                className="mr-3 transform"
+                            />
+                        )}
+                        <div className="text-gray">
+                            Community Specific Templates
+                        </div>
+                    </div>
+
+                    <div className="add-template self-end">
+                        <Button variant="twoTone" type="submit">
+                            Add Template
+                        </Button>
+                    </div>
                 </div>
                 {isOpen && (
                     <div className="body">
