@@ -6,8 +6,8 @@ import { TemplateType } from '@/@types/community'
 export default function Template({ template }: { template: TemplateType }) {
     return (
         <Card bordered>
-            <div className="text-slate-100 font-bold">Default Template:</div>
-            <div className="flex underline text-slate-200 font-bold mt-2">
+            <div className="text-slate-100 font-bold">{template.name}:</div>
+            <div className="flex underline text-slate-300 font-bold mt-2">
                 <div className="mr-2 w-1/6">Field Name</div>
                 <div>Field Type</div>
             </div>
