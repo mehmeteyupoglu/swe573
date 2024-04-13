@@ -165,6 +165,16 @@ def add_template(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(['GET'])
+def default_template(request):
+    if request.method == 'GET':
+        default_template = Template.objects.filter(name='Default Template').first()
+        if default_template:
+            serializer = TemplateSerializer(default_template)
+            return Response(serializer.data)
+        else:
+            return Response({"detail": "Default template not found"}, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
 def template_detail(request, id):
