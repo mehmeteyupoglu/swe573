@@ -11,3 +11,10 @@ export async function apiAddCommunity(data: CommunityFormModel) {
         },
     })
 }
+
+export async function apiGetDefaultTemplate() {
+    return ApiService.fetchData({
+        url: '/default_template/',
+        method: 'get',
+    })
+}
