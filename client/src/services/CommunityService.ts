@@ -5,6 +5,9 @@ export async function apiAddCommunity(data: CommunityFormModel) {
     return ApiService.fetchData({
         url: '/add_community/',
         method: 'post',
-        data,
+        data: {
+            ...data,
+            is_public: data.isPublic,
+        },
     })
 }
