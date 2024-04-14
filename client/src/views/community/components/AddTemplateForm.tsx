@@ -49,7 +49,7 @@ export default function AddTemplateForm() {
     }, [])
 
     return (
-        <div>
+        <div className="max-h-96 overflow-hidden overflow-y-auto custom-scrollbar">
             <Formik
                 initialValues={{
                     username: '',
@@ -107,16 +107,6 @@ export default function AddTemplateForm() {
                                 }
                                 errorMessage={errors.username}
                             >
-                                <Field
-                                    type="text"
-                                    autoComplete="off"
-                                    name="Template Name"
-                                    placeholder={'Template Name'}
-                                    component={Input}
-                                    border={false}
-                                />
-                            </FormItem>
-                            <FormItem>
                                 <Field name="dataType">
                                     {({ field, form }: FieldProps) => (
                                         <Select<DataTypeOption>
