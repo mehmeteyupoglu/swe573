@@ -53,9 +53,9 @@ class Community(models.Model):
 
             if default_template:
                 # Link the community to the template
-                CommunityTemplates.objects.create(
-                    community=self,
-                    template=default_template
+                TemplateCommunity.objects.create(
+                    template=default_template,
+                    community=self
                 )
                 
     name = models.CharField(max_length=200)
@@ -65,7 +65,7 @@ class Community(models.Model):
     is_public = models.BooleanField(default=False, null=True)
     reputation_rating = models.DecimalField(max_digits=10, decimal_places=1, default=0, null=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owner', null=True)
-    members = models.ManyToManyField(User, related_name='communities')
+    # members = models.ManyToManyField(User, related_name='communities')
 
 class Template(models.Model):
     name = models.CharField(max_length=200)
@@ -74,3 +74,7 @@ class Template(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     fields = JSONField(default=list)
     community = models.ForeignKey(Community, on_delete=models.CASCADE, related_name='templates', null=True)
+
+class TemplateCommunity(models.Model):
+    template = models.ForeignKey(Template, on_delete=models.CASCADE)
+    community = models.ForeignKey(Community, on_delete=models.CASCADE)
