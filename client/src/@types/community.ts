@@ -6,11 +6,11 @@ export type CommunityFormModel = {
 }
 
 export type TemplateType = {
-    id: number
+    id?: number
     name: string
     description: string
-    created_at: string
-    updated_at: string
+    created_at?: string
+    updated_at?: string
     fields: [
         {
             field_name: string
