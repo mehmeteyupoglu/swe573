@@ -1,5 +1,5 @@
 import { TemplateType } from '@/@types/community'
-import { Card, Button } from '@/components/ui'
+import { Card, Button, Dialog } from '@/components/ui'
 import { apiGetDefaultTemplate } from '@/services/CommunityService'
 import React, { useEffect, useState } from 'react'
 import { HiChevronDown } from 'react-icons/hi'
@@ -9,6 +9,7 @@ import Template from './Template'
 export default function CommunitySpecificTemplates() {
     const [isOpen, setIsOpen] = React.useState(false)
     const [defaultTemplate, setDefaultTemplate] = useState<TemplateType>()
+    const [isTemplateDialogOpen, setIsTemplateDialogOpen] = useState(false)
 
     useEffect(() => {
         const fetchDefaultTemplate = async () => {
@@ -19,6 +20,14 @@ export default function CommunitySpecificTemplates() {
         }
         fetchDefaultTemplate()
     }, [])
+
+    const onTemplateDialogClose = () => {
+        setIsTemplateDialogOpen(false)
+    }
+
+    const onTemplateDialogOpen = () => {
+        setIsTemplateDialogOpen(true)
+    }
 
     return (
         <div>
@@ -50,7 +59,11 @@ export default function CommunitySpecificTemplates() {
                     </div>
 
                     <div className="add-template self-end">
-                        <Button variant="twoTone" type="submit">
+                        <Button
+                            variant="twoTone"
+                            type="submit"
+                            onClick={onTemplateDialogOpen}
+                        >
                             Add Template
                         </Button>
                     </div>
@@ -66,6 +79,12 @@ export default function CommunitySpecificTemplates() {
                         )}
                     </div>
                 )}
+                <Dialog
+                    isOpen={isTemplateDialogOpen}
+                    onClose={onTemplateDialogClose}
+                >
+                    <h5 className="mb-4">Add Template</h5>
+                </Dialog>
             </Card>
         </div>
     )
