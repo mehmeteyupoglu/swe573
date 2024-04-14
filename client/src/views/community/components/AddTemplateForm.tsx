@@ -51,7 +51,8 @@ export default function AddTemplateForm() {
         <div className="max-h-96 overflow-hidden overflow-y-auto custom-scrollbar">
             <Formik
                 initialValues={{
-                    username: '',
+                    templateName: '',
+                    templateDescription: '',
                     password: '',
                     rememberMe: true,
                 }}
@@ -64,10 +65,27 @@ export default function AddTemplateForm() {
                             <FormItem
                                 label={'Template Name'}
                                 invalid={
-                                    (errors.username &&
-                                        touched.username) as boolean
+                                    (errors.templateName &&
+                                        touched.templateName) as boolean
                                 }
-                                errorMessage={errors.username}
+                                errorMessage={errors.templateName}
+                                className="my-5"
+                            >
+                                <Field
+                                    type="text"
+                                    autoComplete="off"
+                                    name="Template Name"
+                                    placeholder={'Template Name'}
+                                    component={Input}
+                                />
+                            </FormItem>
+                            <FormItem
+                                label={'Template Description'}
+                                invalid={
+                                    (errors.templateDescription &&
+                                        touched.templateDescription) as boolean
+                                }
+                                errorMessage={errors.templateDescription}
                                 className="my-5"
                             >
                                 <Field
@@ -84,10 +102,10 @@ export default function AddTemplateForm() {
                             <FormItem
                                 label={'Field Name'}
                                 invalid={
-                                    (errors.username &&
-                                        touched.username) as boolean
+                                    (errors.password &&
+                                        touched.password) as boolean
                                 }
-                                errorMessage={errors.username}
+                                errorMessage={errors.password}
                             >
                                 <Field
                                     type="text"
@@ -101,10 +119,10 @@ export default function AddTemplateForm() {
                             <FormItem
                                 label={'Field Type'}
                                 invalid={
-                                    (errors.username &&
-                                        touched.username) as boolean
+                                    (errors.password &&
+                                        touched.password) as boolean
                                 }
-                                errorMessage={errors.username}
+                                errorMessage={errors.password}
                             >
                                 <Field name="dataType">
                                     {({ field, form }: FieldProps) => (
