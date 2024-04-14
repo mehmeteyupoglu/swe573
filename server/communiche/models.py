@@ -72,7 +72,4 @@ class Template(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     fields = JSONField(default=list)
-
-class CommunityTemplates(models.Model):
-    community = models.ForeignKey(Community, on_delete=models.CASCADE, related_name='community')
-    template = models.ForeignKey(Template, on_delete=models.CASCADE, related_name='template')
+    community = models.ForeignKey(Community, on_delete=models.CASCADE, related_name='templates', null=True)
