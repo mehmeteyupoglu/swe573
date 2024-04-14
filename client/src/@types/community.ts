@@ -37,3 +37,27 @@ export type DataTypeOption = {
     value: string
     label: string
 }
+
+export type CommunityType = {
+    id: number
+    name: string
+    description: string
+    created_at: string
+    updated_at: string
+    is_public: boolean
+    reputation_rating: string
+    templates: DataTypeOption[]
+    members: Member[]
+}
+
+type Member = {
+    id: number
+    firstname: string
+    lastname: string
+    username: string
+    email: string
+    dob: string | null
+    country: string
+    phone: string
+    short_bio: string | null
+}

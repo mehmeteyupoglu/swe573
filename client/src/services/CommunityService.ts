@@ -26,3 +26,10 @@ export async function apiGetDataTypes() {
         method: 'get',
     })
 }
+
+export async function apiGetCommunityList() {
+    return ApiService.fetchData({
+        url: '/communities/',
+        method: 'get',
+    })
+}
