@@ -28,7 +28,7 @@ export default function CommunitySpecificTemplates() {
             >
                 <div className="flex justify-between items-center header mb-3">
                     <div
-                        className="flex items-center"
+                        className="flex items-center cursor-pointer"
                         onClick={() => {
                             setIsOpen(!isOpen)
                         }}
