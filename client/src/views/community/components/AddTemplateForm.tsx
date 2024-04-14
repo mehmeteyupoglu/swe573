@@ -10,6 +10,7 @@ import { DataTypeOption, DataTypeResponse } from '@/@types/community'
 import { Select } from '@/components/ui'
 import { CustomSelectOption } from '@/components/shared/CustomSelectOption'
 import { useDispatch } from 'react-redux'
+import { addTemplate } from '@/store/slices/community'
 
 export default function AddTemplateForm() {
     const [templateName, setTemplateName] = useState('')
@@ -21,9 +22,9 @@ export default function AddTemplateForm() {
         setFields([...fields, { name: '', type: '' }])
     }
 
-    // const handleSave = () => {
-    //     dispatch(addTemplate({ templateName, templateDescription, fields }))
-    // }
+    const handleSave = () => {
+        dispatch(addTemplate({ templateName, templateDescription, fields }))
+    }
 
     const validationSchema = Yup.object().shape({
         name: Yup.string().required('Please enter a name'),
@@ -88,7 +89,7 @@ export default function AddTemplateForm() {
                                 <Field
                                     type="text"
                                     autoComplete="off"
-                                    name="Template Name"
+                                    name="templateName"
                                     placeholder={'Template Name'}
                                     component={Input}
                                 />
@@ -105,8 +106,8 @@ export default function AddTemplateForm() {
                                 <Field
                                     type="text"
                                     autoComplete="off"
-                                    name="Template Name"
-                                    placeholder={'Template Name'}
+                                    name="templateDescription"
+                                    placeholder={'Template Description'}
                                     component={Input}
                                 />
                             </FormItem>
@@ -187,7 +188,7 @@ export default function AddTemplateForm() {
                                 loading={isSubmitting}
                                 variant="solid"
                                 type="submit"
-                                onClick={handleAddField}
+                                onClick={handleSave}
                                 color="green-600"
                                 className="mt-5"
                             >

@@ -20,8 +20,28 @@ const templateSlice = createSlice({
         setTemplate(state, action: PayloadAction<TemplateType>) {
             Object.assign(state, action.payload)
         },
+
+        addTemplate(
+            state,
+            action: PayloadAction<{
+                templateName: string
+                templateDescription: string
+                fields: { name: string; type: string }[]
+            }>
+        ) {
+            console.log(action.payload)
+            const { templateName, templateDescription, fields } = action.payload
+            state.name = templateName
+            state.description = templateDescription
+            state.fields = [
+                {
+                    field_name: fields[0].name,
+                    field_type: fields[0].type,
+                },
+            ]
+        },
     },
 })
 
-export const { setTemplate } = templateSlice.actions
+export const { setTemplate, addTemplate } = templateSlice.actions
 export default templateSlice.reducer
