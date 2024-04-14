@@ -6,39 +6,10 @@ import { Formik, Form, Field, FieldProps } from 'formik'
 import { FormContainer, FormItem } from '@/components/ui/Form'
 import * as Yup from 'yup'
 import { apiGetDataTypes } from '@/services/CommunityService'
-import { DataTypeResponse } from '@/@types/community'
+import { DataTypeOption, DataTypeResponse } from '@/@types/community'
 import { use } from 'i18next'
 import { Select } from '@/components/ui'
-
-import { HiCheck } from 'react-icons/hi' // import the check icon
-import { OptionProps } from 'react-select' // import the OptionProps type
-
-type DataTypeOption = {
-    value: string
-    label: string
-}
-
-const CustomSelectOption = ({
-    innerProps,
-    label,
-    isSelected,
-}: OptionProps<DataTypeOption>) => {
-    return (
-        <div
-            className={`flex items-center justify-between p-2 ${
-                isSelected
-                    ? 'bg-gray-100 dark:bg-gray-500'
-                    : 'hover:bg-gray-50 dark:hover:bg-gray-600'
-            }`}
-            {...innerProps}
-        >
-            <div className="flex items-center">
-                <span className="ml-2 rtl:mr-2">{label}</span>
-            </div>
-            {isSelected && <HiCheck className="text-emerald-500 text-xl" />}
-        </div>
-    )
-}
+import { CustomSelectOption } from '@/components/shared/CustomSelectOption'
 
 export default function AddTemplateForm() {
     const validationSchema = Yup.object().shape({

@@ -31,3 +31,8 @@ export interface DataTypeResponse {
         | 'File'
     )[]
 }
+
+export type DataTypeOption = {
+    value: string
+    label: string
+}
