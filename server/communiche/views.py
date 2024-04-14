@@ -210,4 +210,4 @@ def template_detail(request, id):
 @api_view(['GET'])
 def data_types(request):
     data_types = constants.DATA_TYPES
-    return JsonResponse({'data_types': [data_type[1] for data_type in data_types]})
+    return JsonResponse([data_type[1] for data_type in data_types], safe=False)
