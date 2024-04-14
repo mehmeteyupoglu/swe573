@@ -9,7 +9,7 @@ class UserSerializer(serializers.ModelSerializer):
 class TemplateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Template
-        fields = ['id', 'name', 'description', 'created_at', 'updated_at', 'fields']
+        fields = ['id', 'name', 'description', 'created_at', 'updated_at', 'fields', 'community_id']
 
 class CommunitySerializer(serializers.ModelSerializer):
     templates = serializers.SerializerMethodField()
