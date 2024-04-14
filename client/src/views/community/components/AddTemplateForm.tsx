@@ -7,7 +7,6 @@ import { FormContainer, FormItem } from '@/components/ui/Form'
 import * as Yup from 'yup'
 import { apiGetDataTypes } from '@/services/CommunityService'
 import { DataTypeOption, DataTypeResponse } from '@/@types/community'
-import { use } from 'i18next'
 import { Select } from '@/components/ui'
 import { CustomSelectOption } from '@/components/shared/CustomSelectOption'
 
