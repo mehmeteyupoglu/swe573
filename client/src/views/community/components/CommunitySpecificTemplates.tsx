@@ -36,7 +36,7 @@ export default function CommunitySpecificTemplates() {
                 className="min-w-[320px] md:min-w-[450px] mt-3"
                 bodyClass="md:p-4"
             >
-                <div className="flex justify-between items-center header mb-3">
+                <div className="flex justify-between items-center header">
                     <div
                         className="flex items-center cursor-pointer"
                         onClick={() => {
