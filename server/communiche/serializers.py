@@ -21,3 +21,12 @@ class CommunitySerializer(serializers.ModelSerializer):
         community_templates = CommunityTemplates.objects.filter(community=obj)
         templates = [ct.template for ct in community_templates]
         return TemplateSerializer(templates, many=True).data
+
+class DataTypeSerializer(serializers.Serializer):
+    data_types = serializers.SerializerMethodField()
+
+    class Meta:
+        fields = ['data_types']
+
+    def get_data_types(self, obj):
+        return [data_type for data_type in constants.DATA_TYPES]

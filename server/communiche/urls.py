@@ -31,4 +31,5 @@ urlpatterns = [
     path('template/<int:id>/', views.template_detail, name='template-detail'),
     path('add_template/', views.add_template, name='add_template'),
     path('default_template/', views.default_template, name='default_template'),
+    path('data_types/', views.data_types, name='data_types'),
 ]

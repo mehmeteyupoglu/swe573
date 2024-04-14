@@ -8,6 +8,8 @@ from django.contrib.auth.hashers import make_password
 import jwt
 from datetime import datetime, timedelta
 from .models import Community
+from django.http import JsonResponse
+from . import constants
 
 @api_view(['GET', 'POST'])
 def user_list(request):
@@ -204,4 +206,8 @@ def template_detail(request, id):
 
     elif request.method == 'DELETE':
         template.delete()
-        return Response('Delete successfull', status=status.HTTP_204_NO_CONTENT)
+
+@api_view(['GET'])
+def data_types(request):
+    data_types = constants.DATA_TYPES
+    return JsonResponse({'data_types': [data_type[1] for data_type in data_types]})
