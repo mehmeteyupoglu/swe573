@@ -17,6 +17,7 @@ class CommunitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Community
         fields = ['id', 'name', 'description', 'created_at', 'updated_at', 'is_public', 'reputation_rating', 'templates', 'members']
+        
 class DataTypeSerializer(serializers.Serializer):
     data_types = serializers.SerializerMethodField()
 
