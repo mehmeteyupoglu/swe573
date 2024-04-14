@@ -9,14 +9,14 @@ class UserSerializer(serializers.ModelSerializer):
 class TemplateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Template
-        fields = ['id', 'name', 'description', 'created_at', 'updated_at', 'fields', 'community_id']
+        fields = ['id', 'name', 'description', 'created_at', 'updated_at', 'fields']
 
 class CommunitySerializer(serializers.ModelSerializer):
-    templates = serializers.SerializerMethodField()
+    templates = TemplateSerializer(many=True, read_only=True)
 
     class Meta:
         model = Community
-        fields = ['id', 'name', 'description', 'created_at', 'updated_at', 'is_public', 'reputation_rating']
+        fields = ['id', 'name', 'description', 'created_at', 'updated_at', 'is_public', 'reputation_rating', 'templates']
 
 class DataTypeSerializer(serializers.Serializer):
     data_types = serializers.SerializerMethodField()
