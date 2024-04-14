@@ -9,8 +9,22 @@ import { apiGetDataTypes } from '@/services/CommunityService'
 import { DataTypeOption, DataTypeResponse } from '@/@types/community'
 import { Select } from '@/components/ui'
 import { CustomSelectOption } from '@/components/shared/CustomSelectOption'
+import { useDispatch } from 'react-redux'
 
 export default function AddTemplateForm() {
+    const [templateName, setTemplateName] = useState('')
+    const [templateDescription, setTemplateDescription] = useState('')
+    const [fields, setFields] = useState([{ name: '', type: '' }])
+    const dispatch = useDispatch()
+
+    const handleAddField = () => {
+        setFields([...fields, { name: '', type: '' }])
+    }
+
+    // const handleSave = () => {
+    //     dispatch(addTemplate({ templateName, templateDescription, fields }))
+    // }
+
     const validationSchema = Yup.object().shape({
         name: Yup.string().required('Please enter a name'),
         description: Yup.string().required('Please enter a description'),
@@ -99,62 +113,85 @@ export default function AddTemplateForm() {
                             <FormItem>
                                 <hr />
                             </FormItem>
-                            <FormItem
-                                label={'Field Name'}
-                                invalid={
-                                    (errors.password &&
-                                        touched.password) as boolean
-                                }
-                                errorMessage={errors.password}
-                            >
-                                <Field
-                                    type="text"
-                                    autoComplete="off"
-                                    name="Template Name"
-                                    placeholder={'Template Name'}
-                                    component={Input}
-                                    border={false}
-                                />
-                            </FormItem>
-                            <FormItem
-                                label={'Field Type'}
-                                invalid={
-                                    (errors.password &&
-                                        touched.password) as boolean
-                                }
-                                errorMessage={errors.password}
-                            >
-                                <Field name="dataType">
-                                    {({ field, form }: FieldProps) => (
-                                        <Select<DataTypeOption>
-                                            field={field}
-                                            form={form}
-                                            options={options}
-                                            placeholder={'Select a data type'}
-                                            components={{
-                                                Option: CustomSelectOption,
-                                            }}
-                                            value={options.find(
-                                                (option) =>
-                                                    option.value === field.value
-                                            )}
-                                            onChange={(option) =>
-                                                form.setFieldValue(
-                                                    field.name,
-                                                    option?.value
-                                                )
-                                            }
-                                        />
-                                    )}
-                                </Field>
-                            </FormItem>
+                            {fields.map((field, index) => (
+                                <div key={index}>
+                                    <Field
+                                        type="text"
+                                        autoComplete="off"
+                                        value={field.name}
+                                        onChange={(
+                                            e: React.ChangeEvent<HTMLInputElement>
+                                        ) => {
+                                            const newFields = [...fields]
+                                            newFields[index].name =
+                                                e.target.value
+                                            setFields(newFields)
+                                        }}
+                                        placeholder="Field Name"
+                                        component={Input}
+                                        className="mb-1"
+                                    />
+
+                                    <Field
+                                        name="dataType"
+                                        value={field.type}
+                                        onChange={(
+                                            e: React.ChangeEvent<HTMLInputElement>
+                                        ) => {
+                                            const newFields = [...fields]
+                                            newFields[index].name =
+                                                e.target.value
+                                            setFields(newFields)
+                                        }}
+                                        placeholder="Field Type"
+                                    >
+                                        {({ field, form }: FieldProps) => (
+                                            <Select<DataTypeOption>
+                                                className="mb-5"
+                                                field={field}
+                                                form={form}
+                                                options={options}
+                                                placeholder={
+                                                    'Select a data type'
+                                                }
+                                                components={{
+                                                    Option: CustomSelectOption,
+                                                }}
+                                                value={options.find(
+                                                    (option) =>
+                                                        option.value ===
+                                                        field.value
+                                                )}
+                                                onChange={(option) =>
+                                                    form.setFieldValue(
+                                                        field.name,
+                                                        option?.value
+                                                    )
+                                                }
+                                            />
+                                        )}
+                                    </Field>
+                                </div>
+                            ))}
                             <Button
                                 block
                                 loading={isSubmitting}
                                 variant="twoTone"
                                 type="submit"
+                                onClick={handleAddField}
                             >
                                 Add field
+                            </Button>
+                            <Button
+                                block
+                                loading={isSubmitting}
+                                variant="solid"
+                                type="submit"
+                                onClick={handleAddField}
+                                color="green-600"
+                                className="mt-5"
+                            >
+                                Save
                             </Button>
                         </FormContainer>
                     </Form>

@@ -85,17 +85,6 @@ export default function CommunitySpecificTemplates() {
                 >
                     <h5 className="mb-4">Add Template</h5>
                     <AddTemplateForm />
-                    <div className="flex flex-col">
-                        <div className="flex justify-end">
-                            <Button
-                                variant="solid"
-                                type="submit"
-                                onClick={onTemplateDialogClose}
-                            >
-                                Save
-                            </Button>
-                        </div>
-                    </div>
                 </Dialog>
             </Card>
         </div>
