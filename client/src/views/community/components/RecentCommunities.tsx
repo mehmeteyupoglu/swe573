@@ -1,6 +1,5 @@
 import { Card } from '@/components/ui'
 import IndividualCommunity from './IndividualCommunity'
-import { use } from 'i18next'
 import { useEffect, useState } from 'react'
 import { apiGetCommunityList } from '@/services/CommunityService'
 import { CommunityType } from '@/@types/community'
