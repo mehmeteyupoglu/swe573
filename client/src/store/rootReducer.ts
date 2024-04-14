@@ -1,6 +1,7 @@
 import { combineReducers, CombinedState, AnyAction, Reducer } from 'redux'
 import auth, { AuthState } from './slices/auth'
 import base, { BaseState } from './slices/base'
+import community from './slices/community'
 import locale, { LocaleState } from './slices/locale/localeSlice'
 import theme, { ThemeState } from './slices/theme/themeSlice'
 import RtkQueryService from '@/services/RtkQueryService'
@@ -8,6 +9,7 @@ import RtkQueryService from '@/services/RtkQueryService'
 export type RootState = CombinedState<{
     auth: CombinedState<AuthState>
     base: CombinedState<BaseState>
+    community: ReturnType<typeof community>
     locale: LocaleState
     theme: ThemeState
     /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -21,6 +23,7 @@ export interface AsyncReducers {
 const staticReducers = {
     auth,
     base,
+    community,
     locale,
     theme,
     [RtkQueryService.reducerPath]: RtkQueryService.reducer,

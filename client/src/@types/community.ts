@@ -17,6 +17,7 @@ export type TemplateType = {
             field_type: string
         }
     ]
+    templateDialogOpen?: boolean
 }
 
 export interface DataTypeResponse {

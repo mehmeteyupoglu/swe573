@@ -10,11 +10,21 @@ import { DataTypeOption, DataTypeResponse } from '@/@types/community'
 import { Select } from '@/components/ui'
 import { CustomSelectOption } from '@/components/shared/CustomSelectOption'
 import { useDispatch } from 'react-redux'
-import { addTemplate } from '@/store/slices/community'
+import { addTemplate, toggleTemplateDialog } from '@/store/slices/community'
 
 export default function AddTemplateForm() {
     const [templateName, setTemplateName] = useState('')
     const [templateDescription, setTemplateDescription] = useState('')
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target
+        if (name === 'templateName') {
+            setTemplateName(value)
+        } else if (name === 'templateDescription') {
+            setTemplateDescription(value)
+        }
+    }
+
     const [fields, setFields] = useState([{ name: '', type: '' }])
     const dispatch = useDispatch()
 
@@ -23,6 +33,7 @@ export default function AddTemplateForm() {
     }
 
     const handleSave = () => {
+        dispatch(toggleTemplateDialog())
         dispatch(addTemplate({ templateName, templateDescription, fields }))
     }
 
@@ -44,7 +55,6 @@ export default function AddTemplateForm() {
         )[]
     >([])
 
-    console.log(dataTypes)
     const options: DataTypeOption[] = dataTypes?.map((dataType) => ({
         value: dataType,
         label: dataType,
@@ -92,6 +102,8 @@ export default function AddTemplateForm() {
                                     name="templateName"
                                     placeholder={'Template Name'}
                                     component={Input}
+                                    onChange={handleChange}
+                                    value={templateName}
                                 />
                             </FormItem>
                             <FormItem
@@ -109,6 +121,8 @@ export default function AddTemplateForm() {
                                     name="templateDescription"
                                     placeholder={'Template Description'}
                                     component={Input}
+                                    onChange={handleChange}
+                                    value={templateDescription}
                                 />
                             </FormItem>
                             <FormItem>

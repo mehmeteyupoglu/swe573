@@ -5,11 +5,18 @@ import React, { useEffect, useState } from 'react'
 import { HiChevronDown } from 'react-icons/hi'
 import Template from './Template'
 import AddTemplateForm from './AddTemplateForm'
+import { useDispatch } from 'react-redux'
+import { toggleTemplateDialog } from '@/store/slices/community'
+import { useAppSelector, RootState } from '@/store'
 
 export default function CommunitySpecificTemplates() {
     const [isOpen, setIsOpen] = React.useState(false)
     const [defaultTemplate, setDefaultTemplate] = useState<TemplateType>()
-    const [isTemplateDialogOpen, setIsTemplateDialogOpen] = useState(false)
+    const isDialogOpen = useAppSelector(
+        (state: RootState) => state.community.template.templateDialogOpen
+    )
+
+    const dispatch = useDispatch()
 
     useEffect(() => {
         const fetchDefaultTemplate = async () => {
@@ -21,12 +28,8 @@ export default function CommunitySpecificTemplates() {
         fetchDefaultTemplate()
     }, [])
 
-    const onTemplateDialogClose = () => {
-        setIsTemplateDialogOpen(false)
-    }
-
     const onTemplateDialogOpen = () => {
-        setIsTemplateDialogOpen(true)
+        dispatch(toggleTemplateDialog())
     }
 
     return (
@@ -79,10 +82,7 @@ export default function CommunitySpecificTemplates() {
                         )}
                     </div>
                 )}
-                <Dialog
-                    isOpen={isTemplateDialogOpen}
-                    onClose={onTemplateDialogClose}
-                >
+                <Dialog isOpen={isDialogOpen ?? false}>
                     <h5 className="mb-4">Add Template</h5>
                     <AddTemplateForm />
                 </Dialog>

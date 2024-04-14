@@ -11,6 +11,7 @@ const initialState: TemplateType = {
             field_type: '',
         },
     ],
+    templateDialogOpen: false,
 }
 
 const templateSlice = createSlice({
@@ -40,8 +41,12 @@ const templateSlice = createSlice({
                 },
             ]
         },
+        toggleTemplateDialog(state) {
+            state.templateDialogOpen = !state.templateDialogOpen
+        },
     },
 })
 
-export const { setTemplate, addTemplate } = templateSlice.actions
+export const { setTemplate, addTemplate, toggleTemplateDialog } =
+    templateSlice.actions
 export default templateSlice.reducer
