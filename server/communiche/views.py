@@ -211,3 +211,14 @@ def template_detail(request, id):
 def data_types(request):
     data_types = constants.DATA_TYPES
     return JsonResponse([data_type[1] for data_type in data_types], safe=False)
+
+@api_view(['POST'])
+def join_community(request, community_id, user_id):
+    try:
+        community = Community.objects.get(pk=community_id)
+        user = User.objects.get(pk=user_id)
+    except (Community.DoesNotExist, User.DoesNotExist):
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    community.members.add(user)
+    return Response(status=status.HTTP_200_OK, safe=False)

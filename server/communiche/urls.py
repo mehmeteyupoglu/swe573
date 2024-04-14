@@ -32,4 +32,5 @@ urlpatterns = [
     path('add_template/', views.add_template, name='add_template'),
     path('default_template/', views.default_template, name='default_template'),
     path('data_types/', views.data_types, name='data_types'),
+    path('join_community/<int:community_id>/<int:user_id>/', views.join_community, name='join_community'),
 ]
