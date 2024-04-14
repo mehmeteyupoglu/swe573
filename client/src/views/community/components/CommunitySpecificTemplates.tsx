@@ -3,7 +3,6 @@ import { Card, Button, Dialog } from '@/components/ui'
 import { apiGetDefaultTemplate } from '@/services/CommunityService'
 import React, { useEffect, useState } from 'react'
 import { HiChevronDown } from 'react-icons/hi'
-import { toSentenceCase } from '@/utils/helpers'
 import Template from './Template'
 import AddTemplateForm from './AddTemplateForm'
 
