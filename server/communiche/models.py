@@ -65,7 +65,12 @@ class Community(models.Model):
     is_public = models.BooleanField(default=False, null=True)
     reputation_rating = models.DecimalField(max_digits=10, decimal_places=1, default=0, null=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owner', null=True)
-    # members = models.ManyToManyField(User, related_name='communities')
+    members = models.ManyToManyField(User, through='CommunityUser', related_name='communities')
+    
+class CommunityUser(models.Model):
+    community = models.ForeignKey(Community, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    joined_at = models.DateTimeField(auto_now_add=True)
 
 class Template(models.Model):
     name = models.CharField(max_length=200)

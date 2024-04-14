@@ -221,4 +221,4 @@ def join_community(request, community_id, user_id):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     community.members.add(user)
-    return Response(status=status.HTTP_200_OK, safe=False)
+    return Response(status=status.HTTP_200_OK)
