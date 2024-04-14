@@ -20,11 +20,14 @@ export default function RecentCommunities() {
     useEffect(() => {
         console.log(communities)
     }, [communities])
+
+    const renderedCommunities = communities.slice(0, 5)
+
     return (
         <div>
             <h3>Recent Communities</h3>
             <Card className="mt-3 h-75 overflow-auto">
-                {communities.map((community) => (
+                {renderedCommunities.map((community) => (
                     <IndividualCommunity
                         key={community.id}
                         community={community.name}
