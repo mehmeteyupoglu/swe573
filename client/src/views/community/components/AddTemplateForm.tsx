@@ -5,7 +5,6 @@ import Checkbox from '@/components/ui/Checkbox'
 import { Formik, Form, Field } from 'formik'
 import { FormContainer, FormItem } from '@/components/ui/Form'
 import * as Yup from 'yup'
-import { useTranslation } from 'react-i18next'
 
 export default function AddTemplateForm() {
     const validationSchema = Yup.object().shape({
@@ -13,7 +12,6 @@ export default function AddTemplateForm() {
         description: Yup.string().required('Please enter a description'),
     })
 
-    const { t } = useTranslation()
     return (
         <div>
             <Formik
@@ -29,7 +27,27 @@ export default function AddTemplateForm() {
                     <Form className="mb-3">
                         <FormContainer>
                             <FormItem
-                                label={t('signIn.username') || 'Username'}
+                                label={'Template Name'}
+                                invalid={
+                                    (errors.username &&
+                                        touched.username) as boolean
+                                }
+                                errorMessage={errors.username}
+                                className="my-5"
+                            >
+                                <Field
+                                    type="text"
+                                    autoComplete="off"
+                                    name="Template Name"
+                                    placeholder={'Template Name'}
+                                    component={Input}
+                                />
+                            </FormItem>
+                            <FormItem>
+                                <hr />
+                            </FormItem>
+                            <FormItem
+                                label={'Field Name'}
                                 invalid={
                                     (errors.username &&
                                         touched.username) as boolean
@@ -39,14 +57,29 @@ export default function AddTemplateForm() {
                                 <Field
                                     type="text"
                                     autoComplete="off"
-                                    name="username"
-                                    placeholder={t(
-                                        'signIn.username'
-                                    ).toLowerCase()}
+                                    name="Template Name"
+                                    placeholder={'Template Name'}
                                     component={Input}
+                                    border={false}
                                 />
                             </FormItem>
-
+                            <FormItem
+                                label={'Field Type'}
+                                invalid={
+                                    (errors.username &&
+                                        touched.username) as boolean
+                                }
+                                errorMessage={errors.username}
+                            >
+                                <Field
+                                    type="text"
+                                    autoComplete="off"
+                                    name="Template Name"
+                                    placeholder={'Template Name'}
+                                    component={Input}
+                                    border={false}
+                                />
+                            </FormItem>
                             <Button
                                 block
                                 loading={isSubmitting}
