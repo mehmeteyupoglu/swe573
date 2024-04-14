@@ -18,3 +18,16 @@ export type TemplateType = {
         }
     ]
 }
+
+export interface DataTypeResponse {
+    data_types: (
+        | 'Text'
+        | 'Date'
+        | 'Geolocation'
+        | 'Number'
+        | 'Image'
+        | 'Video'
+        | 'Audio'
+        | 'File'
+    )[]
+}

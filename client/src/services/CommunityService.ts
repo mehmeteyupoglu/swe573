@@ -19,3 +19,10 @@ export async function apiGetDefaultTemplate() {
         method: 'get',
     })
 }
+
+export async function apiGetDataTypes() {
+    return ApiService.fetchData({
+        url: '/data_types/',
+        method: 'get',
+    })
+}

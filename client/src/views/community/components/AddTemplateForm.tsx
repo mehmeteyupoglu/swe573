@@ -1,16 +1,44 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Input from '@/components/ui/Input'
 import Button from '@/components/ui/Button'
 import Checkbox from '@/components/ui/Checkbox'
 import { Formik, Form, Field } from 'formik'
 import { FormContainer, FormItem } from '@/components/ui/Form'
 import * as Yup from 'yup'
+import { apiGetDataTypes } from '@/services/CommunityService'
+import { DataTypeResponse } from '@/@types/community'
+import { use } from 'i18next'
 
 export default function AddTemplateForm() {
     const validationSchema = Yup.object().shape({
         name: Yup.string().required('Please enter a name'),
         description: Yup.string().required('Please enter a description'),
     })
+
+    const [dataTypes, setDataTypes] = useState<
+        (
+            | 'Text'
+            | 'Date'
+            | 'Geolocation'
+            | 'Number'
+            | 'Image'
+            | 'Video'
+            | 'Audio'
+            | 'File'
+        )[]
+    >([])
+
+    useEffect(() => {
+        const fetchDataType = async () => {
+            const resp = await apiGetDataTypes()
+            if (resp.status == 200) {
+                setDataTypes(
+                    (resp.data as DataTypeResponse['data_types']) || []
+                )
+            }
+        }
+        fetchDataType()
+    }, [])
 
     return (
         <div>
