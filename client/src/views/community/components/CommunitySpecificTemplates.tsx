@@ -58,7 +58,11 @@ export default function CommunitySpecificTemplates() {
                 {isOpen && (
                     <div className="body">
                         {defaultTemplate && (
-                            <Template template={defaultTemplate} />
+                            <div>
+                                <Template template={defaultTemplate} />
+                                <Template template={defaultTemplate} />
+                                <Template template={defaultTemplate} />
+                            </div>
                         )}
                     </div>
                 )}

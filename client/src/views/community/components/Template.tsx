@@ -5,7 +5,7 @@ import { TemplateType } from '@/@types/community'
 
 export default function Template({ template }: { template: TemplateType }) {
     return (
-        <Card bordered>
+        <Card bordered className="mt-5">
             <div className="text-gray font-bold">{template.name}:</div>
             <div className="flex underline text-gray font-bold mt-2">
                 <div className="mr-2 w-1/6">Field Name</div>
