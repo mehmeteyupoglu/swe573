@@ -76,8 +76,6 @@ export default function CommunitySpecificTemplates() {
                         {defaultTemplate && (
                             <div>
                                 <Template template={defaultTemplate} />
-                                <Template template={defaultTemplate} />
-                                <Template template={defaultTemplate} />
                             </div>
                         )}
                     </div>
