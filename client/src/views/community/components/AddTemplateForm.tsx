@@ -75,27 +75,14 @@ export default function AddTemplateForm() {
     return (
         <div className="max-h-96 overflow-hidden overflow-y-auto custom-scrollbar">
             <Formik
-                initialValues={{
-                    templateName: '',
-                    templateDescription: '',
-                    password: '',
-                    rememberMe: true,
-                }}
+                initialValues={{}}
                 validationSchema={validationSchema}
                 onSubmit={(values, { setSubmitting }) => {}}
             >
                 {({ touched, errors, isSubmitting }) => (
                     <Form className="mb-3">
                         <FormContainer>
-                            <FormItem
-                                label={'Template Name'}
-                                invalid={
-                                    (errors.templateName &&
-                                        touched.templateName) as boolean
-                                }
-                                errorMessage={errors.templateName}
-                                className="my-5"
-                            >
+                            <FormItem label={'Template Name'} className="my-5">
                                 <Field
                                     type="text"
                                     autoComplete="off"
@@ -108,11 +95,6 @@ export default function AddTemplateForm() {
                             </FormItem>
                             <FormItem
                                 label={'Template Description'}
-                                invalid={
-                                    (errors.templateDescription &&
-                                        touched.templateDescription) as boolean
-                                }
-                                errorMessage={errors.templateDescription}
                                 className="my-5"
                             >
                                 <Field
@@ -131,6 +113,7 @@ export default function AddTemplateForm() {
                             {fields.map((field, index) => (
                                 <div key={index}>
                                     <Field
+                                        name={'name'}
                                         type="text"
                                         autoComplete="off"
                                         value={field.name}
@@ -148,16 +131,8 @@ export default function AddTemplateForm() {
                                     />
 
                                     <Field
-                                        name="dataType"
-                                        value={field.type}
-                                        onChange={(
-                                            e: React.ChangeEvent<HTMLInputElement>
-                                        ) => {
-                                            const newFields = [...fields]
-                                            newFields[index].name =
-                                                e.target.value
-                                            setFields(newFields)
-                                        }}
+                                        name={`type`}
+                                        value={`${field}`}
                                         placeholder="Field Type"
                                     >
                                         {({ field, form }: FieldProps) => (
@@ -177,12 +152,32 @@ export default function AddTemplateForm() {
                                                         option.value ===
                                                         field.value
                                                 )}
-                                                onChange={(option) =>
+                                                onChange={(option) => {
                                                     form.setFieldValue(
                                                         field.name,
                                                         option?.value
                                                     )
-                                                }
+
+                                                    // Update the fields state
+                                                    const updatedFields: {
+                                                        name: string
+                                                        type: string
+                                                    }[] = fields.map((f) => {
+                                                        if (
+                                                            f.name ===
+                                                            field.name
+                                                        ) {
+                                                            return {
+                                                                ...f,
+                                                                type:
+                                                                    option?.value ||
+                                                                    '', // Set a default value for the type property
+                                                            }
+                                                        }
+                                                        return f
+                                                    })
+                                                    setFields(updatedFields)
+                                                }}
                                             />
                                         )}
                                     </Field>
