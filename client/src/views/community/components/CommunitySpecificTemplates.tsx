@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react'
 import { HiChevronDown } from 'react-icons/hi'
 import { toSentenceCase } from '@/utils/helpers'
 import Template from './Template'
+import AddTemplateForm from './AddTemplateForm'
 
 export default function CommunitySpecificTemplates() {
     const [isOpen, setIsOpen] = React.useState(false)
@@ -84,6 +85,7 @@ export default function CommunitySpecificTemplates() {
                     onClose={onTemplateDialogClose}
                 >
                     <h5 className="mb-4">Add Template</h5>
+                    <AddTemplateForm />
                     <div className="flex flex-col">
                         <div className="flex justify-end">
                             <Button
