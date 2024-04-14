@@ -108,7 +108,7 @@ def login(request):
 @api_view(['GET'])
 def communities(request):
     if request.method == 'GET':
-        communities = Community.objects.all()
+        communities = Community.objects.all().order_by('-updated_at')
         serializer = CommunitySerializer(communities, many=True)
         return Response(serializer.data)
 
