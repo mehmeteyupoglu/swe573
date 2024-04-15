@@ -19,7 +19,10 @@
     },
     "nav": {
         "home": "Home",
-        "singleMenuItem": "Create Menu",
+        "createCommunity": "Create Community",
+        "individualCommunity": "Individual Community",
+        "post": "Post",
+        "communities": "Communities",
         "collapseMenu": {
             "collapseMenu": "Collapse menu item",
             "item1": "Collapse menu item 1",
@@ -69,6 +72,12 @@
         },
         "password": {
             "title": "Password"
+        }
+    },
+    "community": {
+        "messages": {
+            "success": "Community added successfully",
+            "error": "Community added failed"
         }
     },
     "signUp": {

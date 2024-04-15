@@ -2,6 +2,7 @@ import { lazy } from 'react'
 import authRoute from './authRoute'
 import appsRoute from './appsRoute'
 import type { Routes } from '@/@types/routes'
+import i18n from 'i18next'
 
 export const publicRoutes: Routes = [...authRoute]
 
@@ -18,6 +19,26 @@ export const protectedRoutes = [
         path: '/single-menu-view',
         component: lazy(() => import('@/views/demo/SingleMenuView')),
         authority: [],
+    },
+    {
+        key: 'addCommunity',
+        path: '/create-community',
+        component: lazy(() => import('@/views/community/CreateCommunity')),
+        authority: [],
+        meta: {
+            header: i18n.t('nav.createCommunity'),
+            headerContainer: true,
+        },
+    },
+    {
+        key: 'individualCommunity',
+        path: '/individual-community/:id',
+        component: lazy(() => import('@/views/community/IndividualCommunity')),
+        authority: [],
+        meta: {
+            header: i18n.t('nav.individualCommunity'),
+            headerContainer: true,
+        },
     },
     {
         key: 'collapseMenu.item1',
