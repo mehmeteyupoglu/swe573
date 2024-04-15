@@ -227,3 +227,19 @@ def join_community(request, community_id, user_id):
     community.updated_at = datetime.now()  # Update the updated_at attribute
     community.save()  # Save the updated community
     return Response(status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+def is_user_in_community(request, user_id, community_id):
+    try:
+        user = User.objects.get(id=user_id)
+        community = Community.objects.get(id=community_id)
+
+        if user in community.members.all():
+            return JsonResponse({'is_member': True})
+        else:
+            return JsonResponse({'is_member': False})
+    except User.DoesNotExist:
+        return JsonResponse({'error': 'User not found'}, status=404)
+    except Community.DoesNotExist:
+        return JsonResponse({'error': 'Community not found'}, status=404)
