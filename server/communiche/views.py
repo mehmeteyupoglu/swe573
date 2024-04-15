@@ -221,4 +221,6 @@ def join_community(request, community_id, user_id):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     community.members.add(user)
+    community.updated_at = datetime.now()  # Update the updated_at attribute
+    community.save()  # Save the updated community
     return Response(status=status.HTTP_200_OK)
