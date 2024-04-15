@@ -229,7 +229,7 @@ def join_community(request, community_id, user_id):
     return Response(status=status.HTTP_200_OK)
 
 
-@api_view(['POST'])
+@api_view(['GET'])
 def is_user_in_community(request, community_id, user_id):
     try:
         user = User.objects.get(id=user_id)
