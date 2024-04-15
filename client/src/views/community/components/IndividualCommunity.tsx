@@ -139,7 +139,7 @@ export default function IndividualCommunity({
     )
 
     return (
-        <div className="max-w-xl">
+        <div className="max-w-xl mb-5">
             <Card
                 clickable
                 className="hover:shadow-lg transition duration-150 ease-in-out dark:border dark:border-gray-600 dark:border-solid"
@@ -149,7 +149,7 @@ export default function IndividualCommunity({
                 headerBorder={false}
             >
                 <span className="text-emerald-600 font-semibold">
-                    {community.num_members} members, 20 posts
+                    {community.num_members || '###'} members, 20 posts
                 </span>
                 <h4 className="font-bold my-3">{community.name}</h4>
                 <p>{community.description}</p>
