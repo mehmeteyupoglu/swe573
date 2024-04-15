@@ -39,7 +39,7 @@ const navigationConfig: NavigationTree[] = [
     },
     {
         key: 'communities',
-        path: '/single-menu-view',
+        path: '/communities',
         title: 'Single menu item',
         translateKey: 'nav.communities',
         icon: 'communities',
