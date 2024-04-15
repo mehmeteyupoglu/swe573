@@ -40,3 +40,10 @@ export async function apiGetCommunity(id: string) {
         method: 'get',
     })
 }
+
+export async function apiJoinCommunity(communityId: string, userId: string) {
+    return ApiService.fetchData({
+        url: `/join_community/${communityId}/${userId}/`,
+        method: 'post',
+    })
+}
