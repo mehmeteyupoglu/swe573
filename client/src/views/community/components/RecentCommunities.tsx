@@ -1,5 +1,5 @@
 import { Card } from '@/components/ui'
-import IndividualCommunity from './IndividualCommunity'
+import RecentCommunity from './RecentCommunity'
 import { useEffect, useState } from 'react'
 import { apiGetCommunityList } from '@/services/CommunityService'
 import { CommunityType } from '@/@types/community'
@@ -28,7 +28,7 @@ export default function RecentCommunities() {
             <h3>Recent Communities</h3>
             <Card className="mt-3 h-75 overflow-auto">
                 {renderedCommunities.map((community) => (
-                    <IndividualCommunity
+                    <RecentCommunity
                         key={community.id}
                         community={community.name}
                         members={community.members.length}
