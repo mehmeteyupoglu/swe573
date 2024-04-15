@@ -3,8 +3,8 @@ import { Button, Card, Notification, toast } from '@/components/ui'
 import { apiGetCommunity, apiJoinCommunity } from '@/services/CommunityService'
 import { useAppSelector } from '@/store'
 import { formatDate } from '@/utils/helpers'
-import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
 
 export default function IndividualCommunity() {
     const [community, setCommunity] = useState<IndividualCommunityType>(
@@ -15,12 +15,36 @@ export default function IndividualCommunity() {
 
     const { id } = useParams<{ id: string }>()
 
+    const navigate = useNavigate()
+
     useEffect(() => {
         const fetchCommunity = async () => {
-            // fetch community data
-            const resp = await apiGetCommunity(id ?? '')
-            if (resp.status === 200) {
-                setCommunity(resp.data as IndividualCommunityType)
+            try {
+                // fetch community data
+                const resp = await apiGetCommunity(id ?? '')
+
+                if (resp.status === 200) {
+                    setCommunity(resp.data as IndividualCommunityType)
+                } else if (resp.status === 404) {
+                    // community not found
+                    navigate('/home')
+                }
+            } catch (error) {
+                console.error('Error fetching community:', error)
+
+                if ((error as any).response?.status === 404) {
+                    navigate('/home')
+                }
+
+                toast.push(
+                    <Notification
+                        title={'Error fetching community'}
+                        type="danger"
+                    />,
+                    {
+                        placement: 'top-center',
+                    }
+                )
             }
         }
         fetchCommunity()
