@@ -72,4 +72,5 @@ export type IndividualCommunityType = {
     reputation_rating: string
     templates: DataTypeOption[]
     num_members: number
+    members?: Member[]
 }
