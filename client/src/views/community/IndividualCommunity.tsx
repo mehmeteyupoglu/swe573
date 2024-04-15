@@ -38,8 +38,6 @@ export default function IndividualCommunity() {
                     // community not found
                     navigate('/home')
                 }
-
-                setFetchTrigger(!fetchTrigger)
             } catch (error) {
                 console.error('Error fetching community:', error)
 
@@ -59,7 +57,7 @@ export default function IndividualCommunity() {
             }
         }
         fetchCommunity()
-    }, [id])
+    }, [id, fetchTrigger])
 
     useEffect(() => {
         const checkUserInCommunity = async () => {
@@ -107,7 +105,7 @@ export default function IndividualCommunity() {
             // join community
             const resp = await apiJoinCommunity(id ?? '', userId ?? '')
             if (resp.status === 200) {
-                console.log('Joined community')
+                setFetchTrigger((prev) => !prev)
                 toast.push(
                     <Notification
                         title={'You have successfully joined the community!'}
@@ -147,6 +145,8 @@ export default function IndividualCommunity() {
                         placement: 'top-center',
                     }
                 )
+
+                setFetchTrigger((prev) => !prev)
             }
         } catch (error) {
             console.error('Error leaving community:', error)
