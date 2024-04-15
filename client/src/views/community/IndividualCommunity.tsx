@@ -1,6 +1,10 @@
 import { IndividualCommunityType } from '@/@types/community'
 import { Button, Card, Notification, toast } from '@/components/ui'
-import { apiGetCommunity, apiJoinCommunity } from '@/services/CommunityService'
+import {
+    apiGetCommunity,
+    apiIsUserInCommunity,
+    apiJoinCommunity,
+} from '@/services/CommunityService'
 import { useAppSelector } from '@/store'
 import { formatDate } from '@/utils/helpers'
 import { useEffect, useState } from 'react'
@@ -10,6 +14,8 @@ export default function IndividualCommunity() {
     const [community, setCommunity] = useState<IndividualCommunityType>(
         {} as IndividualCommunityType
     )
+
+    const [isUserInCommunity, setIsUserInCommunity] = useState(false)
 
     const userId = useAppSelector((state) => state.auth.user?.id)
 
@@ -50,6 +56,47 @@ export default function IndividualCommunity() {
         fetchCommunity()
     }, [id])
 
+    useEffect(() => {
+        const checkUserInCommunity = async () => {
+            try {
+                // check if user is in community
+                const resp = await apiIsUserInCommunity(id ?? '', userId ?? '')
+                setIsUserInCommunity(
+                    (resp.data as { is_member: boolean }).is_member
+                )
+            } catch (error) {
+                console.error('Error checking user in community:', error)
+            }
+        }
+        checkUserInCommunity()
+    }, [id, userId])
+
+    const renderButton = () => {
+        if (isUserInCommunity) {
+            return (
+                <Button
+                    className="bg-blue-500 text-white"
+                    size="sm"
+                    variant="solid"
+                    onClick={() => navigate(`/community/${id}/`)}
+                >
+                    Leave
+                </Button>
+            )
+        } else {
+            return (
+                <Button
+                    className="bg-blue-500 text-white"
+                    size="sm"
+                    variant="solid"
+                    onClick={handleJoinCommunity}
+                >
+                    Join
+                </Button>
+            )
+        }
+    }
+
     const handleJoinCommunity = async () => {
         try {
             // join community
@@ -82,14 +129,7 @@ export default function IndividualCommunity() {
 
     const cardFooter = (
         <div className="flex items-center justify-between">
-            <Button
-                className="bg-blue-500 text-white"
-                size="sm"
-                variant="solid"
-                onClick={handleJoinCommunity}
-            >
-                Join
-            </Button>
+            {renderButton()}
             <span>
                 <h6 className="text-sm">Last Activity</h6>
                 <span className="text-xs">

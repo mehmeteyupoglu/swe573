@@ -47,3 +47,13 @@ export async function apiJoinCommunity(communityId: string, userId: string) {
         method: 'post',
     })
 }
+
+export async function apiIsUserInCommunity(
+    communityId: string,
+    userId: string
+) {
+    return ApiService.fetchData({
+        url: `/is_user_in_community/${communityId}/${userId}/`,
+        method: 'get',
+    })
+}
