@@ -31,7 +31,7 @@ const { Control } = components
 const validationSchema = Yup.object().shape({
     name: Yup.string()
         .min(3, 'Too Short!')
-        .max(12, 'Too Long!')
+        .max(200, 'Too Long!')
         .required('Community Name Required'),
     description: Yup.string(),
     avatar: Yup.string(),
