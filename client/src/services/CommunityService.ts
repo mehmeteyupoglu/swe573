@@ -33,3 +33,10 @@ export async function apiGetCommunityList() {
         method: 'get',
     })
 }
+
+export async function apiGetCommunity(id: string) {
+    return ApiService.fetchData({
+        url: `/community/${id}/`,
+        method: 'get',
+    })
+}

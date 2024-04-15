@@ -1,12 +1,28 @@
 import { IndividualCommunityType } from '@/@types/community'
 import { Button, Card } from '@/components/ui'
-import React from 'react'
+import { apiGetCommunity } from '@/services/CommunityService'
+import { formatDate } from '@/utils/helpers'
+import React, { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
 
-export default function IndividualCommunity({
-    community,
-}: {
-    community: IndividualCommunityType
-}) {
+export default function IndividualCommunity() {
+    const [community, setCommunity] = useState<IndividualCommunityType>(
+        {} as IndividualCommunityType
+    )
+
+    const { id } = useParams<{ id: string }>()
+
+    useEffect(() => {
+        const fetchCommunity = async () => {
+            // fetch community data
+            const resp = await apiGetCommunity(id ?? '')
+            if (resp.status === 200) {
+                setCommunity(resp.data as IndividualCommunityType)
+            }
+        }
+        fetchCommunity()
+    }, [id])
+
     const cardFooter = (
         <div className="flex items-center justify-between">
             <Button
@@ -18,7 +34,9 @@ export default function IndividualCommunity({
             </Button>
             <span>
                 <h6 className="text-sm">Last Activity</h6>
-                <span className="text-xs">Sep 23, 2021</span>
+                <span className="text-xs">
+                    {formatDate(community.updated_at)}
+                </span>
             </span>
         </div>
     )
@@ -35,14 +53,10 @@ export default function IndividualCommunity({
                 headerBorder={false}
             >
                 <span className="text-emerald-600 font-semibold">
-                    10 members, 20 posts
+                    {community.num_members} members, 20 posts
                 </span>
-                <h4 className="font-bold my-3">Community header</h4>
-                <p>
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry. Lorem Ipsum has been the
-                    industry&apos;s.
-                </p>
+                <h4 className="font-bold my-3">{community.name}</h4>
+                <p>{community.description}</p>
             </Card>
         </div>
     )
