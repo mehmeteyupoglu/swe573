@@ -8,7 +8,6 @@ import {
 import { useAppSelector } from '@/store'
 import { formatDate } from '@/utils/helpers'
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
 
 export default function IndividualCommunity({
     community,
