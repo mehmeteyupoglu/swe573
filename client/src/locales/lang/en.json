@@ -20,6 +20,7 @@
     "nav": {
         "home": "Home",
         "createCommunity": "Create Community",
+        "individualCommunity": "Individual Community",
         "post": "Post",
         "communities": "Communities",
         "collapseMenu": {

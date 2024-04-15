@@ -61,3 +61,15 @@ type Member = {
     phone: string
     short_bio: string | null
 }
+
+export type IndividualCommunityType = {
+    id: number
+    name: string
+    description: string
+    created_at: string
+    updated_at: string
+    is_public: boolean
+    reputation_rating: string
+    templates: DataTypeOption[]
+    num_members: number
+}

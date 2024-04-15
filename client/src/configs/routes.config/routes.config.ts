@@ -31,6 +31,16 @@ export const protectedRoutes = [
         },
     },
     {
+        key: 'individualCommunity',
+        path: '/individual-community/:id',
+        component: lazy(() => import('@/views/community/IndividualCommunity')),
+        authority: [],
+        meta: {
+            header: i18n.t('nav.individualCommunity'),
+            headerContainer: true,
+        },
+    },
+    {
         key: 'collapseMenu.item1',
         path: '/collapse-menu-item-view-1',
         component: lazy(() => import('@/views/demo/CollapseMenuItemView1')),
