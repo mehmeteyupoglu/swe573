@@ -1,6 +1,7 @@
 import { IndividualCommunityType } from '@/@types/community'
 import { Button, Card } from '@/components/ui'
-import { apiGetCommunity } from '@/services/CommunityService'
+import { apiGetCommunity, apiJoinCommunity } from '@/services/CommunityService'
+import { useAppSelector } from '@/store'
 import { formatDate } from '@/utils/helpers'
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
@@ -9,6 +10,8 @@ export default function IndividualCommunity() {
     const [community, setCommunity] = useState<IndividualCommunityType>(
         {} as IndividualCommunityType
     )
+
+    const userId = useAppSelector((state) => state.auth.user?.id)
 
     const { id } = useParams<{ id: string }>()
 
@@ -23,12 +26,21 @@ export default function IndividualCommunity() {
         fetchCommunity()
     }, [id])
 
+    const handleJoinCommunity = async () => {
+        // join community
+        const resp = await apiJoinCommunity(id ?? '', userId ?? '')
+        if (resp.status === 200) {
+            console.log('Joined community')
+        }
+    }
+
     const cardFooter = (
         <div className="flex items-center justify-between">
             <Button
                 className="bg-blue-500 text-white"
                 size="sm"
                 variant="solid"
+                onClick={handleJoinCommunity}
             >
                 Join
             </Button>
