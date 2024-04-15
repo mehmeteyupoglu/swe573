@@ -15,6 +15,8 @@ export default function IndividualCommunity() {
         {} as IndividualCommunityType
     )
 
+    const [fetchTrigger, setFetchTrigger] = useState(false)
+
     const [isUserInCommunity, setIsUserInCommunity] = useState(false)
 
     const userId = useAppSelector((state) => state.auth.user?.id)
@@ -35,6 +37,8 @@ export default function IndividualCommunity() {
                     // community not found
                     navigate('/home')
                 }
+
+                setFetchTrigger(!fetchTrigger)
             } catch (error) {
                 console.error('Error fetching community:', error)
 
@@ -69,7 +73,7 @@ export default function IndividualCommunity() {
             }
         }
         checkUserInCommunity()
-    }, [id, userId])
+    }, [id, userId, fetchTrigger]) // TODO: check fetch trigger functionality
 
     const renderButton = () => {
         if (isUserInCommunity) {
