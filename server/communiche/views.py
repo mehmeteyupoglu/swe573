@@ -230,7 +230,7 @@ def join_community(request, community_id, user_id):
 
 
 @api_view(['POST'])
-def is_user_in_community(request, user_id, community_id):
+def is_user_in_community(request, community_id, user_id):
     try:
         user = User.objects.get(id=user_id)
         community = Community.objects.get(id=community_id)
