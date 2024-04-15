@@ -57,3 +57,10 @@ export async function apiIsUserInCommunity(
         method: 'get',
     })
 }
+
+export async function apiLeaveCommunity(communityId: string, userId: string) {
+    return ApiService.fetchData({
+        url: `/leave_community/${communityId}/${userId}/`,
+        method: 'post',
+    })
+}

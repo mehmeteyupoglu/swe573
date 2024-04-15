@@ -4,6 +4,7 @@ import {
     apiGetCommunity,
     apiIsUserInCommunity,
     apiJoinCommunity,
+    apiLeaveCommunity,
 } from '@/services/CommunityService'
 import { useAppSelector } from '@/store'
 import { formatDate } from '@/utils/helpers'
@@ -82,7 +83,7 @@ export default function IndividualCommunity() {
                     className="bg-blue-500 text-white"
                     size="sm"
                     variant="solid"
-                    onClick={() => navigate(`/community/${id}/`)}
+                    onClick={handleLeaveCommunity}
                 >
                     Leave
                 </Button>
@@ -122,6 +123,36 @@ export default function IndividualCommunity() {
             toast.push(
                 <Notification
                     title={'Error joining community'}
+                    type="danger"
+                />,
+                {
+                    placement: 'top-center',
+                }
+            )
+        }
+    }
+
+    const handleLeaveCommunity = async () => {
+        try {
+            // leave community
+            const resp = await apiLeaveCommunity(id ?? '', userId ?? '')
+            if (resp.status === 200) {
+                console.log('Joined community')
+                toast.push(
+                    <Notification
+                        title={'You have successfully left the community!'}
+                        type="success"
+                    />,
+                    {
+                        placement: 'top-center',
+                    }
+                )
+            }
+        } catch (error) {
+            console.error('Error leaving community:', error)
+            toast.push(
+                <Notification
+                    title={'Error leaving community'}
                     type="danger"
                 />,
                 {
