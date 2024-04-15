@@ -228,6 +228,21 @@ def join_community(request, community_id, user_id):
     community.save()  # Save the updated community
     return Response(status=status.HTTP_200_OK)
 
+@api_view(['POST'])
+def leave_community(request, community_id, user_id):
+    try:
+        community = Community.objects.get(pk=community_id)
+        user = User.objects.get(pk=user_id)
+    except (Community.DoesNotExist, User.DoesNotExist):
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if user in community.members.all():
+        community.members.remove(user)
+        community.updated_at = datetime.now()  # Update the updated_at attribute
+        community.save()  # Save the updated community
+        return Response(status=status.HTTP_200_OK)
+    else:
+        return Response({'detail': 'User is not a member of the community'}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 def is_user_in_community(request, community_id, user_id):
