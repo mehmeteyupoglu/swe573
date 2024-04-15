@@ -131,7 +131,10 @@ def community_detail(request, id):
 
     if request.method == 'GET':
         serializer = CommunitySerializer(community)
-        return Response(serializer.data)
+        community_data = serializer.data
+        community_data['num_members'] = community.members.count()
+        community_data.pop('members', None)  # Remove the 'members' field
+        return Response(community_data)
     
 
     elif request.method == 'PUT':
