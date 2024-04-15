@@ -1,5 +1,5 @@
 import { IndividualCommunityType } from '@/@types/community'
-import { Button, Card } from '@/components/ui'
+import { Button, Card, Notification, toast } from '@/components/ui'
 import { apiGetCommunity, apiJoinCommunity } from '@/services/CommunityService'
 import { useAppSelector } from '@/store'
 import { formatDate } from '@/utils/helpers'
@@ -27,10 +27,32 @@ export default function IndividualCommunity() {
     }, [id])
 
     const handleJoinCommunity = async () => {
-        // join community
-        const resp = await apiJoinCommunity(id ?? '', userId ?? '')
-        if (resp.status === 200) {
-            console.log('Joined community')
+        try {
+            // join community
+            const resp = await apiJoinCommunity(id ?? '', userId ?? '')
+            if (resp.status === 200) {
+                console.log('Joined community')
+                toast.push(
+                    <Notification
+                        title={'You have successfully joined the community!'}
+                        type="success"
+                    />,
+                    {
+                        placement: 'top-center',
+                    }
+                )
+            }
+        } catch (error) {
+            console.error('Error joining community:', error)
+            toast.push(
+                <Notification
+                    title={'Error joining community'}
+                    type="danger"
+                />,
+                {
+                    placement: 'top-center',
+                }
+            )
         }
     }
 
