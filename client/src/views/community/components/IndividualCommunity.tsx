@@ -21,13 +21,16 @@ export default function IndividualCommunity({
 
     const userId = useAppSelector((state) => state.auth.user?.id)
 
-    const { id } = useParams<{ id: string }>()
+    const { id } = community
 
     useEffect(() => {
         const checkUserInCommunity = async () => {
             try {
                 // check if user is in community
-                const resp = await apiIsUserInCommunity(id ?? '', userId ?? '')
+                const resp = await apiIsUserInCommunity(
+                    String(id) ?? '',
+                    userId ?? ''
+                )
                 setIsUserInCommunity(
                     (resp.data as { is_member: boolean }).is_member
                 )
@@ -67,7 +70,7 @@ export default function IndividualCommunity({
     const handleJoinCommunity = async () => {
         try {
             // join community
-            const resp = await apiJoinCommunity(id ?? '', userId ?? '')
+            const resp = await apiJoinCommunity(String(id) ?? '', userId ?? '')
             if (resp.status === 200) {
                 setFetchTrigger((prev) => !prev)
                 toast.push(
@@ -97,7 +100,7 @@ export default function IndividualCommunity({
     const handleLeaveCommunity = async () => {
         try {
             // leave community
-            const resp = await apiLeaveCommunity(id ?? '', userId ?? '')
+            const resp = await apiLeaveCommunity(String(id) ?? '', userId ?? '')
             if (resp.status === 200) {
                 console.log('Joined community')
                 toast.push(
