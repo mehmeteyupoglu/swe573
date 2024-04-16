@@ -9,6 +9,7 @@ import { toggleFetchTrigger, useAppSelector } from '@/store'
 import { formatDate } from '@/utils/helpers'
 import useRequestWithNotification from '@/utils/hooks/useRequestWithNotification'
 import { useEffect, useState } from 'react'
+import { HiLockClosed, HiLockOpen } from 'react-icons/hi'
 import { useDispatch } from 'react-redux'
 
 export default function IndividualCommunity({
@@ -110,10 +111,25 @@ export default function IndividualCommunity({
                 footerBorder={false}
                 headerBorder={false}
             >
-                <span className="text-emerald-600 font-semibold">
-                    {community.num_members || community.members?.length}{' '}
-                    members, 20 posts
-                </span>
+                <div className="w-full bg-gray-200 dark:bg-gray-800 flex justify-between">
+                    <span className="text-emerald-600 font-semibold">
+                        {community.num_members || community.members?.length}{' '}
+                        members, 20 posts
+                    </span>
+                    <span className="font-semibold">
+                        {community.is_public ? (
+                            <p className="underline text-emerald-600">
+                                Public{' '}
+                                <HiLockOpen className="inline-block ml-2 " />
+                            </p>
+                        ) : (
+                            <p className="underline">
+                                Private
+                                <HiLockClosed className="inline-block ml-2" />
+                            </p>
+                        )}
+                    </span>
+                </div>
                 <h4 className="font-bold my-3">{community.name}</h4>
                 <p>{community.description}</p>
             </Card>
