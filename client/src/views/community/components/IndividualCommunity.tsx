@@ -39,48 +39,34 @@ export default function IndividualCommunity({
     )
 
     const renderButton = () => {
+        const generateButton = (text: string, handler: Function) => (
+            <Button
+                className="bg-blue-500 text-white"
+                size="sm"
+                variant="solid"
+                onClick={() =>
+                    typeof handler === 'function' &&
+                    handler(String(id) ?? '', userId ?? '')
+                }
+            >
+                {text}
+            </Button>
+        )
+
         if (community.is_member) {
-            return (
-                <Button
-                    className="bg-blue-500 text-white"
-                    size="sm"
-                    variant="solid"
-                    onClick={() =>
-                        typeof handleLeaveCommunity === 'function' &&
-                        handleLeaveCommunity(String(id) ?? '', userId ?? '')
-                    }
-                >
-                    Leave
-                </Button>
-            )
+            return generateButton('Leave', handleLeaveCommunity as Function)
         } else if (!community.is_public) {
-            return (
-                <Button
-                    className="bg-blue-500 text-white"
-                    size="sm"
-                    variant="solid"
-                    onClick={() =>
-                        typeof handleJoinCommunity === 'function' &&
-                        handleJoinCommunity(String(id) ?? '', userId ?? '')
-                    }
-                >
-                    Request to Join
-                </Button>
+            return generateButton(
+                'Request to Join',
+                handleJoinCommunity as Function
+            )
+        } else if (community.has_user_requested) {
+            return generateButton(
+                'Cancel Request',
+                handleJoinCommunity as Function
             )
         } else {
-            return (
-                <Button
-                    className="bg-blue-500 text-white"
-                    size="sm"
-                    variant="solid"
-                    onClick={() =>
-                        typeof handleJoinCommunity === 'function' &&
-                        handleJoinCommunity(String(id) ?? '', userId ?? '')
-                    }
-                >
-                    Join
-                </Button>
-            )
+            return generateButton('Join', handleJoinCommunity as Function)
         }
     }
 
