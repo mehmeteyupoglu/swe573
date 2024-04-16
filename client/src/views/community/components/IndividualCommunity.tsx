@@ -58,7 +58,7 @@ export default function IndividualCommunity({
     }, [id, userId, fetchTrigger]) // TODO: check fetch trigger functionality
 
     const renderButton = () => {
-        if (isUserInCommunity) {
+        if (community.is_member) {
             return (
                 <Button
                     className="bg-blue-500 text-white"

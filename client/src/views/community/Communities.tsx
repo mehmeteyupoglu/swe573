@@ -12,12 +12,13 @@ export default function Communities() {
     const fetchTrigger = useAppSelector(
         (state) => state.community.community.fetchTrigger
     ) // Add this line
+    const userId = useAppSelector((state) => state.auth.user?.id)
 
     React.useEffect(() => {
         // Fetch communities
         const fetchCommunities = async () => {
             try {
-                const response = await apiGetCommunityList()
+                const response = await apiGetCommunityList(userId)
                 const data = response.data as IndividualCommunityType[] // Add type assertion here
                 setCommunities(data)
             } catch (error) {
