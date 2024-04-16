@@ -4,11 +4,15 @@ import { apiGetCommunity } from '@/services/CommunityService'
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import IndividualCommunity from './components/IndividualCommunity'
+import CommunityDetail from './components/CommunityDetail'
+import { useAppSelector } from '@/store'
 
 export default function IndividualCommunityView() {
     const [community, setCommunity] = useState<IndividualCommunityType>(
         {} as IndividualCommunityType
     )
+
+    const userId = useAppSelector((state) => state.auth.user?.id)
 
     const [fetchTrigger, setFetchTrigger] = useState(false)
 
@@ -20,7 +24,7 @@ export default function IndividualCommunityView() {
         const fetchCommunity = async () => {
             try {
                 // fetch community data
-                const resp = await apiGetCommunity(id ?? '')
+                const resp = await apiGetCommunity(id ?? '', '1')
 
                 if (resp.status === 200) {
                     setCommunity(resp.data as IndividualCommunityType)
@@ -51,7 +55,7 @@ export default function IndividualCommunityView() {
 
     return (
         <div className="max-w-xl">
-            <IndividualCommunity community={community} />
+            <CommunityDetail community={community} />
         </div>
     )
 }
