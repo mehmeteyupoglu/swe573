@@ -59,7 +59,7 @@ export default function IndividualCommunity({
             if (community.has_user_requested && !community.is_member) {
                 return generateButton(
                     'Cancel Request',
-                    handleJoinCommunity as Function
+                    handleLeaveCommunity as Function
                 )
             } else {
                 return generateButton(
@@ -94,7 +94,7 @@ export default function IndividualCommunity({
                 footerBorder={false}
                 headerBorder={false}
             >
-                <div className="w-full bg-gray-200 dark:bg-gray-800 flex justify-between">
+                <div className="w-full flex justify-between">
                     <span className="text-emerald-600 font-semibold">
                         {community.num_members || community.members?.length}{' '}
                         members, 20 posts
