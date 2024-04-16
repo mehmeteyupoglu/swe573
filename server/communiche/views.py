@@ -132,8 +132,17 @@ def community_detail(request, id):
     if request.method == 'GET':
         serializer = CommunitySerializer(community)
         community_data = serializer.data
+        user_id = request.query_params.get('user_id')
+
+        if user_id:
+            user = User.objects.get(pk=user_id)
+            community_data['is_owner'] = community.owner_id == user_id
+            community_data['has_user_requested'] = JoinRequest.objects.filter(community=community, user=user).exists()
+            community_data['is_member'] = user in community.members.all()
+        
         community_data['num_members'] = community.members.count()
-        community_data.pop('members', None)  # Remove the 'members' field
+
+        # community_data.pop('members', None)  # Remove the 'members' field
         return Response(community_data)
     
 
