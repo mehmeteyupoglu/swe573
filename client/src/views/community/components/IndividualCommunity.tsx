@@ -53,6 +53,20 @@ export default function IndividualCommunity({
                     Leave
                 </Button>
             )
+        } else if (!community.is_public) {
+            return (
+                <Button
+                    className="bg-blue-500 text-white"
+                    size="sm"
+                    variant="solid"
+                    onClick={() =>
+                        typeof handleJoinCommunity === 'function' &&
+                        handleJoinCommunity(String(id) ?? '', userId ?? '')
+                    }
+                >
+                    Request to Join
+                </Button>
+            )
         } else {
             return (
                 <Button
