@@ -251,15 +251,15 @@ def leave_community(request, community_id, user_id):
         community.updated_at = datetime.now()  # Update the updated_at attribute
         community.save()  # Save the updated community
 
-        if not community.is_public:
-            # Remove the join request record if it exists
-            join_request = JoinRequest.objects.filter(community=community, user=user).first()
-            if join_request:
-                join_request.delete()
-
         return Response(status=status.HTTP_200_OK)
     else:
-        return Response({'detail': 'User is not a member of the community'}, status=status.HTTP_400_BAD_REQUEST)
+        # Check if join request exists for the user and community
+        join_request = JoinRequest.objects.filter(community=community, user=user).first()
+        if join_request:
+            join_request.delete()
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response({'detail': 'User is not a member of the community'}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 def is_user_in_community(request, community_id, user_id):
