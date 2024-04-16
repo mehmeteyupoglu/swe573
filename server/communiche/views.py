@@ -222,16 +222,21 @@ def join_community(request, community_id, user_id):
     except (Community.DoesNotExist, User.DoesNotExist):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    # if not community.is_public:
-    #     # Register join request
-    #     join_request = JoinRequest(community=community, user=user)
-    #     join_request.save()
-    #     return Response(status=status.HTTP_200_OK)
-    # else:
-    community.members.add(user)
-    community.updated_at = datetime.now()  # Update the updated_at attribute
-    community.save()  # Save the updated community
-    return Response(status=status.HTTP_200_OK)
+    if not community.is_public:
+        # Check if join request already exists for the user and community
+        join_request = JoinRequest.objects.filter(community=community, user=user).first()
+        if join_request:
+            return Response({'detail': 'Join request already exists for the user and community'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Register join request
+        join_request = JoinRequest(community=community, user=user)
+        join_request.save()
+        return Response(status=status.HTTP_200_OK)
+    else:
+        community.members.add(user)
+        community.updated_at = datetime.now()  # Update the updated_at attribute
+        community.save()  # Save the updated community
+        return Response(status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 def leave_community(request, community_id, user_id):
@@ -246,11 +251,11 @@ def leave_community(request, community_id, user_id):
         community.updated_at = datetime.now()  # Update the updated_at attribute
         community.save()  # Save the updated community
 
-        # if not community.is_public:
-        #     # Remove the join request record if it exists
-        #     join_request = JoinRequest.objects.filter(community=community, user=user).first()
-        #     if join_request:
-        #         join_request.delete()
+        if not community.is_public:
+            # Remove the join request record if it exists
+            join_request = JoinRequest.objects.filter(community=community, user=user).first()
+            if join_request:
+                join_request.delete()
 
         return Response(status=status.HTTP_200_OK)
     else:
