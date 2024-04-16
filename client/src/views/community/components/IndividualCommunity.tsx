@@ -21,7 +21,6 @@ export default function IndividualCommunity({
     const fetchTrigger = useAppSelector(
         (state) => state.community.community.fetchTrigger
     )
-    const [isUserInCommunity, setIsUserInCommunity] = useState(false)
     const userId = useAppSelector((state) => state.auth.user?.id)
     const { id } = community
 
@@ -38,24 +37,6 @@ export default function IndividualCommunity({
         'Error leaving community',
         () => dispatch(toggleFetchTrigger())
     )
-
-    useEffect(() => {
-        const checkUserInCommunity = async () => {
-            try {
-                // check if user is in community
-                const resp = await apiIsUserInCommunity(
-                    String(id) ?? '',
-                    userId ?? ''
-                )
-                setIsUserInCommunity(
-                    (resp.data as { is_member: boolean }).is_member
-                )
-            } catch (error) {
-                console.error('Error checking user in community:', error)
-            }
-        }
-        checkUserInCommunity()
-    }, [id, userId, fetchTrigger]) // TODO: check fetch trigger functionality
 
     const renderButton = () => {
         if (community.is_member) {
