@@ -2,13 +2,14 @@ import { CommunityFormModel } from '@/@types/community'
 import ApiService from './ApiService'
 
 export async function apiAddCommunity(data: CommunityFormModel) {
-    const { isPublic, ...rest } = data
+    const { isPublic, userId, ...rest } = data
     return ApiService.fetchData({
         url: '/add_community/',
         method: 'post',
         data: {
             ...rest,
             is_public: isPublic,
+            user_id: userId,
         },
     })
 }

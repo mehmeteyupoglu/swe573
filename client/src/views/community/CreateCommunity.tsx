@@ -8,19 +8,15 @@ import FormDesription from '../account/Settings/components/FormDesription'
 import FormRow from '../account/Settings/components/FormRow'
 import { Field, Form, Formik } from 'formik'
 import { components } from 'react-select'
-import {
-    HiChevronDown,
-    HiOutlineBriefcase,
-    HiOutlineUser,
-} from 'react-icons/hi'
+import { HiOutlineBriefcase } from 'react-icons/hi'
 import * as Yup from 'yup'
 import type { FormikProps, FieldInputProps, FieldProps } from 'formik'
 import { useNavigate } from 'react-router-dom'
 import { CommunityFormModel } from '@/@types/community'
 import { apiAddCommunity } from '@/services/CommunityService'
 import { t } from 'i18next'
-import { Card } from '@/components/ui'
 import CommunitySpecificTemplates from './components/CommunitySpecificTemplates'
+import { useAppSelector } from '@/store'
 
 type CommunityProps = {
     data?: CommunityFormModel
@@ -54,12 +50,17 @@ const CreateCommunity = ({
         form.setFieldValue(field.name, URL.createObjectURL(file[0]))
     }
 
+    const userId = useAppSelector((state) => state.auth.user?.id)
+
     const onFormSubmit = async (
         values: CommunityFormModel,
         setSubmitting: (isSubmitting: boolean) => void
     ) => {
         try {
-            const resp = await apiAddCommunity(values)
+            const resp = await apiAddCommunity({
+                ...values,
+                userId,
+            })
 
             if (resp.status == 201) {
                 // TODO: add english i18n version

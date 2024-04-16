@@ -3,6 +3,7 @@ export type CommunityFormModel = {
     description: string
     avatar: string
     isPublic: boolean
+    userId?: string
 }
 
 export type TemplateType = {
