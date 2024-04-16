@@ -9,14 +9,17 @@ import { toggleFetchTrigger, useAppSelector } from '@/store'
 import { formatDate } from '@/utils/helpers'
 import useRequestWithNotification from '@/utils/hooks/useRequestWithNotification'
 import { useEffect, useState } from 'react'
+import { FaExternalLinkAlt } from 'react-icons/fa'
 import { HiLockClosed, HiLockOpen } from 'react-icons/hi'
 import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 export default function IndividualCommunity({
     community,
 }: {
     community: IndividualCommunityType
 }) {
+    const navigate = useNavigate()
     const dispatch = useDispatch()
     const fetchTrigger = useAppSelector(
         (state) => state.community.community.fetchTrigger
@@ -75,11 +78,18 @@ export default function IndividualCommunity({
     const cardFooter = (
         <div className="flex items-center justify-between">
             {renderButton()}
-            <span>
-                <h6 className="text-sm">Last Activity</h6>
-                <span className="text-xs">
-                    {formatDate(community.updated_at)}
-                </span>
+            <span className="flex items-center">
+                <FaExternalLinkAlt
+                    className="mr-2"
+                    size={'20'}
+                    onClick={() => navigate(`/individual-community/${id}`)}
+                />
+                <div>
+                    <h6 className="text-sm">Last Activity</h6>
+                    <span className="text-xs">
+                        {formatDate(community.updated_at)}
+                    </span>
+                </div>
             </span>
         </div>
     )
