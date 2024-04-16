@@ -7,6 +7,7 @@ import {
 } from '@/services/CommunityService'
 import { toggleFetchTrigger, useAppSelector } from '@/store'
 import { formatDate } from '@/utils/helpers'
+import useRequestWithNotification from '@/utils/hooks/useRequestWithNotification'
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
@@ -22,6 +23,20 @@ export default function IndividualCommunity({
     const [isUserInCommunity, setIsUserInCommunity] = useState(false)
     const userId = useAppSelector((state) => state.auth.user?.id)
     const { id } = community
+
+    const [handleJoinCommunity, isJoining] = useRequestWithNotification(
+        apiJoinCommunity,
+        'You have successfully joined the community!',
+        'Error joining community',
+        () => dispatch(toggleFetchTrigger())
+    )
+
+    const [handleLeaveCommunity, isLeaving] = useRequestWithNotification(
+        apiLeaveCommunity,
+        'You have successfully left the community!',
+        'Error leaving community',
+        () => dispatch(toggleFetchTrigger())
+    )
 
     useEffect(() => {
         const checkUserInCommunity = async () => {
@@ -48,7 +63,10 @@ export default function IndividualCommunity({
                     className="bg-blue-500 text-white"
                     size="sm"
                     variant="solid"
-                    onClick={handleLeaveCommunity}
+                    onClick={() =>
+                        typeof handleLeaveCommunity === 'function' &&
+                        handleLeaveCommunity(String(id) ?? '', userId ?? '')
+                    }
                 >
                     Leave
                 </Button>
@@ -59,72 +77,13 @@ export default function IndividualCommunity({
                     className="bg-blue-500 text-white"
                     size="sm"
                     variant="solid"
-                    onClick={handleJoinCommunity}
+                    onClick={() =>
+                        typeof handleJoinCommunity === 'function' &&
+                        handleJoinCommunity(String(id) ?? '', userId ?? '')
+                    }
                 >
                     Join
                 </Button>
-            )
-        }
-    }
-
-    const handleJoinCommunity = async () => {
-        try {
-            // join community
-            const resp = await apiJoinCommunity(String(id) ?? '', userId ?? '')
-            if (resp.status === 200) {
-                dispatch(toggleFetchTrigger())
-                toast.push(
-                    <Notification
-                        title={'You have successfully joined the community!'}
-                        type="success"
-                    />,
-                    {
-                        placement: 'top-center',
-                    }
-                )
-            }
-        } catch (error) {
-            console.error('Error joining community:', error)
-            toast.push(
-                <Notification
-                    title={'Error joining community'}
-                    type="danger"
-                />,
-                {
-                    placement: 'top-center',
-                }
-            )
-        }
-    }
-
-    const handleLeaveCommunity = async () => {
-        try {
-            // leave community
-            const resp = await apiLeaveCommunity(String(id) ?? '', userId ?? '')
-            if (resp.status === 200) {
-                console.log('Joined community')
-                toast.push(
-                    <Notification
-                        title={'You have successfully left the community!'}
-                        type="success"
-                    />,
-                    {
-                        placement: 'top-center',
-                    }
-                )
-
-                dispatch(toggleFetchTrigger())
-            }
-        } catch (error) {
-            console.error('Error leaving community:', error)
-            toast.push(
-                <Notification
-                    title={'Error leaving community'}
-                    type="danger"
-                />,
-                {
-                    placement: 'top-center',
-                }
             )
         }
     }
