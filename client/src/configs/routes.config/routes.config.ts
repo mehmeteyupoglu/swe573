@@ -31,12 +31,12 @@ export const protectedRoutes = [
         },
     },
     {
-        key: 'individualCommunity',
-        path: '/individual-community/:id',
-        component: lazy(() => import('@/views/community/IndividualCommunity')),
+        key: 'communityDetail',
+        path: '/community-detail/:id',
+        component: lazy(() => import('@/views/community/CommunityDetail')),
         authority: [],
         meta: {
-            header: i18n.t('nav.individualCommunity'),
+            header: i18n.t('nav.communityDetail'),
             headerContainer: true,
         },
     },

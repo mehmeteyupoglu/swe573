@@ -21,6 +21,7 @@
         "home": "Home",
         "createCommunity": "Create Community",
         "individualCommunity": "Individual Community",
+        "communityDetail": "Community Detail",
         "post": "Post",
         "communities": "Communities",
         "collapseMenu": {
