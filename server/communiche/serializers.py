@@ -13,10 +13,15 @@ class TemplateSerializer(serializers.ModelSerializer):
 
 class CommunitySerializer(serializers.ModelSerializer):
     members = UserSerializer(many=True, read_only=True)
+    is_member = serializers.SerializerMethodField()
 
     class Meta:
         model = Community
-        fields = ['id', 'name', 'description', 'created_at', 'updated_at', 'is_public', 'reputation_rating', 'templates', 'members']
+        fields = ['id', 'name', 'description', 'created_at', 'updated_at', 'is_public', 'reputation_rating', 'templates', 'members', 'is_member']
+
+    def get_is_member(self, obj):
+        user_id = self.context.get('request').query_params.get('user_id') if self.context.get('request') else None
+        return obj.members.filter(id=user_id).exists()
 
 class DataTypeSerializer(serializers.Serializer):
     data_types = serializers.SerializerMethodField()
