@@ -69,7 +69,14 @@ export type IndividualCommunityType = {
     created_at: string
     updated_at: string
     is_public: boolean
+    is_member: boolean
+    has_user_requested: boolean
     reputation_rating: string
     templates: DataTypeOption[]
     num_members: number
+    members?: Member[]
+}
+
+export type FetchCommunityType = {
+    fetchTrigger: boolean
 }

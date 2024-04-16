@@ -1,13 +1,13 @@
 from django.http import JsonResponse
 from .models import Template, User
-from .serializers import TemplateSerializer, UserSerializer, CommunitySerializer
+from .serializers import TemplateSerializer, UserSerializer, CommunitySerializer, JoinRequestSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.hashers import make_password
 import jwt
 from datetime import datetime, timedelta
-from .models import Community
+from .models import Community, JoinRequest
 from django.http import JsonResponse
 from . import constants
 
@@ -109,12 +109,11 @@ def login(request):
 def communities(request):
     if request.method == 'GET':
         communities = Community.objects.all().order_by('-updated_at')
-        serializer = CommunitySerializer(communities, many=True)
+        serializer = CommunitySerializer(communities, context = {'request': request}, many=True)
         return Response(serializer.data)
 
 @api_view(['POST'])
 def add_community(request):
-    print(request.data)
     if request.method == 'POST':
         serializer = CommunitySerializer(data=request.data)
         if serializer.is_valid():
@@ -223,10 +222,21 @@ def join_community(request, community_id, user_id):
     except (Community.DoesNotExist, User.DoesNotExist):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    community.members.add(user)
-    community.updated_at = datetime.now()  # Update the updated_at attribute
-    community.save()  # Save the updated community
-    return Response(status=status.HTTP_200_OK)
+    if not community.is_public:
+        # Check if join request already exists for the user and community
+        join_request = JoinRequest.objects.filter(community=community, user=user).first()
+        if join_request:
+            return Response({'detail': 'Join request already exists for the user and community'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Register join request
+        join_request = JoinRequest(community=community, user=user)
+        join_request.save()
+        return Response(status=status.HTTP_200_OK)
+    else:
+        community.members.add(user)
+        community.updated_at = datetime.now()  # Update the updated_at attribute
+        community.save()  # Save the updated community
+        return Response(status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 def leave_community(request, community_id, user_id):
@@ -240,9 +250,16 @@ def leave_community(request, community_id, user_id):
         community.members.remove(user)
         community.updated_at = datetime.now()  # Update the updated_at attribute
         community.save()  # Save the updated community
+
         return Response(status=status.HTTP_200_OK)
     else:
-        return Response({'detail': 'User is not a member of the community'}, status=status.HTTP_400_BAD_REQUEST)
+        # Check if join request exists for the user and community
+        join_request = JoinRequest.objects.filter(community=community, user=user).first()
+        if join_request:
+            join_request.delete()
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response({'detail': 'User is not a member of the community'}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 def is_user_in_community(request, community_id, user_id):
