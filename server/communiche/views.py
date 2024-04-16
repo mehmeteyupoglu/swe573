@@ -114,7 +114,6 @@ def communities(request):
 
 @api_view(['POST'])
 def add_community(request):
-    print(request.data)
     if request.method == 'POST':
         serializer = CommunitySerializer(data=request.data)
         if serializer.is_valid():
