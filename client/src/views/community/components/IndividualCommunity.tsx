@@ -56,15 +56,17 @@ export default function IndividualCommunity({
         if (community.is_member) {
             return generateButton('Leave', handleLeaveCommunity as Function)
         } else if (!community.is_public) {
-            return generateButton(
-                'Request to Join',
-                handleJoinCommunity as Function
-            )
-        } else if (community.has_user_requested) {
-            return generateButton(
-                'Cancel Request',
-                handleJoinCommunity as Function
-            )
+            if (community.has_user_requested && !community.is_member) {
+                return generateButton(
+                    'Cancel Request',
+                    handleJoinCommunity as Function
+                )
+            } else {
+                return generateButton(
+                    'Request to Join',
+                    handleJoinCommunity as Function
+                )
+            }
         } else {
             return generateButton('Join', handleJoinCommunity as Function)
         }
