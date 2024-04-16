@@ -117,7 +117,8 @@ def add_community(request):
     if request.method == 'POST':
         serializer = CommunitySerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            user_id = request.data.get('user_id')
+            serializer.save(owner_id=user_id)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
