@@ -83,3 +83,8 @@ class Template(models.Model):
 class TemplateCommunity(models.Model):
     template = models.ForeignKey(Template, on_delete=models.CASCADE)
     community = models.ForeignKey(Community, on_delete=models.CASCADE)
+
+class JoinRequest(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    community = models.ForeignKey(Community, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
