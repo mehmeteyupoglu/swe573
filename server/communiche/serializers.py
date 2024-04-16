@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Template, User, Community
+from .models import Template, User, Community, JoinRequest
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -26,3 +26,8 @@ class DataTypeSerializer(serializers.Serializer):
 
     def get_data_types(self, obj):
         return [data_type for data_type in constants.DATA_TYPES]
+
+class JoinRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = JoinRequest
+        fields = ['community', 'user', 'joined_at']

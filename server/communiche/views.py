@@ -1,13 +1,13 @@
 from django.http import JsonResponse
 from .models import Template, User
-from .serializers import TemplateSerializer, UserSerializer, CommunitySerializer
+from .serializers import TemplateSerializer, UserSerializer, CommunitySerializer, JoinRequestSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.hashers import make_password
 import jwt
 from datetime import datetime, timedelta
-from .models import Community
+from .models import Community, JoinRequest
 from django.http import JsonResponse
 from . import constants
 
@@ -223,10 +223,16 @@ def join_community(request, community_id, user_id):
     except (Community.DoesNotExist, User.DoesNotExist):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    community.members.add(user)
-    community.updated_at = datetime.now()  # Update the updated_at attribute
-    community.save()  # Save the updated community
-    return Response(status=status.HTTP_200_OK)
+    if not community.is_public:
+        # Register join request
+        join_request = JoinRequest(community=community, user=user)
+        join_request.save()
+        return Response(status=status.HTTP_200_OK)
+    else:
+        community.members.add(user)
+        community.updated_at = datetime.now()  # Update the updated_at attribute
+        community.save()  # Save the updated community
+        return Response(status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 def leave_community(request, community_id, user_id):
@@ -240,6 +246,13 @@ def leave_community(request, community_id, user_id):
         community.members.remove(user)
         community.updated_at = datetime.now()  # Update the updated_at attribute
         community.save()  # Save the updated community
+
+        if not community.is_public:
+            # Remove the join request record if it exists
+            join_request = JoinRequest.objects.filter(community=community, user=user).first()
+            if join_request:
+                join_request.delete()
+
         return Response(status=status.HTTP_200_OK)
     else:
         return Response({'detail': 'User is not a member of the community'}, status=status.HTTP_400_BAD_REQUEST)
