@@ -74,3 +74,7 @@ export type IndividualCommunityType = {
     num_members: number
     members?: Member[]
 }
+
+export type FetchCommunityType = {
+    fetchTrigger: boolean
+}

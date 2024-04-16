@@ -2,11 +2,16 @@ import { IndividualCommunityType } from '@/@types/community'
 import { apiGetCommunityList } from '@/services/CommunityService'
 import React, { useEffect } from 'react'
 import IndividualCommunity from './components/IndividualCommunity'
+import { useAppSelector } from '@/store'
 
 export default function Communities() {
     const [communities, setCommunities] = React.useState<
         IndividualCommunityType[]
     >([]) // Update initial state
+
+    const fetchTrigger = useAppSelector(
+        (state) => state.community.community.fetchTrigger
+    ) // Add this line
 
     React.useEffect(() => {
         // Fetch communities
@@ -21,11 +26,8 @@ export default function Communities() {
         }
 
         fetchCommunities()
-    }, [])
+    }, [fetchTrigger]) // Add fetchTrigger to dependency array
 
-    useEffect(() => {
-        console.log(communities)
-    }, [communities])
     return (
         <div>
             {communities.map((community) => (

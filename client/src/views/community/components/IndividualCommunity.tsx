@@ -5,24 +5,23 @@ import {
     apiJoinCommunity,
     apiLeaveCommunity,
 } from '@/services/CommunityService'
-import { useAppSelector } from '@/store'
+import { toggleFetchTrigger, useAppSelector } from '@/store'
 import { formatDate } from '@/utils/helpers'
 import { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 
 export default function IndividualCommunity({
     community,
 }: {
     community: IndividualCommunityType
 }) {
-    const [fetchTrigger, setFetchTrigger] = useState(false)
-
+    const dispatch = useDispatch()
+    const fetchTrigger = useAppSelector(
+        (state) => state.community.community.fetchTrigger
+    )
     const [isUserInCommunity, setIsUserInCommunity] = useState(false)
-
     const userId = useAppSelector((state) => state.auth.user?.id)
-
     const { id } = community
-
-    console.log(community)
 
     useEffect(() => {
         const checkUserInCommunity = async () => {
@@ -73,7 +72,7 @@ export default function IndividualCommunity({
             // join community
             const resp = await apiJoinCommunity(String(id) ?? '', userId ?? '')
             if (resp.status === 200) {
-                setFetchTrigger((prev) => !prev)
+                dispatch(toggleFetchTrigger())
                 toast.push(
                     <Notification
                         title={'You have successfully joined the community!'}
@@ -114,7 +113,7 @@ export default function IndividualCommunity({
                     }
                 )
 
-                setFetchTrigger((prev) => !prev)
+                dispatch(toggleFetchTrigger())
             }
         } catch (error) {
             console.error('Error leaving community:', error)
