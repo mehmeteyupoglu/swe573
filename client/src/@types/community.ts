@@ -51,7 +51,7 @@ export type CommunityType = {
     members: Member[]
 }
 
-type Member = {
+export type Member = {
     id: number
     firstname: string
     lastname: string
@@ -71,6 +71,7 @@ export type IndividualCommunityType = {
     updated_at: string
     is_public: boolean
     is_member: boolean
+    is_owner: boolean
     has_user_requested: boolean
     reputation_rating: string
     templates: DataTypeOption[]
