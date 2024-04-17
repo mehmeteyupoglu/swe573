@@ -53,9 +53,5 @@ export default function IndividualCommunityView() {
         fetchCommunity()
     }, [id, fetchTrigger])
 
-    return (
-        <div className="max-w-xl">
-            <CommunityDetail community={community} />
-        </div>
-    )
+    return <CommunityDetail community={community} />
 }

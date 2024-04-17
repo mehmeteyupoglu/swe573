@@ -80,11 +80,6 @@ export default function CommunityDetail({
         <div className="flex items-center justify-between">
             {renderButton()}
             <span className="flex items-center">
-                <FaExternalLinkAlt
-                    className="mr-2"
-                    size={'20'}
-                    onClick={() => navigate(`/community-detail/${id}`)}
-                />
                 <div>
                     <h6 className="text-sm">Last Activity</h6>
                     <span className="text-xs">
