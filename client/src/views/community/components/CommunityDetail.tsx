@@ -1,15 +1,12 @@
 import { IndividualCommunityType } from '@/@types/community'
-import { Button, Card, Notification, toast } from '@/components/ui'
+import { Button, Card } from '@/components/ui'
 import {
-    apiIsUserInCommunity,
     apiJoinCommunity,
     apiLeaveCommunity,
 } from '@/services/CommunityService'
 import { toggleFetchTrigger, useAppSelector } from '@/store'
 import { formatDate } from '@/utils/helpers'
 import useRequestWithNotification from '@/utils/hooks/useRequestWithNotification'
-import { useEffect, useState } from 'react'
-import { FaExternalLinkAlt } from 'react-icons/fa'
 import { HiLockClosed, HiLockOpen } from 'react-icons/hi'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
