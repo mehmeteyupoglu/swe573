@@ -15,10 +15,11 @@ class CommunitySerializer(serializers.ModelSerializer):
     members = UserSerializer(many=True, read_only=True)
     is_member = serializers.SerializerMethodField()
     has_user_requested = serializers.SerializerMethodField()
+    is_owner = serializers.SerializerMethodField()
 
     class Meta:
         model = Community
-        fields = ['id', 'name', 'description', 'created_at', 'updated_at', 'is_public', 'reputation_rating', 'templates', 'members', 'is_member', 'has_user_requested']
+        fields = ['id', 'name', 'description', 'created_at', 'updated_at', 'is_public', 'reputation_rating', 'templates', 'members', 'is_member', 'has_user_requested', 'is_owner']
 
     def get_is_member(self, obj):
         user_id = self.context.get('request').query_params.get('user_id') if self.context.get('request') else None
@@ -28,6 +29,10 @@ class CommunitySerializer(serializers.ModelSerializer):
         user_id = self.context.get('request').query_params.get('user_id') if self.context.get('request') else None
         community_id = obj.id
         return obj.joinrequest_set.filter(user_id=user_id, community_id=community_id).exists()
+
+    def get_is_owner(self, obj):
+        user_id = self.context.get('request').query_params.get('user_id') if self.context.get('request') else None
+        return str(obj.owner_id) == str(user_id)
     
 
 class CommunityUserSerializer(serializers.ModelSerializer):
