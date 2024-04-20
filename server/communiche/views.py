@@ -136,7 +136,7 @@ def community_detail(request, id):
 
         if user_id:
             user = User.objects.get(pk=user_id)
-            community_data['is_owner'] = community.owner_id == user_id
+            community_data['is_owner'] = str(community.owner_id) == str(user_id)
             community_data['has_user_requested'] = JoinRequest.objects.filter(community=community, user=user).exists()
             community_data['is_member'] = user in community.members.all()
         
