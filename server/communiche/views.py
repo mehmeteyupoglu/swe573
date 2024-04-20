@@ -7,7 +7,7 @@ from rest_framework import status
 from django.contrib.auth.hashers import make_password
 import jwt
 from datetime import datetime, timedelta
-from .models import Community, JoinRequest
+from .models import Community, JoinRequest, CommunityUser
 from django.http import JsonResponse
 from . import constants
 
@@ -119,6 +119,12 @@ def add_community(request):
         if serializer.is_valid():
             user_id = request.data.get('user_id')
             serializer.save(owner_id=user_id)
+            
+            # Add owner to communityuser table with role -1
+            community = serializer.instance
+            owner = User.objects.get(pk=user_id)
+            community_user = CommunityUser.objects.create(community=community, user=owner, role=-1)
+            
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
