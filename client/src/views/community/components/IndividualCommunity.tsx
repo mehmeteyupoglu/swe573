@@ -44,6 +44,7 @@ export default function IndividualCommunity({
     const renderButton = () => {
         const generateButton = (text: string, handler: Function) => (
             <Button
+                disabled={community.is_owner}
                 className="bg-blue-500 text-white"
                 size="sm"
                 variant="solid"
