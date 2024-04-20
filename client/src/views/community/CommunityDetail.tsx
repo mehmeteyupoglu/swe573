@@ -16,6 +16,7 @@ export default function IndividualCommunityView() {
     )
 
     const { id } = useParams<{ id: string }>()
+    const userId = useAppSelector((state) => state.auth.user?.id)
 
     const navigate = useNavigate()
 
@@ -23,7 +24,7 @@ export default function IndividualCommunityView() {
         const fetchCommunity = async () => {
             try {
                 // fetch community data
-                const resp = await apiGetCommunity(id ?? '', '1')
+                const resp = await apiGetCommunity(id ?? '', userId ?? '')
 
                 if (resp.status === 200) {
                     setCommunity(resp.data as IndividualCommunityType)
