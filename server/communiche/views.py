@@ -299,3 +299,19 @@ def user_role(request, community_id):
     if community_user:
         return JsonResponse({'role': community_user.role})
     return JsonResponse({'role': 0})
+
+@api_view(['POST'])
+def change_user_role(request, community_id, user_id):
+    try:
+        community = Community.objects.get(pk=community_id)
+        user = User.objects.get(pk=user_id)
+    except (Community.DoesNotExist, User.DoesNotExist):
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    role = request.data.get('role')
+    community_user = community.communityuser_set.filter(user=user).first()
+    if community_user:
+        community_user.role = role
+        community_user.save()
+        return Response(status=status.HTTP_200_OK)
+    return Response({'message': 'User is not a member of the community'}, status=status.HTTP_400_BAD_REQUEST)
