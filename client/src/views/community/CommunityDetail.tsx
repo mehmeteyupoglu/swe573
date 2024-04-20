@@ -3,7 +3,6 @@ import { Notification, toast } from '@/components/ui'
 import { apiGetCommunity } from '@/services/CommunityService'
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import IndividualCommunity from './components/IndividualCommunity'
 import CommunityDetail from './components/CommunityDetail'
 import { useAppSelector } from '@/store'
 
@@ -14,7 +13,9 @@ export default function IndividualCommunityView() {
 
     const userId = useAppSelector((state) => state.auth.user?.id)
 
-    const [fetchTrigger, setFetchTrigger] = useState(false)
+    const fetchTrigger = useAppSelector(
+        (state) => state.community.community.fetchTrigger
+    )
 
     const { id } = useParams<{ id: string }>()
 
