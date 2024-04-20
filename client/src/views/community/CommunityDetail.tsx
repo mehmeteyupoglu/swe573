@@ -11,8 +11,6 @@ export default function IndividualCommunityView() {
         {} as IndividualCommunityType
     )
 
-    const userId = useAppSelector((state) => state.auth.user?.id)
-
     const fetchTrigger = useAppSelector(
         (state) => state.community.community.fetchTrigger
     )
