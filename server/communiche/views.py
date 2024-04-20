@@ -315,3 +315,20 @@ def change_user_role(request, community_id, user_id):
         community_user.save()
         return Response(status=status.HTTP_200_OK)
     return Response({'message': 'User is not a member of the community'}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def community_members(request, community_id):
+    community = Community.objects.get(pk=community_id)
+    members = community.members.all()
+    serializer = UserSerializer(members, many=True)
+    
+    # Add role information to each member
+    for member in serializer.data:
+        user_id = member['id']
+        community_user = CommunityUser.objects.filter(user_id=user_id, community_id=community_id).first()
+        if community_user:
+            member['role'] = community_user.role
+        else:
+            member['role'] = None
+    
+    return Response(serializer.data)
