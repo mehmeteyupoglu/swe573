@@ -25,7 +25,18 @@ export default function IndividualCommunity({
         (state) => state.community.community.fetchTrigger
     )
     const userId = useAppSelector((state) => state.auth.user?.id)
-    const { id } = community
+    const {
+        id,
+        is_member,
+        is_owner,
+        is_public,
+        has_user_requested,
+        updated_at,
+        name,
+        description,
+        num_members,
+        members,
+    } = community
 
     const [handleJoinCommunity, isJoining] = useRequestWithNotification(
         apiJoinCommunity,
@@ -44,7 +55,7 @@ export default function IndividualCommunity({
     const renderButton = () => {
         const generateButton = (text: string, handler: Function) => (
             <Button
-                disabled={community.is_owner}
+                disabled={is_owner}
                 className="bg-blue-500 text-white"
                 size="sm"
                 variant="solid"
@@ -57,10 +68,10 @@ export default function IndividualCommunity({
             </Button>
         )
 
-        if (community.is_member) {
+        if (is_member) {
             return generateButton('Leave', handleLeaveCommunity as Function)
-        } else if (!community.is_public) {
-            if (community.has_user_requested && !community.is_member) {
+        } else if (!is_public) {
+            if (has_user_requested && !is_member) {
                 return generateButton(
                     'Cancel Request',
                     handleLeaveCommunity as Function
@@ -87,9 +98,7 @@ export default function IndividualCommunity({
                 />
                 <div>
                     <h6 className="text-sm">Last Activity</h6>
-                    <span className="text-xs">
-                        {formatDate(community.updated_at)}
-                    </span>
+                    <span className="text-xs">{formatDate(updated_at)}</span>
                 </div>
             </span>
         </div>
@@ -107,11 +116,10 @@ export default function IndividualCommunity({
             >
                 <div className="w-full flex justify-between">
                     <span className="text-emerald-600 font-semibold">
-                        {community.num_members || community.members?.length}{' '}
-                        members, 20 posts
+                        {num_members || members?.length} members, 20 posts
                     </span>
                     <span className="font-semibold">
-                        {community.is_public ? (
+                        {is_public ? (
                             <p className="underline text-emerald-600">
                                 Public{' '}
                                 <HiLockOpen className="inline-block ml-2 " />
@@ -124,8 +132,8 @@ export default function IndividualCommunity({
                         )}
                     </span>
                 </div>
-                <h4 className="font-bold my-3">{community.name}</h4>
-                <p>{community.description}</p>
+                <h4 className="font-bold my-3">{name}</h4>
+                <p>{description}</p>
             </Card>
         </div>
     )
