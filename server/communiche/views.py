@@ -279,3 +279,17 @@ def is_user_in_community(request, community_id, user_id):
         return JsonResponse({'error': 'User not found'}, status=404)
     except Community.DoesNotExist:
         return JsonResponse({'error': 'Community not found'}, status=404)
+
+@api_view(['GET'])
+def user_role(request, community_id):
+    try:
+        user_id = request.query_params.get('user_id')
+        community = Community.objects.get(pk=community_id)
+        user = User.objects.get(pk=user_id)
+    except (Community.DoesNotExist, User.DoesNotExist):
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    community_user = community.communityuser_set.filter(user=user).first()
+    if community_user:
+        return JsonResponse({'role': community_user.role})
+    return JsonResponse({'role': 0})

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Template, User, Community, JoinRequest
+from .models import Template, User, Community, JoinRequest, CommunityUser
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -28,6 +28,14 @@ class CommunitySerializer(serializers.ModelSerializer):
         user_id = self.context.get('request').query_params.get('user_id') if self.context.get('request') else None
         community_id = obj.id
         return obj.joinrequest_set.filter(user_id=user_id, community_id=community_id).exists()
+    
+
+class CommunityUserSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+
+    class Meta:
+        model = CommunityUser
+        fields = ['user', 'role']
 
 class DataTypeSerializer(serializers.Serializer):
     data_types = serializers.SerializerMethodField()
