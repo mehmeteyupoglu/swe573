@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { apiGetCommunityList } from '@/services/CommunityService'
 import { CommunityType, IndividualCommunityType } from '@/@types/community'
 import { useAppSelector } from '@/store'
+import { ActionLink } from '@/components/shared'
 
 export default function RecentCommunities() {
     const [communities, setCommunities] = useState<IndividualCommunityType[]>(
@@ -30,6 +31,7 @@ export default function RecentCommunities() {
                 {renderedCommunities.map((community) => (
                     <RecentCommunity key={community.id} community={community} />
                 ))}
+                <ActionLink to={'/communities'}>{'See all'}</ActionLink>
             </Card>
         </div>
     )
