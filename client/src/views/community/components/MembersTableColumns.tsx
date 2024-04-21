@@ -35,14 +35,6 @@ const columns: ColumnDef<any>[] = [
             return <div className="flex">{formattedDate}</div>
         },
     },
-    {
-        header: 'Durum',
-        accessorKey: 'action',
-        cell: (props) => {
-            const row = props.row.original
-            return <div className="flex">action</div>
-        },
-    },
 ]
 
 export default columns

@@ -63,7 +63,7 @@ export default function Members({
                 footerBorder={false}
                 headerBorder={false}
             >
-                <MembersTable members={members} />
+                <MembersTable members={members} community={community} />
             </Card>
         </div>
     )
