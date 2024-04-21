@@ -1,12 +1,14 @@
 import { IndividualCommunityType, Member } from '@/@types/community'
 import { Button, Card } from '@/components/ui'
 import {
+    apiFetchMembers,
     apiJoinCommunity,
     apiLeaveCommunity,
 } from '@/services/CommunityService'
 import { toggleFetchTrigger, useAppSelector } from '@/store'
 import { formatDate } from '@/utils/helpers'
 import useRequestWithNotification from '@/utils/hooks/useRequestWithNotification'
+import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
@@ -15,15 +17,16 @@ export default function Members({
 }: {
     community: IndividualCommunityType
 }) {
+    const [members, setMembers] = useState<Member[]>([])
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const fetchTrigger = useAppSelector(
         (state) => state.community.community.fetchTrigger
     )
     const userId = useAppSelector((state) => state.auth.user?.id)
+
     const {
         id,
-        members,
         num_members,
         name,
         description,
@@ -33,60 +36,28 @@ export default function Members({
         is_owner,
     } = community
 
-    const [handleJoinCommunity, isJoining] = useRequestWithNotification(
-        apiJoinCommunity,
-        'You have successfully joined the community!',
-        'Error joining community',
-        () => dispatch(toggleFetchTrigger())
-    )
-
-    const [handleLeaveCommunity, isLeaving] = useRequestWithNotification(
-        apiLeaveCommunity,
-        'You have successfully left the community!',
-        'Error leaving community',
-        () => dispatch(toggleFetchTrigger())
-    )
-
-    const renderButton = () => {
-        const generateButton = (text: string, handler: Function) => (
-            <Button
-                disabled={community.is_owner}
-                className="bg-blue-500 text-white"
-                size="sm"
-                variant="solid"
-                onClick={() =>
-                    typeof handler === 'function' &&
-                    handler(String(id) ?? '', userId ?? '')
-                }
-            >
-                {text}
-            </Button>
-        )
-
-        if (community.is_member) {
-            return generateButton('Leave', handleLeaveCommunity as Function)
-        } else if (!community.is_public) {
-            if (community.has_user_requested && !community.is_member) {
-                return generateButton(
-                    'Cancel Request',
-                    handleLeaveCommunity as Function
-                )
-            } else {
-                return generateButton(
-                    'Request to Join',
-                    handleJoinCommunity as Function
-                )
-            }
-        } else {
-            return generateButton('Join', handleJoinCommunity as Function)
-        }
-    }
-
     const cardFooter = (
         <div className="flex items-center justify-between">
-            {renderButton()}
+            {/* {renderButton()} */}
         </div>
     )
+
+    useEffect(() => {
+        const fetchMembers = async () => {
+            try {
+                const members = await apiFetchMembers(String(id) ?? '')
+                if (members.status === 200) {
+                    setMembers(members.data as Member[])
+                }
+                // fetch members data
+                console.log('fetching members')
+            } catch (error) {
+                console.error('Error fetching members', error)
+            }
+        }
+
+        fetchMembers()
+    }, [fetchTrigger])
 
     const Members = () => {
         return (
@@ -94,7 +65,16 @@ export default function Members({
                 {members &&
                     members.length > 0 &&
                     members.map((item: Member) => {
-                        return <p>{item.firstname + ' ' + item.lastname}</p>
+                        return (
+                            <div className="flex justify-between">
+                                <p>{item.firstname + ' ' + item.lastname}</p>
+                                <p className="underline">
+                                    {'Member since' +
+                                        ' ' +
+                                        formatDate(item.joined_at ?? '')}
+                                </p>
+                            </div>
+                        )
                     })}
             </div>
         )

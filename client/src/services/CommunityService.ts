@@ -71,3 +71,10 @@ export async function apiLeaveCommunity(communityId: string, userId: string) {
         method: 'post',
     })
 }
+
+export async function apiFetchMembers(communityId: string) {
+    return ApiService.fetchData({
+        url: `/community/${communityId}/members`,
+        method: 'get',
+    })
+}

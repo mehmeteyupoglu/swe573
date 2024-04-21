@@ -61,6 +61,8 @@ export type Member = {
     country: string
     phone: string
     short_bio: string | null
+    role?: number
+    joined_at?: string
 }
 
 export type IndividualCommunityType = {
