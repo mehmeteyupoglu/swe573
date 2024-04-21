@@ -11,6 +11,7 @@ import useRequestWithNotification from '@/utils/hooks/useRequestWithNotification
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import MembersTable from './MembersTable'
 
 export default function Members({
     community,
@@ -36,12 +37,6 @@ export default function Members({
         is_owner,
     } = community
 
-    const cardFooter = (
-        <div className="flex items-center justify-between">
-            {/* {renderButton()} */}
-        </div>
-    )
-
     useEffect(() => {
         const fetchMembers = async () => {
             try {
@@ -59,38 +54,16 @@ export default function Members({
         fetchMembers()
     }, [fetchTrigger])
 
-    const Members = () => {
-        return (
-            <div className="members mt-5">
-                {members &&
-                    members.length > 0 &&
-                    members.map((item: Member) => {
-                        return (
-                            <div className="flex justify-between">
-                                <p>{item.firstname + ' ' + item.lastname}</p>
-                                <p className="underline">
-                                    {'Member since' +
-                                        ' ' +
-                                        formatDate(item.joined_at ?? '')}
-                                </p>
-                            </div>
-                        )
-                    })}
-            </div>
-        )
-    }
-
     return (
-        <div className="max-w-xl mb-5">
+        <div className="mb-5">
             <Card
                 clickable
                 className="hover:shadow-lg transition duration-150 ease-in-out dark:border dark:border-gray-600 dark:border-solid"
-                footer={cardFooter}
                 headerClass="p-0"
                 footerBorder={false}
                 headerBorder={false}
             >
-                <Members />
+                <MembersTable members={members} />
             </Card>
         </div>
     )
