@@ -40,6 +40,26 @@ export const protectedRoutes = [
             headerContainer: true,
         },
     },
+    // {
+    //     key: 'community',
+    //     path: '/community-detail/:id',
+    //     component: lazy(() => import('@/views/community/CommunityDetail')),
+    //     authority: [],
+    //     meta: {
+    //         header: i18n.t('nav.communityDetail'),
+    //         headerContainer: true,
+    //     },
+    // },
+
+    {
+        key: 'appsAccount.settings',
+        path: `community/:id/:tab`,
+        component: lazy(() => import('@/views/community/CommunityDetail')),
+        meta: {
+            header: i18n.t('nav.communityDetail'),
+            headerContainer: true,
+        },
+    },
     {
         key: 'communities',
         path: '/communities',

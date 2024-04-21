@@ -150,7 +150,7 @@ export default function CommunityDetail({
                 </div>
                 <h4 className="font-bold my-3">{name}</h4>
                 <p>{description}</p>
-                <Members />
+                {/* <Members /> */}
             </Card>
         </div>
     )

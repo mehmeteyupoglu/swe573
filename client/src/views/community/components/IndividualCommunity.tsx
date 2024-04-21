@@ -94,7 +94,7 @@ export default function IndividualCommunity({
                 <FaExternalLinkAlt
                     className="mr-2"
                     size={'20'}
-                    onClick={() => navigate(`/community-detail/${id}`)}
+                    onClick={() => navigate(`/community/${id}/details`)}
                 />
                 <div>
                     <h6 className="text-sm">Last Activity</h6>
