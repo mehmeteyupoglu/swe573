@@ -7,3 +7,14 @@ export function toSentenceCase(str: String) {
 
 export const formatDate = (date: string) =>
     dayjs(date).format('MMMM DD, YYYY HH:mm')
+
+export const mapRoleToLabel = (role: number) => {
+    switch (role) {
+        case -1:
+            return 'Owner'
+        case 1:
+            return 'Moderator'
+        default:
+            return 'Member'
+    }
+}

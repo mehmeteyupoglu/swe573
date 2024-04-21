@@ -1,3 +1,4 @@
+import { formatDate, mapRoleToLabel } from '@/utils/helpers'
 import { ColumnDef } from '@tanstack/react-table'
 
 const columns: ColumnDef<any>[] = [
@@ -20,10 +21,19 @@ const columns: ColumnDef<any>[] = [
     {
         header: 'Role',
         accessorKey: 'role',
+        cell: (props) => {
+            const row = props.row.original
+            return <div className="flex">{mapRoleToLabel(row.role)}</div>
+        },
     },
     {
         header: 'Member Since',
         accessorKey: 'joined_at',
+        cell: (props) => {
+            const row = props.row.original
+            const formattedDate = formatDate(row.joined_at)
+            return <div className="flex">{formattedDate}</div>
+        },
     },
     {
         header: 'Durum',
