@@ -328,7 +328,9 @@ def community_members(request, community_id):
         community_user = CommunityUser.objects.filter(user_id=user_id, community_id=community_id).first()
         if community_user:
             member['role'] = community_user.role
+            member['joined_at'] = community_user.joined_at
         else:
             member['role'] = None
+            member['joined_at'] = None
     
     return Response(serializer.data)
