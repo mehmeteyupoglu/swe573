@@ -9,6 +9,7 @@ import { IndividualCommunityType } from '@/@types/community'
 import { apiGetCommunity } from '@/services/CommunityService'
 import { Notification, toast } from '@/components/ui'
 import CommunityDetail from './components/CommunityDetail'
+import Members from './components/Members'
 
 const { TabNav, TabList } = Tabs
 
@@ -107,7 +108,9 @@ const Settings = () => {
                         {currentTab === 'details' && (
                             <CommunityDetail community={community} />
                         )}
-                        {currentTab === 'meals' && <div>Members</div>}
+                        {currentTab === 'members' && (
+                            <Members community={community} />
+                        )}
                         {currentTab === 'ingredients' && <div>Posts</div>}
                     </Suspense>
                 </div>
