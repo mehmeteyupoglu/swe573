@@ -7,7 +7,9 @@ function useAuthority(
     emptyCheck = false
 ) {
     const roleMatched = useMemo(() => {
-        return authority.some((role) => userAuthority.includes(role))
+        return authority.some((role) =>
+            userAuthority.includes(role.toLowerCase())
+        )
     }, [authority, userAuthority])
 
     if (
