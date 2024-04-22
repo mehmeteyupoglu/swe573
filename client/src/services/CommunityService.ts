@@ -92,3 +92,13 @@ export async function apiChangeUserRole(
         },
     })
 }
+
+export async function apiGetUserRole(communityId: string, userId: string) {
+    return ApiService.fetchData({
+        url: `/community/${communityId}/role/`,
+        method: 'get',
+        params: {
+            user_id: userId,
+        },
+    })
+}
