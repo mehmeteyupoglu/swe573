@@ -6,11 +6,13 @@ import { useNavigate, useLocation, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAppSelector } from '@/store'
 import { IndividualCommunityType } from '@/@types/community'
-import { apiGetCommunity } from '@/services/CommunityService'
+import { apiGetCommunity, apiGetUserRole } from '@/services/CommunityService'
 import { Notification, toast } from '@/components/ui'
 import CommunityDetail from './components/CommunityDetail'
 import Members from './components/Members'
 import { AuthorityCheck } from '@/components/shared'
+import useFetchData from '@/utils/hooks/useFetchData'
+import { mapRoleToLabel } from '@/utils/helpers'
 
 const { TabNav, TabList } = Tabs
 
@@ -18,11 +20,11 @@ const Settings = () => {
     const [community, setCommunity] = useState<IndividualCommunityType>(
         {} as IndividualCommunityType
     )
-    const user = useAppSelector((state) => state.auth.user)
     const [currentTab, setCurrentTab] = useState('profile')
     const navigate = useNavigate()
     const location = useLocation()
 
+    const [mappedRole, setMappedRole] = useState<string>('')
     const { id } = useParams<{ id: string }>()
     const userId = useAppSelector((state) => state.auth.user?.id)
     const fetchTrigger = useAppSelector(
@@ -34,17 +36,43 @@ const Settings = () => {
         navigate(`/community/${id}/${val}`)
     }
 
+    const userRole = useFetchData(apiGetUserRole, [id, userId])
+
+    // useEffect(() => {
+    //     const fetchUserRole = async () => {
+    //         try {
+    //             const resp = await apiGetUserRole(id ?? '', userId ?? '')
+    //             setMappedRole(mapRoleToLabel((resp.data as any)?.role || ''))
+    //         } catch (error) {
+    //             console.error('Error fetching user role:', error)
+    //         }
+    //     }
+
+    //     fetchUserRole()
+    // }, [])
+
+    useEffect(() => {
+        if (userRole) {
+            setMappedRole(mapRoleToLabel((userRole as any)?.data?.role))
+        }
+    }, [userRole])
+
     useEffect(() => {
         const pathSegments = location.pathname.split('/')
         const lastPathSegment = pathSegments[pathSegments.length - 1]
         setCurrentTab(lastPathSegment)
     }, [location.pathname])
 
+    useEffect(() => {
+        console.log({ mappedRole })
+    }, [mappedRole])
+
     const communityDetailsMenu: Record<
         string,
         {
             label: string
             path: string
+            authority?: string[]
         }
     > = {
         details: { label: 'Details', path: 'details' },
@@ -56,6 +84,7 @@ const Settings = () => {
         pendingRequests: {
             label: 'Pending Requests',
             path: 'pendingRequests',
+            authority: ['owner', 'moderator'],
         },
     }
 
@@ -95,19 +124,30 @@ const Settings = () => {
     return (
         <Container>
             <AdaptableCard>
-                <Tabs
-                    value={currentTab}
-                    variant="pill"
-                    onChange={(val) => onTabChange(val)}
-                >
-                    <TabList className="pb-4">
-                        {Object.keys(communityDetailsMenu).map((key) => (
-                            <TabNav key={key} value={key}>
-                                {communityDetailsMenu[key].label}
-                            </TabNav>
-                        ))}
-                    </TabList>
-                </Tabs>
+                {mappedRole && (
+                    <Tabs
+                        value={currentTab}
+                        variant="pill"
+                        onChange={(val) => onTabChange(val)}
+                    >
+                        <TabList className="pb-4">
+                            {Object.keys(communityDetailsMenu).map((key) => (
+                                <AuthorityCheck
+                                    key={key}
+                                    authority={[mappedRole]}
+                                    userAuthority={
+                                        communityDetailsMenu[key].authority ||
+                                        []
+                                    }
+                                >
+                                    <TabNav value={key}>
+                                        {communityDetailsMenu[key].label}
+                                    </TabNav>
+                                </AuthorityCheck>
+                            ))}
+                        </TabList>
+                    </Tabs>
+                )}
                 <div className="px-1 py-2 md:px-4 md:py-6">
                     <Suspense fallback={<></>}>
                         {currentTab === 'details' && (
@@ -119,8 +159,8 @@ const Settings = () => {
                         {currentTab === 'ingredients' && <div>Posts</div>}
                         {currentTab === 'pendingRequests' && (
                             <AuthorityCheck
-                                userAuthority={['owner', 'moderator']} // TODO: To be implemented
-                                authority={['owner', 'moderator']}
+                                userAuthority={['x']} // TODO: To be implemented
+                                authority={['y', 'x']}
                             >
                                 <div>Pending Requests</div>
                             </AuthorityCheck>
