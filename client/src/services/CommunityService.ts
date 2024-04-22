@@ -78,3 +78,17 @@ export async function apiFetchMembers(communityId: string) {
         method: 'get',
     })
 }
+
+export async function apiChangeUserRole(
+    communityId: string,
+    userId: string,
+    role: number
+) {
+    return ApiService.fetchData({
+        url: `/change_user_role/${communityId}/${userId}`,
+        method: 'post',
+        data: {
+            role,
+        },
+    })
+}
