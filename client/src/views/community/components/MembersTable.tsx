@@ -15,13 +15,18 @@ const MembersTable = ({
     const { is_owner } = community
 
     const _columns: ColumnDef<any>[] = useMemo(() => columns, [])
+    const filteredColumns = _columns.filter((item) => item.header !== 'Actions')
 
     return (
         <div>
             {is_owner && (
                 <p className="mb-2">You are the owner of this community</p>
             )}
-            <DataTable columns={_columns} data={members} loading={isLoading} />
+            <DataTable
+                columns={is_owner ? _columns : filteredColumns}
+                data={members}
+                loading={isLoading}
+            />
         </div>
     )
 }
