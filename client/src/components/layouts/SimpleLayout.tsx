@@ -7,13 +7,12 @@ import HorizontalNav from '@/components/template/HorizontalNav'
 import View from '@/views'
 import LanguageSelector from '../template/LanguageSelector'
 import ModeSwitcher from '../template/ThemeConfigurator/ModeSwitcher'
+import LogoAsText from '../shared/LogoAsText'
 
 const HeaderActionsStart = () => {
     return (
         <>
-            <p className="dark:text-sky-50 text-black font-extrabold text-3xl hidden lg:block">
-                Communiche
-            </p>
+            <LogoAsText />
             <MobileNav />
         </>
     )
