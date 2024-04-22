@@ -10,6 +10,7 @@ import { apiGetCommunity } from '@/services/CommunityService'
 import { Notification, toast } from '@/components/ui'
 import CommunityDetail from './components/CommunityDetail'
 import Members from './components/Members'
+import { AuthorityCheck } from '@/components/shared'
 
 const { TabNav, TabList } = Tabs
 
@@ -51,6 +52,10 @@ const Settings = () => {
         posts: {
             label: 'Posts',
             path: 'posts',
+        },
+        pendingRequests: {
+            label: 'Pending Requests',
+            path: 'pendingRequests',
         },
     }
 
@@ -112,6 +117,14 @@ const Settings = () => {
                             <Members community={community} />
                         )}
                         {currentTab === 'ingredients' && <div>Posts</div>}
+                        {currentTab === 'pendingRequests' && (
+                            <AuthorityCheck
+                                userAuthority={['owner', 'moderator']} // TODO: To be implemented
+                                authority={['owner', 'moderator']}
+                            >
+                                <div>Pending Requests</div>
+                            </AuthorityCheck>
+                        )}
                     </Suspense>
                 </div>
             </AdaptableCard>
