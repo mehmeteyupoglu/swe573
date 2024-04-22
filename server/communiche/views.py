@@ -105,6 +105,10 @@ def login(request):
     
     return Response({'token': token, 'user': serialized_data}, status=status.HTTP_200_OK)
 
+@api_view(['POST'])
+def logout(request):
+    return Response(status=status.HTTP_200_OK)
+
 @api_view(['GET'])
 def communities(request):
     if request.method == 'GET':
