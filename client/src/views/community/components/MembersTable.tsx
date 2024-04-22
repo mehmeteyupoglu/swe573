@@ -19,7 +19,7 @@ const MembersTable = ({
     community: IndividualCommunityType
 }) => {
     const [isLoading, setIsLoading] = useState<boolean>(false)
-    const { is_owner } = community
+    const { is_owner, id } = community
 
     const dispatch = useDispatch()
 
@@ -92,7 +92,7 @@ const MembersTable = ({
                             onClick={() => {
                                 if (typeof handleChangeRole === 'function') {
                                     console.log(row)
-                                    handleChangeRole(row.id, row.id, 1)
+                                    handleChangeRole(id, row.id, 1)
                                 }
                             }}
                         >
