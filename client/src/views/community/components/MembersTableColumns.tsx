@@ -1,7 +1,20 @@
 import { Button } from '@/components/ui'
+import { apiChangeUserRole } from '@/services/CommunityService'
+import { toggleFetchTrigger } from '@/store'
 import { formatDate, mapRoleToLabel } from '@/utils/helpers'
+import useRequestWithNotification from '@/utils/hooks/useRequestWithNotification'
 import { ColumnDef } from '@tanstack/react-table'
 import React from 'react'
+import { useDispatch } from 'react-redux'
+
+const dispatch = useDispatch()
+
+const [handleChangeRole, isChangingRole] = useRequestWithNotification(
+    apiChangeUserRole,
+    'Role has been successfully changed!',
+    'Error changing role',
+    () => dispatch(toggleFetchTrigger())
+)
 
 const columns: ColumnDef<any>[] = [
     {
@@ -62,7 +75,12 @@ const columns: ColumnDef<any>[] = [
                         className="bg-blue-500 text-white"
                         size="sm"
                         variant="solid"
-                        onClick={() => console.log({ row })}
+                        onClick={() => {
+                            if (typeof handleChangeRole === 'function') {
+                                console.log(row)
+                                handleChangeRole(row.id, row.id, 1)
+                            }
+                        }}
                     >
                         Assign Moderator
                     </Button>
