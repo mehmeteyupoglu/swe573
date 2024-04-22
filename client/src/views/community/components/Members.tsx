@@ -3,10 +3,7 @@ import { Card } from '@/components/ui'
 import { apiFetchMembers } from '@/services/CommunityService'
 import { useAppSelector } from '@/store'
 import { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
 import MembersTable from './MembersTable'
-import NoData from '@/components/shared/NoData'
 
 export default function Members({
     community,
@@ -47,11 +44,7 @@ export default function Members({
                 footerBorder={false}
                 headerBorder={false}
             >
-                {!members || members.length === 0 ? (
-                    <NoData />
-                ) : (
-                    <MembersTable members={members} community={community} />
-                )}
+                <MembersTable members={members} community={community} />
             </Card>
         </div>
     )
