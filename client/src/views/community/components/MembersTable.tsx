@@ -91,7 +91,6 @@ const MembersTable = ({
                             variant="solid"
                             onClick={() => {
                                 if (typeof handleChangeRole === 'function') {
-                                    console.log(row)
                                     handleChangeRole(id, row.id, 1)
                                 }
                             }}
@@ -106,9 +105,13 @@ const MembersTable = ({
                             className="bg-blue-500 text-white"
                             size="sm"
                             variant="solid"
-                            onClick={() => console.log({ row })}
+                            onClick={() => {
+                                if (typeof handleChangeRole === 'function') {
+                                    handleChangeRole(id, row.id, 0)
+                                }
+                            }}
                         >
-                            Remove
+                            Unassign Moderator
                         </Button>
                     )
             },
