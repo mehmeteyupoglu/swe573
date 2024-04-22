@@ -25,17 +25,8 @@ export default function CommunityDetail({
         (state) => state.community.community.fetchTrigger
     )
     const userId = useAppSelector((state) => state.auth.user?.id)
-    const {
-        id,
-        members,
-        num_members,
-        name,
-        description,
-        updated_at,
-        is_member,
-        is_public,
-        is_owner,
-    } = community
+    const { id, members, num_members, name, description, is_public, is_owner } =
+        community
 
     const [handleJoinCommunity, isJoining] = useRequestWithNotification(
         apiJoinCommunity,
