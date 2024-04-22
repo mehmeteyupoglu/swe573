@@ -119,9 +119,6 @@ const MembersTable = ({
 
     return (
         <div>
-            {is_owner && (
-                <p className="mb-2">You are the owner of this community</p>
-            )}
             <DataTable
                 columns={is_owner ? columns : filteredColumns}
                 data={members}
