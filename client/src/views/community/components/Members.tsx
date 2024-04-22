@@ -1,17 +1,12 @@
 import { IndividualCommunityType, Member } from '@/@types/community'
-import { Button, Card } from '@/components/ui'
-import {
-    apiFetchMembers,
-    apiJoinCommunity,
-    apiLeaveCommunity,
-} from '@/services/CommunityService'
-import { toggleFetchTrigger, useAppSelector } from '@/store'
-import { formatDate } from '@/utils/helpers'
-import useRequestWithNotification from '@/utils/hooks/useRequestWithNotification'
+import { Card } from '@/components/ui'
+import { apiFetchMembers } from '@/services/CommunityService'
+import { useAppSelector } from '@/store'
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import MembersTable from './MembersTable'
+import NoData from '@/components/shared/NoData'
 
 export default function Members({
     community,
@@ -19,23 +14,12 @@ export default function Members({
     community: IndividualCommunityType
 }) {
     const [members, setMembers] = useState<Member[]>([])
-    const navigate = useNavigate()
-    const dispatch = useDispatch()
     const fetchTrigger = useAppSelector(
         (state) => state.community.community.fetchTrigger
     )
     const userId = useAppSelector((state) => state.auth.user?.id)
 
-    const {
-        id,
-        num_members,
-        name,
-        description,
-        updated_at,
-        is_member,
-        is_public,
-        is_owner,
-    } = community
+    const { id } = community
 
     useEffect(() => {
         const fetchMembers = async () => {
@@ -63,7 +47,11 @@ export default function Members({
                 footerBorder={false}
                 headerBorder={false}
             >
-                <MembersTable members={members} community={community} />
+                {!members || members.length === 0 ? (
+                    <NoData />
+                ) : (
+                    <MembersTable members={members} community={community} />
+                )}
             </Card>
         </div>
     )
