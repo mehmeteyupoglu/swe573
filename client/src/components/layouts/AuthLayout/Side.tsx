@@ -5,6 +5,7 @@ import { APP_NAME } from '@/constants/app.constant'
 import type { CommonProps } from '@/@types/common'
 import { useTranslation } from 'react-i18next'
 import Copyright from '@/components/shared/Copyright'
+import LogoAsText from '@/components/shared/LogoAsText'
 
 interface SideProps extends CommonProps {
     content?: React.ReactNode
@@ -22,9 +23,7 @@ const Side = ({ children, content, ...rest }: SideProps) => {
             >
                 {/* TODO: to be initiated later */}
                 {/* <Logo mode="dark" /> */}
-                <p className="text-sky-50 font-extrabold text-3xl">
-                    {APP_NAME}
-                </p>
+                <LogoAsText />
                 <div>
                     <div className="mb-6 flex items-center gap-4">
                         <Avatar
