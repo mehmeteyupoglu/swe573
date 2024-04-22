@@ -43,7 +43,19 @@ const columns: ColumnDef<any>[] = [
         cell: (props) => {
             const row = props.row.original
 
-            if (row.role != 1) {
+            if (row.role === -1) {
+                return (
+                    <Button
+                        disabled
+                        className="bg-blue-500 text-white"
+                        size="sm"
+                        variant="solid"
+                        onClick={() => console.log({ row })}
+                    >
+                        Owner
+                    </Button>
+                )
+            } else if (row.role === 0) {
                 return (
                     <Button
                         // disabled={is_owner}
@@ -55,7 +67,18 @@ const columns: ColumnDef<any>[] = [
                         Assign Moderator
                     </Button>
                 )
-            }
+            } else
+                return (
+                    <Button
+                        // disabled={is_owner}
+                        className="bg-blue-500 text-white"
+                        size="sm"
+                        variant="solid"
+                        onClick={() => console.log({ row })}
+                    >
+                        Remove
+                    </Button>
+                )
         },
     },
 ]
