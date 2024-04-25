@@ -2,9 +2,11 @@ from rest_framework import serializers
 from .models import Template, User, Community, JoinRequest, CommunityUser
 
 class UserSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+
     class Meta:
         model = User
-        fields = ['id', 'firstname', 'lastname', 'username', 'email', 'dob', 'country', 'phone', 'short_bio']
+        fields = ['id', 'firstname', 'lastname', 'username', 'email', 'dob', 'country', 'phone', 'short_bio', 'password']
 
 class TemplateSerializer(serializers.ModelSerializer):
     class Meta:
