@@ -48,10 +48,10 @@ const PendingRequestsTable = ({
         },
         {
             header: 'Request Date',
-            accessorKey: 'joined_at',
+            accessorKey: 'created_at',
             cell: (props) => {
                 const row = props.row.original
-                const formattedDate = formatDate(row.joined_at)
+                const formattedDate = formatDate(row.created_at)
                 return <div className="flex">{formattedDate}</div>
             },
         },
