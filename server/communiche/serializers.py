@@ -60,4 +60,4 @@ class JoinRequestSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = JoinRequest
-        fields = ['community', 'created_at', 'updated_at', 'status', 'username', 'firstname', 'lastname']
+        fields = ['id', 'community', 'created_at', 'updated_at', 'status', 'username', 'firstname', 'lastname']

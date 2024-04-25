@@ -353,3 +353,32 @@ def join_requests(request, community_id):
     
     combined_requests = pending_serializer.data + accepted_or_rejected_serializer.data
     return Response(combined_requests)
+
+@api_view(['POST'])
+def accept_reject_join_request(request, join_request_id):
+    try:
+        join_request = JoinRequest.objects.get(pk=join_request_id)
+        community = join_request.community
+        user = join_request.user
+    except (JoinRequest.DoesNotExist, Community.DoesNotExist, User.DoesNotExist):
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    action = request.data.get('action')
+    if action == 1:
+        # Update join request status to accepted
+        join_request.status = 1
+        join_request.save()
+
+        # Add user to communityuser table
+        community_user = CommunityUser(user=user, community=community)
+        community_user.save()
+
+        return Response(status=status.HTTP_200_OK)
+    elif action == -1:
+        # Update join request status to rejected
+        join_request.status = -1
+        join_request.save()
+
+        return Response(status=status.HTTP_200_OK)
+    else:
+        return Response({'message': 'Invalid action'}, status=status.HTTP_400_BAD_REQUEST)
