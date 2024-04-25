@@ -97,7 +97,13 @@ const PendingRequestsTable = ({
                         </div>
                     )
                 } else if (status === 1) {
-                    return <div className="flex">Accepted</div>
+                    return (
+                        <div>
+                            Accepted
+                            <br />
+                            <span>{formatDate(row.updated_at)}</span>
+                        </div>
+                    )
                 } else {
                     return <div className="flex">Rejected</div>
                 }
