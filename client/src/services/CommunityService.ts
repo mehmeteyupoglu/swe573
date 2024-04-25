@@ -102,3 +102,10 @@ export async function apiGetUserRole(communityId: string, userId: string) {
         },
     })
 }
+
+export async function apiGetJoinRequests(communityId: string) {
+    return ApiService.fetchData({
+        url: `/community/${communityId}/join_requests/`,
+        method: 'get',
+    })
+}
