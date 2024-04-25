@@ -335,3 +335,10 @@ def community_members(request, community_id):
             member['joined_at'] = None
     
     return Response(serializer.data)
+
+@api_view(['GET'])
+def join_requests(request, community_id):
+    community = Community.objects.get(pk=community_id)
+    requests = JoinRequest.objects.filter(community=community)
+    serializer = JoinRequestSerializer(requests, many=True)
+    return Response(serializer.data)
