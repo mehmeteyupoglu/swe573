@@ -89,3 +89,4 @@ class JoinRequest(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     community = models.ForeignKey(Community, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+    status = models.IntegerField(default=0)  # 0 for pending, 1 for accepted, -1 for rejected
