@@ -355,15 +355,15 @@ def join_requests(request, community_id):
     return Response(combined_requests)
 
 @api_view(['POST'])
-def accept_reject_join_request(request, join_request_id):
+def accept_reject_join_request(request, request_id):
     try:
-        join_request = JoinRequest.objects.get(pk=join_request_id)
+        join_request = JoinRequest.objects.get(pk=request_id)
         community = join_request.community
         user = join_request.user
     except (JoinRequest.DoesNotExist, Community.DoesNotExist, User.DoesNotExist):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    action = request.data.get('action')
+    action = int(request.data.get('action'))
     if action == 1:
         # Update join request status to accepted
         join_request.status = 1
