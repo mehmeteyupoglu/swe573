@@ -84,3 +84,10 @@ export type IndividualCommunityType = {
 export type FetchCommunityType = {
     fetchTrigger: boolean
 }
+
+export type JoinRequest = {
+    id: number
+    user: Member
+    created_at?: string
+    status: boolean
+}

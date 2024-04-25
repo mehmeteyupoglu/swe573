@@ -13,6 +13,7 @@ import Members from './components/Members'
 import { AuthorityCheck } from '@/components/shared'
 import useFetchData from '@/utils/hooks/useFetchData'
 import { mapRoleToLabel } from '@/utils/helpers'
+import PendingRequests from './components/PendingRequests'
 
 const { TabNav, TabList } = Tabs
 
@@ -158,7 +159,7 @@ const Settings = () => {
                         )}
                         {currentTab === 'ingredients' && <div>Posts</div>}
                         {currentTab === 'pendingRequests' && (
-                            <div>Pending Requests</div>
+                            <PendingRequests community={community} />
                         )}
                     </Suspense>
                 </div>
