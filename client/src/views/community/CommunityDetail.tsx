@@ -158,12 +158,7 @@ const Settings = () => {
                         )}
                         {currentTab === 'ingredients' && <div>Posts</div>}
                         {currentTab === 'pendingRequests' && (
-                            <AuthorityCheck
-                                userAuthority={['x']} // TODO: To be implemented
-                                authority={['y', 'x']}
-                            >
-                                <div>Pending Requests</div>
-                            </AuthorityCheck>
+                            <div>Pending Requests</div>
                         )}
                     </Suspense>
                 </div>
