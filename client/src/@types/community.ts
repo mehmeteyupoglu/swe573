@@ -87,7 +87,9 @@ export type FetchCommunityType = {
 
 export type JoinRequest = {
     id: number
-    user: Member
+    firstname: string
+    lastname: string
+    username: string
     created_at?: string
     status: boolean
 }
