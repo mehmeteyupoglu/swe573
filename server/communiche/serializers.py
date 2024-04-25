@@ -56,4 +56,4 @@ class DataTypeSerializer(serializers.Serializer):
 class JoinRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = JoinRequest
-        fields = ['community', 'user', 'joined_at']
+        fields = ['community', 'user', 'joined_at', 'status']
