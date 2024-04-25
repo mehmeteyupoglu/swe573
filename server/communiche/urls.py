@@ -41,5 +41,5 @@ urlpatterns = [
     path('change_user_role/<int:community_id>/<int:user_id>/', views.change_user_role, name='change_user_role'),
     path('community/<int:community_id>/members', views.community_members, name='community-members'),
     path('logout/', views.logout, name='logout'),
-    path('community/<int:community_id>/join_requests', views.join_requests, name='join_requests'),
+    path('community/<int:community_id>/join_requests/', views.join_requests, name='join_requests'),
 ]
