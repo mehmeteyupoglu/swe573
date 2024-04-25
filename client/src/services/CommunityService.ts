@@ -109,3 +109,16 @@ export async function apiGetJoinRequests(communityId: string) {
         method: 'get',
     })
 }
+
+export async function apiAcceptRejectRequest(
+    requestId: string,
+    status: number
+) {
+    return ApiService.fetchData({
+        url: `/community/${requestId}/accept_reject_join_request/`,
+        method: 'post',
+        data: {
+            action: status,
+        },
+    })
+}

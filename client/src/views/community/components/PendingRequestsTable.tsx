@@ -5,7 +5,10 @@ import columns from './MembersTableColumns'
 import { IndividualCommunityType, JoinRequest } from '@/@types/community'
 
 import { Button } from '@/components/ui'
-import { apiChangeUserRole } from '@/services/CommunityService'
+import {
+    apiAcceptRejectRequest,
+    apiChangeUserRole,
+} from '@/services/CommunityService'
 import { toggleFetchTrigger } from '@/store'
 import { formatDate, mapRoleToLabel } from '@/utils/helpers'
 import useRequestWithNotification from '@/utils/hooks/useRequestWithNotification'
@@ -23,10 +26,10 @@ const PendingRequestsTable = ({
 
     const dispatch = useDispatch()
 
-    const [handleChangeRole, isChangingRole] = useRequestWithNotification(
-        apiChangeUserRole,
-        'Role has been successfully changed!',
-        'Error changing role',
+    const [handleAcceptReject, isChangingRole] = useRequestWithNotification(
+        apiAcceptRejectRequest,
+        'Action taken successfully',
+        'Error taking action',
         () => dispatch(toggleFetchTrigger())
     )
 
@@ -58,30 +61,42 @@ const PendingRequestsTable = ({
             cell: (props) => {
                 const row = props.row.original
 
-                if (row.status === 0) {
+                const { id, status } = row
+
+                if (status === 0) {
                     return (
                         <div>
                             <Button
-                                disabled
                                 size="sm"
                                 variant="solid"
-                                onClick={() => console.log({ row })}
+                                onClick={() => {
+                                    if (
+                                        typeof handleAcceptReject === 'function'
+                                    ) {
+                                        handleAcceptReject(id, 1)
+                                    }
+                                }}
                                 className="bg-green-960 text-white mr-2"
                             >
                                 Accept
                             </Button>
                             <Button
-                                disabled
                                 className="bg-red-500 text-white"
                                 size="sm"
                                 variant="solid"
-                                onClick={() => console.log({ row })}
+                                onClick={() => {
+                                    if (
+                                        typeof handleAcceptReject === 'function'
+                                    ) {
+                                        handleAcceptReject(id, -1)
+                                    }
+                                }}
                             >
                                 Decline
                             </Button>
                         </div>
                     )
-                } else if (row.status === 1) {
+                } else if (status === 1) {
                     return <div className="flex">Accepted</div>
                 } else {
                     return <div className="flex">Rejected</div>
