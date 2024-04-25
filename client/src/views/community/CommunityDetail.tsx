@@ -82,9 +82,9 @@ const Settings = () => {
             label: 'Posts',
             path: 'posts',
         },
-        pendingRequests: {
-            label: 'Pending Requests',
-            path: 'pendingRequests',
+        requests: {
+            label: 'Requests',
+            path: 'requests',
             authority: ['owner', 'moderator'],
         },
     }
@@ -158,7 +158,7 @@ const Settings = () => {
                             <Members community={community} />
                         )}
                         {currentTab === 'ingredients' && <div>Posts</div>}
-                        {currentTab === 'pendingRequests' && (
+                        {currentTab === 'requests' && (
                             <PendingRequests community={community} />
                         )}
                     </Suspense>
