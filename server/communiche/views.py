@@ -10,6 +10,7 @@ from datetime import datetime, timedelta
 from .models import Community, JoinRequest, CommunityUser
 from django.http import JsonResponse
 from . import constants
+from datetime import datetime, timedelta
 
 @api_view(['GET', 'POST'])
 def user_list(request):
@@ -336,9 +337,19 @@ def community_members(request, community_id):
     
     return Response(serializer.data)
 
+# TODO: Check this later 
 @api_view(['GET'])
 def join_requests(request, community_id):
     community = Community.objects.get(pk=community_id)
-    requests = JoinRequest.objects.filter(community=community)
-    serializer = JoinRequestSerializer(requests, many=True)
-    return Response(serializer.data)
+    
+    # Get pending requests
+    pending_requests = JoinRequest.objects.filter(community=community, status=0)
+    pending_serializer = JoinRequestSerializer(pending_requests, many=True)
+    
+    # Get accepted or rejected requests that are less than 30 days old
+    thirty_days_ago = datetime.now() - timedelta(days=30)
+    accepted_or_rejected_requests = JoinRequest.objects.filter(community=community, status__in=[1, -1], created_at__gte=thirty_days_ago)
+    accepted_or_rejected_serializer = JoinRequestSerializer(accepted_or_rejected_requests, many=True)
+    
+    combined_requests = pending_serializer.data + accepted_or_rejected_serializer.data
+    return Response(combined_requests)
