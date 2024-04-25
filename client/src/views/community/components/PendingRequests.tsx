@@ -3,6 +3,7 @@ import { Card } from '@/components/ui'
 import { apiGetJoinRequests } from '@/services/CommunityService'
 import { useAppSelector } from '@/store'
 import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
 import PendingRequestsTable from './PendingRequestsTable'
 
 export default function PendingRequests({
@@ -14,9 +15,8 @@ export default function PendingRequests({
     const fetchTrigger = useAppSelector(
         (state) => state.community.community.fetchTrigger
     )
-    const userId = useAppSelector((state) => state.auth.user?.id)
 
-    const { id } = community
+    const { id } = useParams<{ id: string }>()
 
     useEffect(() => {
         const fetchMembers = async () => {

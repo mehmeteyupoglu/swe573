@@ -3,6 +3,7 @@ import { Card } from '@/components/ui'
 import { apiFetchMembers } from '@/services/CommunityService'
 import { useAppSelector } from '@/store'
 import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
 import MembersTable from './MembersTable'
 
 export default function Members({
@@ -14,9 +15,8 @@ export default function Members({
     const fetchTrigger = useAppSelector(
         (state) => state.community.community.fetchTrigger
     )
-    const userId = useAppSelector((state) => state.auth.user?.id)
 
-    const { id } = community
+    const { id } = useParams<{ id: string }>()
 
     useEffect(() => {
         const fetchMembers = async () => {
