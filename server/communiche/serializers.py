@@ -54,8 +54,10 @@ class DataTypeSerializer(serializers.Serializer):
         return [data_type for data_type in constants.DATA_TYPES]
 
 class JoinRequestSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
-    
+    username = serializers.CharField(source='user.username')
+    firstname = serializers.CharField(source='user.firstname')
+    lastname = serializers.CharField(source='user.lastname')
+
     class Meta:
         model = JoinRequest
-        fields = ['community', 'created_at', 'status', 'user']
+        fields = ['community', 'created_at', 'status', 'username', 'firstname', 'lastname']
