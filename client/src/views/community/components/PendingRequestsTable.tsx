@@ -57,6 +57,35 @@ const PendingRequestsTable = ({
             accessorKey: 'actions',
             cell: (props) => {
                 const row = props.row.original
+
+                if (row.status === 0) {
+                    return (
+                        <div>
+                            <Button
+                                disabled
+                                size="sm"
+                                variant="solid"
+                                onClick={() => console.log({ row })}
+                                className="bg-green-960 text-white mr-2"
+                            >
+                                Accept
+                            </Button>
+                            <Button
+                                disabled
+                                className="bg-red-500 text-white"
+                                size="sm"
+                                variant="solid"
+                                onClick={() => console.log({ row })}
+                            >
+                                Decline
+                            </Button>
+                        </div>
+                    )
+                } else if (row.status === 1) {
+                    return <div className="flex">Accepted</div>
+                } else {
+                    return <div className="flex">Rejected</div>
+                }
             },
         },
     ]
