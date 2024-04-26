@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Template, User, Community, JoinRequest, CommunityUser
+from .models import Template, User, Community, JoinRequest, CommunityUser, TemplateCommunity
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -12,6 +12,11 @@ class TemplateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Template
         fields = ['id', 'name', 'description', 'created_at', 'updated_at', 'fields']
+
+class TemplateCommunitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TemplateCommunity
+        fields = '__all__'  # This will include all fields in the model
 
 class CommunitySerializer(serializers.ModelSerializer):
     members = UserSerializer(many=True, read_only=True)

@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 from .models import Template, User
-from .serializers import TemplateSerializer, UserSerializer, CommunitySerializer, JoinRequestSerializer
+from .serializers import TemplateSerializer, UserSerializer, CommunitySerializer, JoinRequestSerializer, TemplateCommunitySerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -11,6 +11,7 @@ from .models import Community, JoinRequest, CommunityUser
 from django.http import JsonResponse
 from . import constants
 from datetime import datetime, timedelta
+from .models import Community, TemplateCommunity
 
 @api_view(['GET', 'POST'])
 def user_list(request):
@@ -382,3 +383,10 @@ def accept_reject_join_request(request, request_id):
         return Response(status=status.HTTP_200_OK)
     else:
         return Response({'message': 'Invalid action'}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def community_templates(request, community_id):
+    community = Community.objects.get(pk=community_id)
+    templates = TemplateCommunity.objects.filter(community=community)
+    serializer = TemplateCommunitySerializer(templates, many=True)
+    return Response(serializer.data)

@@ -43,4 +43,5 @@ urlpatterns = [
     path('logout/', views.logout, name='logout'),
     path('community/<int:community_id>/join_requests/', views.join_requests, name='join_requests'),
     path('community/<int:request_id>/accept_reject_join_request/', views.accept_reject_join_request, name='accept_join_request'),
+    path('community/<int:community_id>/templates/', views.community_templates, name='community-templates'),
 ]
