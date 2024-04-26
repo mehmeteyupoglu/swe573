@@ -3,18 +3,13 @@ import { Dispatch, SetStateAction } from 'react'
 
 import { HiCheck } from 'react-icons/hi'
 import Select from '@/components/ui/Select'
-
-type CategoryOption = {
-    value: string
-    label: string
-    id: string
-}
+import { CommonSelectOptionType } from '@/@types/common'
 
 const CustomSelectOption = ({
     innerProps,
     label,
     isSelected,
-}: OptionProps<CategoryOption>) => {
+}: OptionProps<CommonSelectOptionType>) => {
     return (
         <div
             className={`flex items-center justify-between p-2 ${
@@ -33,7 +28,7 @@ const CustomSelectOption = ({
 }
 
 interface MealTableFilterProps {
-    mealCategories: CategoryOption[]
+    mealCategories: CommonSelectOptionType[]
     categoryQuery: string
     setCategoryQuery: Dispatch<SetStateAction<string>>
 }
@@ -57,7 +52,8 @@ const MealTableFilter = (props: MealTableFilterProps) => {
                 }
                 onChange={(selectedOption) => {
                     if (selectedOption) {
-                        const value = (selectedOption as CategoryOption).id
+                        const value = (selectedOption as CommonSelectOptionType)
+                            .id
                         setCategoryQuery(value) // Update the category query state
                     } else {
                         setCategoryQuery('') // Clear the category query state

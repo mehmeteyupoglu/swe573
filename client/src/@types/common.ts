@@ -17,7 +17,7 @@ export type TableQueries = {
     }
 }
 
-export type selectType = {
+export type CommonSelectOptionType = {
     value: string
     label: string
     id: string
