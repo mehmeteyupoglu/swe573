@@ -8,7 +8,7 @@ import { toggleFetchTrigger, useAppSelector } from '@/store'
 import { formatDate } from '@/utils/helpers'
 import useRequestWithNotification from '@/utils/hooks/useRequestWithNotification'
 import { FaCrown } from 'react-icons/fa'
-import { HiLockClosed, HiLockOpen } from 'react-icons/hi'
+import { HiLockClosed, HiLockOpen, HiOutlineDocumentAdd } from 'react-icons/hi'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
@@ -143,6 +143,21 @@ export default function CommunityDetail({
                 <p>{description}</p>
                 {/* <Members /> */}
             </Card>
+            <Button
+                className="mt-5 flex items-center justify-center gap-x-0.5"
+                size="sm"
+                variant="twoTone"
+                color="emerald-600"
+                block
+                onClick={() =>
+                    navigate(`/community/${id}/settings`, {
+                        state: { community },
+                    })
+                }
+            >
+                <HiOutlineDocumentAdd className="" />
+                <span>Post</span>
+            </Button>
         </div>
     )
 }
