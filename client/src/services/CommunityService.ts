@@ -122,3 +122,10 @@ export async function apiAcceptRejectRequest(
         },
     })
 }
+
+export async function apiGetCommunityTemplates(communityId: string) {
+    return ApiService.fetchData({
+        url: `/community/${communityId}/templates/`,
+        method: 'get',
+    })
+}

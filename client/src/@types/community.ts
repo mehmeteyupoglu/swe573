@@ -21,6 +21,11 @@ export type TemplateType = {
     templateDialogOpen?: boolean
 }
 
+export type TemplateResponse = {
+    template: TemplateType
+    id: number
+}
+
 export interface DataTypeResponse {
     data_types: (
         | 'Text'

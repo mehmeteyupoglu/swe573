@@ -1,11 +1,12 @@
-import { Member } from '@/@types/community'
-import { apiFetchMembers } from '@/services/CommunityService'
+import { TemplateResponse } from '@/@types/community'
+import { apiGetCommunityTemplates } from '@/services/CommunityService'
 import { useAppSelector } from '@/store'
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import MapTemplates from './components/MapTemplates'
 
 export default function Post() {
-    const [members, setMembers] = useState<Member[]>([])
+    const [templates, setTemplates] = useState<TemplateResponse[]>([])
     const fetchTrigger = useAppSelector(
         (state) => state.community.community.fetchTrigger
     )
@@ -15,18 +16,24 @@ export default function Post() {
     useEffect(() => {
         const fetchMembers = async () => {
             try {
-                const members = await apiFetchMembers(String(id) ?? '')
-                if (members.status === 200) {
-                    setMembers(members.data as Member[])
+                const templates = await apiGetCommunityTemplates(
+                    String(id) ?? ''
+                )
+                if (templates.status === 200) {
+                    setTemplates(templates.data as TemplateResponse[])
                 }
-                // fetch members data
-                console.log('fetching members')
+                // fetch templates data
+                console.log('fetching templates')
             } catch (error) {
-                console.error('Error fetching members', error)
+                console.error('Error fetching templates', error)
             }
         }
 
         fetchMembers()
     }, [fetchTrigger])
-    return <div></div>
+    return (
+        <div>
+            <MapTemplates templates={templates} />
+        </div>
+    )
 }
