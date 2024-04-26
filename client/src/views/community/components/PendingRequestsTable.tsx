@@ -4,7 +4,7 @@ import type { ColumnDef } from '@/components/shared/DataTable'
 import columns from './MembersTableColumns'
 import { IndividualCommunityType, JoinRequest } from '@/@types/community'
 
-import { Button } from '@/components/ui'
+import { Badge, Button } from '@/components/ui'
 import { apiAcceptRejectRequest } from '@/services/CommunityService'
 import { toggleFetchTrigger } from '@/store'
 import { formatDate } from '@/utils/helpers'
@@ -94,7 +94,11 @@ const PendingRequestsTable = ({
                 } else if (status === 1) {
                     return (
                         <div>
-                            Accepted
+                            <Badge
+                                className="mr-4"
+                                content={'Accepted'}
+                                innerClass="bg-emerald-500"
+                            />
                             <br />
                             <span>
                                 {formatDate(row.updated_at, 'MMMM DD, YYYY')}
@@ -102,7 +106,19 @@ const PendingRequestsTable = ({
                         </div>
                     )
                 } else {
-                    return <div className="flex">Rejected</div>
+                    return (
+                        <div>
+                            <Badge
+                                className="mr-4"
+                                content={'Rejected'}
+                                innerClass="bg-red-500 text-red-50"
+                            />
+                            <br />
+                            <span>
+                                {formatDate(row.updated_at, 'MMMM DD, YYYY')}
+                            </span>
+                        </div>
+                    )
                 }
             },
         },
