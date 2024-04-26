@@ -1,5 +1,6 @@
 import { TemplateResponse, TemplateType } from '@/@types/community'
 import React from 'react'
+import MapFields from './MapFields'
 
 export default function MapTemplates({
     templates,
@@ -10,15 +11,13 @@ export default function MapTemplates({
         <div>
             {templates.map((template) => (
                 <div key={template.id}>
-                    <h1>{template.template.id}</h1>
+                    <br />
                     <h2>{template.template.name}</h2>
                     <p>{template.template.description}</p>
-                    {template.template.fields.map((field) => (
-                        <div key={field.field_name}>
-                            <h3>{field.field_name}</h3>
-                            <p>{field.field_type}</p>
-                        </div>
-                    ))}
+
+                    <br />
+                    <h3>Fields</h3>
+                    <MapFields fields={template.template.fields} />
                 </div>
             ))}
         </div>

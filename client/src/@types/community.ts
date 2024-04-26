@@ -6,18 +6,18 @@ export type CommunityFormModel = {
     userId?: string
 }
 
+export type Field = {
+    field_name: string
+    field_type: string
+}
+
 export type TemplateType = {
     id?: number
     name: string
     description: string
     created_at?: string
     updated_at?: string
-    fields: [
-        {
-            field_name: string
-            field_type: string
-        }
-    ]
+    fields: Field[]
     templateDialogOpen?: boolean
 }
 
