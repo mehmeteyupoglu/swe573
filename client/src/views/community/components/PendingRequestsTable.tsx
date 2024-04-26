@@ -1,25 +1,20 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import DataTable from '@/components/shared/DataTable'
 import type { ColumnDef } from '@/components/shared/DataTable'
 import columns from './MembersTableColumns'
 import { IndividualCommunityType, JoinRequest } from '@/@types/community'
 
 import { Button } from '@/components/ui'
-import {
-    apiAcceptRejectRequest,
-    apiChangeUserRole,
-} from '@/services/CommunityService'
+import { apiAcceptRejectRequest } from '@/services/CommunityService'
 import { toggleFetchTrigger } from '@/store'
-import { formatDate, mapRoleToLabel } from '@/utils/helpers'
+import { formatDate } from '@/utils/helpers'
 import useRequestWithNotification from '@/utils/hooks/useRequestWithNotification'
 import { useDispatch } from 'react-redux'
 
 const PendingRequestsTable = ({
     joinRequests,
-    community,
 }: {
     joinRequests: JoinRequest[]
-    community: IndividualCommunityType
 }) => {
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
@@ -101,7 +96,9 @@ const PendingRequestsTable = ({
                         <div>
                             Accepted
                             <br />
-                            <span>{formatDate(row.updated_at)}</span>
+                            <span>
+                                {formatDate(row.updated_at, 'MMMM DD, YYYY')}
+                            </span>
                         </div>
                     )
                 } else {

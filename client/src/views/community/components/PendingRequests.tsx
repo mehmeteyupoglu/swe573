@@ -44,10 +44,7 @@ export default function PendingRequests({
                 footerBorder={false}
                 headerBorder={false}
             >
-                <PendingRequestsTable
-                    joinRequests={joinRequests}
-                    community={community}
-                />
+                <PendingRequestsTable joinRequests={joinRequests} />
             </Card>
         </div>
     )
