@@ -22,16 +22,16 @@ const PendingRequestsTable = ({
     community: IndividualCommunityType
 }) => {
     const [isLoading, setIsLoading] = useState<boolean>(false)
-    const { is_owner, id } = community
 
     const dispatch = useDispatch()
 
-    const [handleAcceptReject, isChangingRole] = useRequestWithNotification(
-        apiAcceptRejectRequest,
-        'Action taken successfully',
-        'Error taking action',
-        () => dispatch(toggleFetchTrigger())
-    )
+    const [handleAcceptReject, isHandleAccepRejecting] =
+        useRequestWithNotification(
+            apiAcceptRejectRequest,
+            'Action taken successfully',
+            'Error taking action',
+            () => dispatch(toggleFetchTrigger())
+        )
 
     const columns: ColumnDef<any>[] = [
         {
