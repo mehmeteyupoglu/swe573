@@ -5,11 +5,15 @@ import columns from './MembersTableColumns'
 import { IndividualCommunityType, Member } from '@/@types/community'
 
 import { Button } from '@/components/ui'
-import { apiChangeUserRole } from '@/services/CommunityService'
+import {
+    apiChangeUserRole,
+    apiLeaveCommunity,
+} from '@/services/CommunityService'
 import { toggleFetchTrigger } from '@/store'
 import { formatDate, mapRoleToLabel } from '@/utils/helpers'
 import useRequestWithNotification from '@/utils/hooks/useRequestWithNotification'
 import { useDispatch } from 'react-redux'
+import { ActionLink } from '@/components/shared'
 
 const MembersTable = ({
     members,
@@ -27,6 +31,13 @@ const MembersTable = ({
         apiChangeUserRole,
         'Role has been successfully changed!',
         'Error changing role',
+        () => dispatch(toggleFetchTrigger())
+    )
+
+    const [handleLeaveCommunity, isLeaving] = useRequestWithNotification(
+        apiLeaveCommunity,
+        'You have successfully removed the member!',
+        'Error removing member',
         () => dispatch(toggleFetchTrigger())
     )
 
@@ -84,35 +95,67 @@ const MembersTable = ({
                     )
                 } else if (row.role === 0) {
                     return (
-                        <Button
-                            // disabled={is_owner}
-                            className="bg-blue-500 text-white"
-                            size="sm"
-                            variant="solid"
-                            onClick={() => {
-                                if (typeof handleChangeRole === 'function') {
-                                    handleChangeRole(id, row.id, 1)
-                                }
-                            }}
-                        >
-                            Assign Moderator
-                        </Button>
+                        <div className="flex justify-between items-center">
+                            <Button
+                                // disabled={is_owner}
+                                className="bg-blue-500 text-white"
+                                size="sm"
+                                variant="solid"
+                                onClick={() => {
+                                    if (
+                                        typeof handleChangeRole === 'function'
+                                    ) {
+                                        handleChangeRole(id, row.id, 1)
+                                    }
+                                }}
+                            >
+                                Assign Moderator
+                            </Button>
+                            <ActionLink
+                                onClick={() => {
+                                    if (
+                                        typeof handleLeaveCommunity ===
+                                        'function'
+                                    ) {
+                                        handleLeaveCommunity(id, row.id, 0)
+                                    }
+                                }}
+                            >
+                                Remove
+                            </ActionLink>
+                        </div>
                     )
                 } else
                     return (
-                        <Button
-                            // disabled={is_owner}
-                            className="bg-blue-500 text-white"
-                            size="sm"
-                            variant="solid"
-                            onClick={() => {
-                                if (typeof handleChangeRole === 'function') {
-                                    handleChangeRole(id, row.id, 0)
-                                }
-                            }}
-                        >
-                            Unassign Moderator
-                        </Button>
+                        <div className="flex justify-between items-center">
+                            <Button
+                                // disabled={is_owner}
+                                className="bg-blue-500 text-white"
+                                size="sm"
+                                variant="solid"
+                                onClick={() => {
+                                    if (
+                                        typeof handleChangeRole === 'function'
+                                    ) {
+                                        handleChangeRole(id, row.id, 0)
+                                    }
+                                }}
+                            >
+                                Unassign Moderator
+                            </Button>
+                            <ActionLink
+                                onClick={() => {
+                                    if (
+                                        typeof handleLeaveCommunity ===
+                                        'function'
+                                    ) {
+                                        handleLeaveCommunity(id, row.id, 0)
+                                    }
+                                }}
+                            >
+                                Remove
+                            </ActionLink>
+                        </div>
                     )
             },
         },
