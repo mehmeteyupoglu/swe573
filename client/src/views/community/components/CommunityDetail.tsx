@@ -150,7 +150,7 @@ export default function CommunityDetail({
                 color="emerald-600"
                 block
                 onClick={() =>
-                    navigate(`/community/${id}/settings`, {
+                    navigate(`/community/${id}/post`, {
                         state: { community },
                     })
                 }
