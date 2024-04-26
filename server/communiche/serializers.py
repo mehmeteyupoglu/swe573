@@ -14,6 +14,8 @@ class TemplateSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'description', 'created_at', 'updated_at', 'fields']
 
 class TemplateCommunitySerializer(serializers.ModelSerializer):
+    template = TemplateSerializer()
+
     class Meta:
         model = TemplateCommunity
         fields = '__all__'  # This will include all fields in the model
