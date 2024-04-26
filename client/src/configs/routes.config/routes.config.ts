@@ -31,12 +31,41 @@ export const protectedRoutes = [
         },
     },
     {
-        key: 'individualCommunity',
-        path: '/individual-community/:id',
-        component: lazy(() => import('@/views/community/IndividualCommunity')),
+        key: 'communityDetail',
+        path: '/community-detail/:id',
+        component: lazy(() => import('@/views/community/CommunityDetail')),
         authority: [],
         meta: {
-            header: i18n.t('nav.individualCommunity'),
+            header: i18n.t('nav.communityDetail'),
+            headerContainer: true,
+        },
+    },
+    // {
+    //     key: 'community',
+    //     path: '/community-detail/:id',
+    //     component: lazy(() => import('@/views/community/CommunityDetail')),
+    //     authority: [],
+    //     meta: {
+    //         header: i18n.t('nav.communityDetail'),
+    //         headerContainer: true,
+    //     },
+    // },
+
+    {
+        key: 'appsAccount.settings',
+        path: `community/:id/:tab`,
+        component: lazy(() => import('@/views/community/CommunityDetail')),
+        meta: {
+            header: i18n.t('nav.communityDetail'),
+            headerContainer: true,
+        },
+    },
+    {
+        key: 'post',
+        path: `community/:id/post`,
+        component: lazy(() => import('@/views/post/Post')),
+        meta: {
+            header: i18n.t('nav.post'),
             headerContainer: true,
         },
     },

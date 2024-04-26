@@ -6,19 +6,24 @@ export type CommunityFormModel = {
     userId?: string
 }
 
+export type Field = {
+    field_name: string
+    field_type: string
+}
+
 export type TemplateType = {
     id?: number
     name: string
     description: string
     created_at?: string
     updated_at?: string
-    fields: [
-        {
-            field_name: string
-            field_type: string
-        }
-    ]
+    fields: Field[]
     templateDialogOpen?: boolean
+}
+
+export type TemplateResponse = {
+    template: TemplateType
+    id: number
 }
 
 export interface DataTypeResponse {
@@ -51,7 +56,7 @@ export type CommunityType = {
     members: Member[]
 }
 
-type Member = {
+export type Member = {
     id: number
     firstname: string
     lastname: string
@@ -61,6 +66,8 @@ type Member = {
     country: string
     phone: string
     short_bio: string | null
+    role?: number
+    joined_at?: string
 }
 
 export type IndividualCommunityType = {
@@ -71,6 +78,7 @@ export type IndividualCommunityType = {
     updated_at: string
     is_public: boolean
     is_member: boolean
+    is_owner: boolean
     has_user_requested: boolean
     reputation_rating: string
     templates: DataTypeOption[]
@@ -80,4 +88,14 @@ export type IndividualCommunityType = {
 
 export type FetchCommunityType = {
     fetchTrigger: boolean
+}
+
+export type JoinRequest = {
+    id: number
+    firstname: string
+    lastname: string
+    username: string
+    created_at?: string
+    updated_at?: string
+    status: boolean
 }

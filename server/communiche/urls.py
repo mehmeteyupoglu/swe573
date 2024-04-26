@@ -24,6 +24,8 @@ urlpatterns = [
     path('users/<int:id>/', views.user_detail, name='user-detail'),
     path('signup/', views.signup),
     path('login/', views.login),
+
+    # community
     path('communities/', views.communities, name='communities'),
     path('community/<int:id>/', views.community_detail, name='community-detail'),
     path('add_community/', views.add_community, name='add_community'),
@@ -35,4 +37,11 @@ urlpatterns = [
     path('join_community/<int:community_id>/<int:user_id>/', views.join_community, name='join_community'),
     path('leave_community/<int:community_id>/<int:user_id>/', views.leave_community, name='leave_community'),
     path('is_user_in_community/<int:community_id>/<int:user_id>/', views.is_user_in_community),
+    path('community/<int:community_id>/role/', views.user_role, name='user-role'),
+    path('change_user_role/<int:community_id>/<int:user_id>/', views.change_user_role, name='change_user_role'),
+    path('community/<int:community_id>/members', views.community_members, name='community-members'),
+    path('logout/', views.logout, name='logout'),
+    path('community/<int:community_id>/join_requests/', views.join_requests, name='join_requests'),
+    path('community/<int:request_id>/accept_reject_join_request/', views.accept_reject_join_request, name='accept_join_request'),
+    path('community/<int:community_id>/templates/', views.community_templates, name='community-templates'),
 ]

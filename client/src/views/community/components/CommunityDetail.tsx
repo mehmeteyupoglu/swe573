@@ -1,42 +1,32 @@
-import { IndividualCommunityType } from '@/@types/community'
-import { Button, Card, Notification, toast } from '@/components/ui'
+import { IndividualCommunityType, Member } from '@/@types/community'
+import { Button, Card } from '@/components/ui'
 import {
-    apiIsUserInCommunity,
     apiJoinCommunity,
     apiLeaveCommunity,
 } from '@/services/CommunityService'
 import { toggleFetchTrigger, useAppSelector } from '@/store'
 import { formatDate } from '@/utils/helpers'
 import useRequestWithNotification from '@/utils/hooks/useRequestWithNotification'
-import { useEffect, useState } from 'react'
-import { FaExternalLinkAlt } from 'react-icons/fa'
-import { HiLockClosed, HiLockOpen } from 'react-icons/hi'
+import { FaCrown } from 'react-icons/fa'
+import { HiLockClosed, HiLockOpen, HiOutlineDocumentAdd } from 'react-icons/hi'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-export default function IndividualCommunity({
+export default function CommunityDetail({
     community,
 }: {
     community: IndividualCommunityType
 }) {
+    console.log(community)
+
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const fetchTrigger = useAppSelector(
         (state) => state.community.community.fetchTrigger
     )
     const userId = useAppSelector((state) => state.auth.user?.id)
-    const {
-        id,
-        is_member,
-        is_owner,
-        is_public,
-        has_user_requested,
-        updated_at,
-        name,
-        description,
-        num_members,
-        members,
-    } = community
+    const { id, members, num_members, name, description, is_public, is_owner } =
+        community
 
     const [handleJoinCommunity, isJoining] = useRequestWithNotification(
         apiJoinCommunity,
@@ -55,7 +45,7 @@ export default function IndividualCommunity({
     const renderButton = () => {
         const generateButton = (text: string, handler: Function) => (
             <Button
-                disabled={is_owner}
+                disabled={community.is_owner}
                 className="bg-blue-500 text-white"
                 size="sm"
                 variant="solid"
@@ -68,10 +58,10 @@ export default function IndividualCommunity({
             </Button>
         )
 
-        if (is_member) {
+        if (community.is_member) {
             return generateButton('Leave', handleLeaveCommunity as Function)
-        } else if (!is_public) {
-            if (has_user_requested && !is_member) {
+        } else if (!community.is_public) {
+            if (community.has_user_requested && !community.is_member) {
                 return generateButton(
                     'Cancel Request',
                     handleLeaveCommunity as Function
@@ -91,18 +81,28 @@ export default function IndividualCommunity({
         <div className="flex items-center justify-between">
             {renderButton()}
             <span className="flex items-center">
-                <FaExternalLinkAlt
-                    className="mr-2"
-                    size={'20'}
-                    onClick={() => navigate(`/community/${id}/details`)}
-                />
                 <div>
                     <h6 className="text-sm">Last Activity</h6>
-                    <span className="text-xs">{formatDate(updated_at)}</span>
+                    <span className="text-xs">
+                        {formatDate(community.updated_at)}
+                    </span>
                 </div>
             </span>
         </div>
     )
+
+    const Members = () => {
+        return (
+            <div className="members mt-5">
+                Community Members
+                {members &&
+                    members.length > 0 &&
+                    members.map((item: Member) => {
+                        return <p>{item.firstname + ' ' + item.lastname}</p>
+                    })}
+            </div>
+        )
+    }
 
     return (
         <div className="max-w-xl mb-5">
@@ -117,6 +117,13 @@ export default function IndividualCommunity({
                 <div className="w-full flex justify-between">
                     <span className="text-emerald-600 font-semibold">
                         {num_members || members?.length} members, 20 posts
+                        <br />
+                        {is_owner && (
+                            <div className="flex text-yellow-300 items-center">
+                                <FaCrown className=" mr-1 " />{' '}
+                                <span>Owner</span>
+                            </div>
+                        )}
                     </span>
                     <span className="font-semibold">
                         {is_public ? (
@@ -134,7 +141,23 @@ export default function IndividualCommunity({
                 </div>
                 <h4 className="font-bold my-3">{name}</h4>
                 <p>{description}</p>
+                {/* <Members /> */}
             </Card>
+            <Button
+                className="mt-5 flex items-center justify-center gap-x-0.5"
+                size="sm"
+                variant="twoTone"
+                color="emerald-600"
+                block
+                onClick={() =>
+                    navigate(`/community/${id}/post`, {
+                        state: { community },
+                    })
+                }
+            >
+                <HiOutlineDocumentAdd className="" />
+                <span>Post</span>
+            </Button>
         </div>
     )
 }

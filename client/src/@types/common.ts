@@ -16,3 +16,9 @@ export type TableQueries = {
         key: string | number
     }
 }
+
+export type selectType = {
+    value: string
+    label: string
+    id: string
+}

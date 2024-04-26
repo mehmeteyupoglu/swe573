@@ -1,15 +1,17 @@
 from django.http import JsonResponse
 from .models import Template, User
-from .serializers import TemplateSerializer, UserSerializer, CommunitySerializer, JoinRequestSerializer
+from .serializers import TemplateSerializer, UserSerializer, CommunitySerializer, JoinRequestSerializer, TemplateCommunitySerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.hashers import make_password
 import jwt
 from datetime import datetime, timedelta
-from .models import Community, JoinRequest
+from .models import Community, JoinRequest, CommunityUser
 from django.http import JsonResponse
 from . import constants
+from datetime import datetime, timedelta
+from .models import Community, TemplateCommunity
 
 @api_view(['GET', 'POST'])
 def user_list(request):
@@ -74,10 +76,7 @@ def signup(request):
     serializer = UserSerializer(data=data)
     if serializer.is_valid():
         serializer.save()
-        # Exclude the password field from the serialized data
-        serialized_data = serializer.data.copy()
-        serialized_data.pop('password', None)
-        return Response(serialized_data, status=status.HTTP_201_CREATED)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -105,6 +104,10 @@ def login(request):
     
     return Response({'token': token, 'user': serialized_data}, status=status.HTTP_200_OK)
 
+@api_view(['POST'])
+def logout(request):
+    return Response(status=status.HTTP_200_OK)
+
 @api_view(['GET'])
 def communities(request):
     if request.method == 'GET':
@@ -117,7 +120,14 @@ def add_community(request):
     if request.method == 'POST':
         serializer = CommunitySerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            user_id = request.data.get('user_id')
+            serializer.save(owner_id=user_id)
+            
+            # Add owner to communityuser table with role -1
+            community = serializer.instance
+            owner = User.objects.get(pk=user_id)
+            community_user = CommunityUser.objects.create(community=community, user=owner, role=-1)
+            
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -131,8 +141,17 @@ def community_detail(request, id):
     if request.method == 'GET':
         serializer = CommunitySerializer(community)
         community_data = serializer.data
+        user_id = request.query_params.get('user_id')
+
+        if user_id:
+            user = User.objects.get(pk=user_id)
+            community_data['is_owner'] = str(community.owner_id) == str(user_id)
+            community_data['has_user_requested'] = JoinRequest.objects.filter(community=community, user=user).exists()
+            community_data['is_member'] = user in community.members.all()
+        
         community_data['num_members'] = community.members.count()
-        community_data.pop('members', None)  # Remove the 'members' field
+
+        # community_data.pop('members', None)  # Remove the 'members' field
         return Response(community_data)
     
 
@@ -269,3 +288,105 @@ def is_user_in_community(request, community_id, user_id):
         return JsonResponse({'error': 'User not found'}, status=404)
     except Community.DoesNotExist:
         return JsonResponse({'error': 'Community not found'}, status=404)
+
+@api_view(['GET'])
+def user_role(request, community_id):
+    try:
+        user_id = request.query_params.get('user_id')
+        community = Community.objects.get(pk=community_id)
+        user = User.objects.get(pk=user_id)
+    except (Community.DoesNotExist, User.DoesNotExist):
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    community_user = community.communityuser_set.filter(user=user).first()
+    if community_user:
+        return JsonResponse({'role': community_user.role})
+    return JsonResponse({'role': 0})
+
+@api_view(['POST'])
+def change_user_role(request, community_id, user_id):
+    try:
+        community = Community.objects.get(pk=community_id)
+        user = User.objects.get(pk=user_id)
+    except (Community.DoesNotExist, User.DoesNotExist):
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    role = request.data.get('role')
+    community_user = community.communityuser_set.filter(user=user).first()
+    if community_user:
+        community_user.role = role
+        community_user.save()
+        return Response(status=status.HTTP_200_OK)
+    return Response({'message': 'User is not a member of the community'}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def community_members(request, community_id):
+    community = Community.objects.get(pk=community_id)
+    members = community.members.all()
+    serializer = UserSerializer(members, many=True)
+    
+    # Add role information to each member
+    for member in serializer.data:
+        user_id = member['id']
+        community_user = CommunityUser.objects.filter(user_id=user_id, community_id=community_id).first()
+        if community_user:
+            member['role'] = community_user.role
+            member['joined_at'] = community_user.joined_at
+        else:
+            member['role'] = None
+            member['joined_at'] = None
+    
+    return Response(serializer.data)
+
+# TODO: Check this later 
+@api_view(['GET'])
+def join_requests(request, community_id):
+    community = Community.objects.get(pk=community_id)
+    
+    # Get pending requests
+    pending_requests = JoinRequest.objects.filter(community=community, status=0)
+    pending_serializer = JoinRequestSerializer(pending_requests, many=True)
+    
+    # Get accepted or rejected requests that are less than 30 days old
+    thirty_days_ago = datetime.now() - timedelta(days=30)
+    accepted_or_rejected_requests = JoinRequest.objects.filter(community=community, status__in=[1, -1], created_at__gte=thirty_days_ago)
+    accepted_or_rejected_serializer = JoinRequestSerializer(accepted_or_rejected_requests, many=True)
+    
+    combined_requests = pending_serializer.data + accepted_or_rejected_serializer.data
+    return Response(combined_requests)
+
+@api_view(['POST'])
+def accept_reject_join_request(request, request_id):
+    try:
+        join_request = JoinRequest.objects.get(pk=request_id)
+        community = join_request.community
+        user = join_request.user
+    except (JoinRequest.DoesNotExist, Community.DoesNotExist, User.DoesNotExist):
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    action = int(request.data.get('action'))
+    if action == 1:
+        # Update join request status to accepted
+        join_request.status = 1
+        join_request.save()
+
+        # Add user to communityuser table
+        community_user = CommunityUser(user=user, community=community)
+        community_user.save()
+
+        return Response(status=status.HTTP_200_OK)
+    elif action == -1:
+        # Update join request status to rejected
+        join_request.status = -1
+        join_request.save()
+
+        return Response(status=status.HTTP_200_OK)
+    else:
+        return Response({'message': 'Invalid action'}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def community_templates(request, community_id):
+    community = Community.objects.get(pk=community_id)
+    templates = TemplateCommunity.objects.filter(community=community)
+    serializer = TemplateCommunitySerializer(templates, many=True)
+    return Response(serializer.data)

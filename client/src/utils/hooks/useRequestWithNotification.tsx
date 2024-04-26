@@ -5,7 +5,8 @@ function useRequestWithNotification(
     requestFunc: any,
     successMessage: any,
     errorMessage: any,
-    successCallback: any
+    successCallback: any,
+    notificationAllowed: boolean = true
 ) {
     const [isLoading, setIsLoading] = useState(false)
 
@@ -14,19 +15,26 @@ function useRequestWithNotification(
         try {
             const resp = await requestFunc(...params)
             if (resp.status === 200) {
+                if (notificationAllowed) {
+                    toast.push(
+                        <Notification title={successMessage} type="success" />,
+                        {
+                            placement: 'top-center',
+                        }
+                    )
+                }
+            }
+            successCallback()
+        } catch (error) {
+            console.error(errorMessage, error)
+            if (notificationAllowed) {
                 toast.push(
-                    <Notification title={successMessage} type="success" />,
+                    <Notification title={errorMessage} type="danger" />,
                     {
                         placement: 'top-center',
                     }
                 )
             }
-            successCallback()
-        } catch (error) {
-            console.error(errorMessage, error)
-            toast.push(<Notification title={errorMessage} type="danger" />, {
-                placement: 'top-center',
-            })
         } finally {
             setIsLoading(false)
         }
