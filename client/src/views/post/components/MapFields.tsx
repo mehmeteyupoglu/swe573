@@ -1,8 +1,9 @@
 import { Field } from '@/@types/community'
+import { Button } from '@/components/ui'
 import { FormItem } from '@/components/ui/Form'
-import Input from '@/components/ui/Input'
 import { toSentenceCase } from '@/utils/helpers'
 import useFieldToComponent from '@/utils/hooks/useFieldToComponent'
+import { HiOutlineDocumentAdd } from 'react-icons/hi'
 
 export default function MapFields({ fields }: { fields: Field[] }) {
     return (
@@ -27,6 +28,18 @@ export default function MapFields({ fields }: { fields: Field[] }) {
                     </FormItem>
                 )
             })}
+
+            <Button
+                className="mt-5 flex items-center justify-center gap-x-0.5"
+                size="sm"
+                variant="solid"
+                color="emerald-600"
+                block
+                onClick={() => {}}
+            >
+                <HiOutlineDocumentAdd className="" />
+                <span>Post</span>
+            </Button>
         </div>
     )
 }
