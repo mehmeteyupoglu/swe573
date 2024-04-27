@@ -17,9 +17,9 @@ export default function MapTemplates({
 
     useEffect(() => {
         const options = templates.map((template) => ({
-            value: template.template.id?.toString() ?? '', // Convert the value to string with nullish coalescing operator
+            value: template.template.id?.toString() ?? '',
             label: template.template.name,
-            id: template.template.id?.toString() ?? '', // Convert the id to string with nullish coalescing operator
+            id: template.template.id?.toString() ?? '',
         }))
         setTemplates(options)
     }, [templates])
