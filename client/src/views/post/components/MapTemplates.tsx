@@ -12,6 +12,8 @@ export default function MapTemplates({
 }) {
     const [template, setTemplate] = useState<string>('') // Change the type to string
     const [_templates, setTemplates] = useState<CommonSelectOptionType[]>([])
+    const [selectedTemplate, setSelectedTemplate] =
+        useState<TemplateType | null>()
 
     useEffect(() => {
         const options = templates.map((template) => ({
@@ -21,6 +23,14 @@ export default function MapTemplates({
         }))
         setTemplates(options)
     }, [templates])
+
+    useEffect(() => {
+        const selected = templates.find((item) => {
+            return item.template.id === Number(template)
+        })
+
+        setSelectedTemplate(selected?.template ?? null)
+    }, [template, templates])
 
     return (
         <div>
@@ -46,6 +56,7 @@ export default function MapTemplates({
                     }
                 }}
             />
+            {selectedTemplate && <MapFields fields={selectedTemplate.fields} />}
         </div>
     )
 }
