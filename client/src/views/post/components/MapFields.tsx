@@ -4,6 +4,7 @@ import React from 'react'
 export default function MapFields({ fields }: { fields: Field[] }) {
     return (
         <div>
+            Fields for this template
             {fields.map((field) => (
                 <div key={field.field_name}>
                     <h3>{field.field_name}</h3>
