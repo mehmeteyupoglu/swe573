@@ -1,16 +1,28 @@
-import { Field, TemplateResponse, TemplateType } from '@/@types/community'
-import React from 'react'
+import { Field } from '@/@types/community'
+import { FormItem } from '@/components/ui/Form'
+import Input from '@/components/ui/Input'
+import { toSentenceCase } from '@/utils/helpers'
 
 export default function MapFields({ fields }: { fields: Field[] }) {
     return (
         <div>
-            Fields for this template
-            {fields.map((field) => (
-                <div key={field.field_name}>
-                    <h3>{field.field_name}</h3>
-                    <p>{field.field_type}</p>
-                </div>
-            ))}
+            {fields.map((field) => {
+                const field_name = toSentenceCase(field.field_name)
+                return (
+                    <FormItem
+                        key={field_name}
+                        label={field_name}
+                        invalid={false}
+                        errorMessage=""
+                    >
+                        <Input
+                            type={field.field_type}
+                            name={field_name}
+                            placeholder={field_name}
+                        />
+                    </FormItem>
+                )
+            })}
         </div>
     )
 }
