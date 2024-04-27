@@ -1,5 +1,5 @@
 import { TemplateResponse, TemplateType } from '@/@types/community'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import MapFields from './MapFields'
 import { Select } from '@/components/ui'
 import { CustomSelectOption } from '@/components/shared/CustomSelectOption'
@@ -10,38 +10,20 @@ export default function MapTemplates({
 }: {
     templates: TemplateResponse[]
 }) {
-    const [template, setTemplate] = React.useState<string>('')
-    const [_templates, setTemplates] = React.useState<CommonSelectOptionType[]>(
-        []
-    )
-
-    React.useEffect(() => {
-        const mapTemplates = templates.map((template) => ({
-            value: template.template.name,
-            label: template.template.name,
-            id: template.id.toString(), // Convert the id to string
-        }))
-        setTemplates(mapTemplates)
-    }, [templates])
+    const [template, setTemplate] = useState<string>('') // Change the type to string
+    const [_templates, setTemplates] = useState<CommonSelectOptionType[]>([])
 
     useEffect(() => {
-        console.log('Template:', template)
-    }, [template])
+        const options = templates.map((template) => ({
+            value: template.template.id?.toString() ?? '', // Convert the value to string with nullish coalescing operator
+            label: template.template.name,
+            id: template.template.id?.toString() ?? '', // Convert the id to string with nullish coalescing operator
+        }))
+        setTemplates(options)
+    }, [templates])
 
     return (
         <div>
-            {templates.map((template) => (
-                <div key={template.id}>
-                    <br />
-                    <h2>{template.template.name}</h2>
-                    <p>{template.template.description}</p>
-
-                    <br />
-                    <h3>Fields</h3>
-                    <MapFields fields={template.template.fields} />
-                </div>
-            ))}
-
             <Select
                 options={_templates}
                 placeholder={'Templates'}
@@ -50,13 +32,15 @@ export default function MapTemplates({
                 }}
                 className="mb-4 max-w-md md:w-52"
                 value={
-                    _templates.find((option) => option.id === template) || null
+                    _templates.find((option) => option.value === template) ||
+                    null
                 }
                 onChange={(selectedOption) => {
                     if (selectedOption) {
-                        const value = (selectedOption as CommonSelectOptionType)
-                            .id
-                        setTemplate(value) // Update the category query state
+                        const template = (
+                            selectedOption as CommonSelectOptionType
+                        ).value
+                        setTemplate(template) // Update the category query state
                     } else {
                         setTemplate('') // Clear the category query state
                     }
