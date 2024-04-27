@@ -5,29 +5,34 @@ import { toSentenceCase } from '@/utils/helpers'
 import useFieldToComponent from '@/utils/hooks/useFieldToComponent'
 import { HiOutlineDocumentAdd } from 'react-icons/hi'
 
+const FieldComponent = ({ field }: { field: Field }) => {
+    const Component = useFieldToComponent(field.field_type)
+    const field_name = toSentenceCase(field.field_name)
+
+    return (
+        <FormItem
+            key={field_name}
+            label={field_name}
+            invalid={false}
+            errorMessage=""
+        >
+            {Component && (
+                <Component
+                    type={field.field_type}
+                    name={field_name}
+                    placeholder={field_name}
+                />
+            )}
+        </FormItem>
+    )
+}
+
 export default function MapFields({ fields }: { fields: Field[] }) {
     return (
         <div>
-            {fields.map((field) => {
-                const Component = useFieldToComponent(field.field_type)
-                const field_name = toSentenceCase(field.field_name)
-                return (
-                    <FormItem
-                        key={field_name}
-                        label={field_name}
-                        invalid={false}
-                        errorMessage=""
-                    >
-                        {Component && (
-                            <Component
-                                type={field.field_type}
-                                name={field_name}
-                                placeholder={field_name}
-                            />
-                        )}
-                    </FormItem>
-                )
-            })}
+            {fields.map((field) => (
+                <FieldComponent key={field.field_name} field={field} />
+            ))}
 
             <Button
                 className="mt-5 flex items-center justify-center gap-x-0.5"
