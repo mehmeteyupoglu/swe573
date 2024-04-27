@@ -4,7 +4,7 @@ DATA_TYPES = [
     ('date', 'Date'),
     ('geo', 'Geolocation'),
     ('number', 'Number'),
-    ('image', 'Image'),
+    ('image', 'text'),
     ('video', 'Video'),
     ('audio', 'Audio'),
     ('file', 'File'),
