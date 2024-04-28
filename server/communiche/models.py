@@ -98,6 +98,7 @@ class Posts(models.Model):
     content = models.CharField(max_length=4000)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    likes = models.ManyToManyField(User, related_name='post_likes')
     comments = models.ManyToManyField('PostComment', related_name='post_comments')
 
 class PostComment(models.Model):
