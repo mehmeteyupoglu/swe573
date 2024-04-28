@@ -49,7 +49,15 @@ export default function MapFields({ fields }: { fields: Field[] }) {
 
     const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        console.log(fieldValues)
+
+        const formData = fields.map((field) => ({
+            field_name: field.field_name,
+            field_type: field.field_type,
+            field_value: fieldValues[field.field_name] || '',
+        }))
+
+        // Now you can send formData to the server
+        console.log(formData)
     }
 
     const handleFieldChange = (name: string, value: string) => {
