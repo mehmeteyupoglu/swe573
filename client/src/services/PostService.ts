@@ -15,3 +15,10 @@ export async function apiPost(
         },
     })
 }
+
+export async function apiGetPosts() {
+    return ApiService.fetchData({
+        url: '/posts/',
+        method: 'get',
+    })
+}
