@@ -12,12 +12,15 @@ export default function DisplayPost() {
                     <HiUserGroup />
                 </div>
             </div>
-            <div className="body">
-                <p>Post Content</p>
+            <div className="body mt-5 mb-5">
+                <p>Post Content Post Content Post Content Post Content</p>
             </div>
-            <div className="footer flex justify-end">
-                <p>Comments (3)</p>
-                <p className="ml-3">Upvote (8) </p>
+            <div className="footer flex justify-between">
+                <p>Posted by user x at y</p>
+                <div className="flex ">
+                    <p>Comments (3)</p>
+                    <p className="ml-3">Upvote (8) </p>
+                </div>
             </div>
         </Card>
     )
