@@ -94,6 +94,9 @@ export default function MapFields({ fields }: { fields: Field[] }) {
                     color="emerald-600"
                     block
                     type="submit"
+                    disabled={Object.values(fieldValues).every(
+                        (value) => value === ''
+                    )}
                 >
                     <HiOutlineDocumentAdd className="" />
                     <span>Post</span>
