@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 from .models import Template, User, Posts
-from .serializers import TemplateSerializer, UserSerializer, CommunitySerializer, JoinRequestSerializer, TemplateCommunitySerializer
+from .serializers import TemplateSerializer, UserSerializer, CommunitySerializer, JoinRequestSerializer, TemplateCommunitySerializer, PostSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -410,3 +410,9 @@ def post(request):
     post.save()
     
     return Response(status=status.HTTP_201_CREATED)
+
+@api_view(['GET'])
+def posts(request):
+    posts = Posts.objects.all()
+    serializer = PostSerializer(posts, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)

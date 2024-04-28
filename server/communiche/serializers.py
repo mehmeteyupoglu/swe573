@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Template, User, Community, JoinRequest, CommunityUser, TemplateCommunity
+from .models import Template, User, Community, JoinRequest, CommunityUser, TemplateCommunity, Posts, PostComment
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -68,3 +68,21 @@ class JoinRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = JoinRequest
         fields = ['id', 'community', 'created_at', 'updated_at', 'status', 'username', 'firstname', 'lastname']
+
+class PostSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='user.username')
+    firstname = serializers.CharField(source='user.firstname')
+    lastname = serializers.CharField(source='user.lastname')
+    community = CommunitySerializer()
+    # comments = serializers.SerializerMethodField()
+    # likes = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Posts
+        fields = ['id', 'community', 'content', 'created_at', 'updated_at', 'username', 'firstname', 'lastname']
+
+    # def get_comments(self, obj):
+    #     return PostCommentSerializer(obj.post_comments.all(), many=True).data
+
+    # def get_likes(self, obj):
+    #     return obj.likes.count()

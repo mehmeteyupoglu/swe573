@@ -45,4 +45,5 @@ urlpatterns = [
     path('community/<int:request_id>/accept_reject_join_request/', views.accept_reject_join_request, name='accept_join_request'),
     path('community/<int:community_id>/templates/', views.community_templates, name='community-templates'),
     path('post/', views.post, name='post'),
+    path('posts/', views.posts, name='posts'),
 ]
