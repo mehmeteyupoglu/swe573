@@ -1,12 +1,16 @@
-import { CommunityType } from './community'
+import { CommunityType, Field } from './community'
 
 export type PostData = {
     id: number
     community: CommunityType
-    content: string
+    content: ContentType
     created_at: string
     updated_at: string
     username: string
     firstname: string
     lastname: string
+}
+
+export type ContentType = {
+    fields: Field[]
 }
