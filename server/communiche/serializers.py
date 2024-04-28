@@ -1,3 +1,4 @@
+import json
 from rest_framework import serializers
 from .models import Template, User, Community, JoinRequest, CommunityUser, TemplateCommunity, Posts, PostComment
 
@@ -74,6 +75,7 @@ class PostSerializer(serializers.ModelSerializer):
     firstname = serializers.CharField(source='user.firstname')
     lastname = serializers.CharField(source='user.lastname')
     community = CommunitySerializer()
+    content = serializers.SerializerMethodField()
     # comments = serializers.SerializerMethodField()
     # likes = serializers.SerializerMethodField()
 
@@ -86,3 +88,9 @@ class PostSerializer(serializers.ModelSerializer):
 
     # def get_likes(self, obj):
     #     return obj.likes.count()
+
+    def get_content(self, obj):
+        try:
+            return json.loads(obj.content)
+        except json.JSONDecodeError:
+            return None  # or return some default value
