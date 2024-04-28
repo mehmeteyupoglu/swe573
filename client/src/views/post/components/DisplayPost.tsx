@@ -20,8 +20,11 @@ export default function DisplayPost({ post }: { post: PostData }) {
             <div className="footer flex justify-between">
                 <p>
                     Posted by
-                    <span>{' ' + firstname + ' ' + lastname}</span> at{' '}
-                    <span> {formatDate(created_at)}</span>
+                    <span className="italic">
+                        {' ' + firstname + ' ' + lastname}
+                    </span>{' '}
+                    at{' '}
+                    <span className="underline"> {formatDate(created_at)}</span>
                 </p>
                 <div className="flex ">
                     <p>Comments (3)</p>
