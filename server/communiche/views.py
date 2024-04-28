@@ -413,6 +413,6 @@ def post(request):
 
 @api_view(['GET'])
 def posts(request):
-    posts = Posts.objects.all()
+    posts = Posts.objects.all().order_by('-created_at')
     serializer = PostSerializer(posts, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)

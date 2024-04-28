@@ -21,7 +21,7 @@ export default function DisplayPost({ post }: { post: PostData }) {
                 <p>
                     Posted by
                     <span>{' ' + firstname + ' ' + lastname}</span> at{' '}
-                    <span> {formatDate(created_at, 'MMMM DD, YYYY')}</span>
+                    <span> {formatDate(created_at)}</span>
                 </p>
                 <div className="flex ">
                     <p>Comments (3)</p>
