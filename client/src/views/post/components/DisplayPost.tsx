@@ -22,7 +22,7 @@ export default function DisplayPost({ post }: { post: PostData }) {
             <div className="footer flex justify-between">
                 <p>
                     Posted by
-                    <span>{firstname + ' ' + lastname}</span> at{' '}
+                    <span>{' ' + firstname + ' ' + lastname}</span> at{' '}
                     <span> {formatDate(created_at, 'MMMM DD, YYYY')}</span>
                 </p>
                 <div className="flex ">
