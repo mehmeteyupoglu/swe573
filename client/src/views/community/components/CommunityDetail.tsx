@@ -144,6 +144,7 @@ export default function CommunityDetail({
                 {/* <Members /> */}
             </Card>
             <Button
+                disabled={!community.is_member}
                 className="mt-5 flex items-center justify-center gap-x-0.5"
                 size="sm"
                 variant="twoTone"
