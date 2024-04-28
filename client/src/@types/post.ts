@@ -3,7 +3,7 @@ import { CommunityType, Field } from './community'
 export type PostData = {
     id: number
     community: CommunityType
-    content: ContentType
+    content: _Field[]
     created_at: string
     updated_at: string
     username: string
@@ -11,6 +11,8 @@ export type PostData = {
     lastname: string
 }
 
-export type ContentType = {
-    fields: Field[]
+export type _Field = {
+    field_name: string
+    field_type: string
+    field_value: string
 }
