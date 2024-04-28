@@ -5,6 +5,11 @@ import { toSentenceCase } from '@/utils/helpers'
 import useFieldToComponent from '@/utils/hooks/useFieldToComponent'
 import { HiOutlineDocumentAdd } from 'react-icons/hi'
 import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { toggleFetchTrigger, useAppSelector } from '@/store'
+import useRequestWithNotification from '@/utils/hooks/useRequestWithNotification'
+import { apiPost } from '@/services/PostService'
+import { useDispatch } from 'react-redux'
 
 const FieldComponent = ({
     field,
@@ -47,6 +52,17 @@ export default function MapFields({ fields }: { fields: Field[] }) {
         {}
     )
 
+    const { id } = useParams<{ id: string }>()
+    const userId = useAppSelector((state) => state.auth.user?.id)
+    const dispatch = useDispatch()
+
+    const [handlePost, isPosting] = useRequestWithNotification(
+        apiPost,
+        'You have successfully posted!',
+        'Error posting',
+        () => dispatch(toggleFetchTrigger())
+    )
+
     const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
@@ -56,8 +72,11 @@ export default function MapFields({ fields }: { fields: Field[] }) {
             field_value: fieldValues[field.field_name] || '',
         }))
 
-        // Now you can send formData to the server
-        console.log(formData)
+        // TODO: why is this not notifyin the user that the post was successful?
+        // turn form data into a string with JSON.stringify
+        if (typeof handlePost === 'function') {
+            handlePost(id, userId, JSON.stringify(formData))
+        }
     }
 
     const handleFieldChange = (name: string, value: string) => {
