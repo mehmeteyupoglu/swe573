@@ -28,23 +28,30 @@ const FieldComponent = ({ field }: { field: Field }) => {
 }
 
 export default function MapFields({ fields }: { fields: Field[] }) {
-    return (
-        <div>
-            {fields.map((field) => (
-                <FieldComponent key={field.field_name} field={field} />
-            ))}
+    const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+    }
 
-            <Button
-                className="mt-5 flex items-center justify-center gap-x-0.5"
-                size="sm"
-                variant="solid"
-                color="emerald-600"
-                block
-                onClick={() => {}}
-            >
-                <HiOutlineDocumentAdd className="" />
-                <span>Post</span>
-            </Button>
-        </div>
+    return (
+        <form onSubmit={handleFormSubmit}>
+            <div>
+                {fields.map((field) => (
+                    <FieldComponent key={field.field_name} field={field} />
+                ))}
+
+                <Button
+                    className="mt-5 flex items-center justify-center gap-x-0.5"
+                    size="sm"
+                    variant="solid"
+                    color="emerald-600"
+                    block
+                    type="submit"
+                    // onClick={handleSubmit}
+                >
+                    <HiOutlineDocumentAdd className="" />
+                    <span>Post</span>
+                </Button>
+            </div>
+        </form>
     )
 }
