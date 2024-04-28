@@ -4,10 +4,23 @@ import { FormItem } from '@/components/ui/Form'
 import { toSentenceCase } from '@/utils/helpers'
 import useFieldToComponent from '@/utils/hooks/useFieldToComponent'
 import { HiOutlineDocumentAdd } from 'react-icons/hi'
+import { useState } from 'react'
 
-const FieldComponent = ({ field }: { field: Field }) => {
+const FieldComponent = ({
+    field,
+    value,
+    onChange,
+}: {
+    field: Field
+    value: string
+    onChange: (value: string) => void
+}) => {
     const Component = useFieldToComponent(field.field_type)
     const field_name = toSentenceCase(field.field_name)
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        onChange(e.target.value)
+    }
 
     return (
         <FormItem
@@ -21,6 +34,8 @@ const FieldComponent = ({ field }: { field: Field }) => {
                     type={field.field_type}
                     name={field_name}
                     placeholder={field_name}
+                    value={value}
+                    onChange={handleChange}
                 />
             )}
         </FormItem>
@@ -28,15 +43,31 @@ const FieldComponent = ({ field }: { field: Field }) => {
 }
 
 export default function MapFields({ fields }: { fields: Field[] }) {
+    const [fieldValues, setFieldValues] = useState<{ [key: string]: string }>(
+        {}
+    )
+
     const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        console.log(fieldValues)
+    }
+
+    const handleFieldChange = (name: string, value: string) => {
+        setFieldValues((prev) => ({ ...prev, [name]: value }))
     }
 
     return (
         <form onSubmit={handleFormSubmit}>
             <div>
                 {fields.map((field) => (
-                    <FieldComponent key={field.field_name} field={field} />
+                    <FieldComponent
+                        key={field.field_name}
+                        field={field}
+                        value={fieldValues[field.field_name] || ''}
+                        onChange={(value) =>
+                            handleFieldChange(field.field_name, value)
+                        }
+                    />
                 ))}
 
                 <Button
@@ -46,7 +77,6 @@ export default function MapFields({ fields }: { fields: Field[] }) {
                     color="emerald-600"
                     block
                     type="submit"
-                    // onClick={handleSubmit}
                 >
                     <HiOutlineDocumentAdd className="" />
                     <span>Post</span>
