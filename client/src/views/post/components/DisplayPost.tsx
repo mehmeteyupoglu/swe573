@@ -1,12 +1,10 @@
 import { PostData } from '@/@types/post'
 import { Card } from '@/components/ui'
 import { formatDate } from '@/utils/helpers'
-import React from 'react'
 import { HiUserGroup } from 'react-icons/hi'
 
 export default function DisplayPost({ post }: { post: PostData }) {
-    const { username, firstname, lastname, content, community, created_at } =
-        post
+    const { firstname, lastname, content, community, created_at } = post
     return (
         <Card className="mt-3">
             <div className="header justify-between">
