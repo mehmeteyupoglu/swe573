@@ -4,7 +4,7 @@ import { FormItem } from '@/components/ui/Form'
 import { toSentenceCase } from '@/utils/helpers'
 import useFieldToComponent from '@/utils/hooks/useFieldToComponent'
 import { HiOutlineDocumentAdd } from 'react-icons/hi'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const FieldComponent = ({
     field,
@@ -63,6 +63,15 @@ export default function MapFields({ fields }: { fields: Field[] }) {
     const handleFieldChange = (name: string, value: string) => {
         setFieldValues((prev) => ({ ...prev, [name]: value }))
     }
+
+    useEffect(() => {
+        const initialValues: { [key: string]: string } = {}
+        fields.forEach((field) => {
+            initialValues[field.field_name] = ''
+        })
+
+        setFieldValues(initialValues)
+    }, [fields])
 
     return (
         <form onSubmit={handleFormSubmit}>
