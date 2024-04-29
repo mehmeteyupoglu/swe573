@@ -1,13 +1,13 @@
 import React from 'react'
 import { OptionProps } from 'react-select' // import the OptionProps type
 import { HiCheck } from 'react-icons/hi'
-import { DataTypeOption } from '@/@types/community'
+import { CommonSelectOptionType } from '@/@types/common'
 
 export const CustomSelectOption = ({
     innerProps,
     label,
     isSelected,
-}: OptionProps<DataTypeOption>) => {
+}: OptionProps<CommonSelectOptionType>) => {
     return (
         <div
             className={`flex items-center justify-between p-2 ${

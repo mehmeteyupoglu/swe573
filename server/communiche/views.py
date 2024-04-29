@@ -1,6 +1,6 @@
 from django.http import JsonResponse
-from .models import Template, User
-from .serializers import TemplateSerializer, UserSerializer, CommunitySerializer, JoinRequestSerializer, TemplateCommunitySerializer
+from .models import Template, User, Posts
+from .serializers import TemplateSerializer, UserSerializer, CommunitySerializer, JoinRequestSerializer, TemplateCommunitySerializer, PostSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -390,3 +390,29 @@ def community_templates(request, community_id):
     templates = TemplateCommunity.objects.filter(community=community)
     serializer = TemplateCommunitySerializer(templates, many=True)
     return Response(serializer.data)
+
+@api_view(['POST'])
+def post(request):
+    data = request.data.copy()
+    user_id = data.get('user_id')
+    community_id = data.get('community_id')
+    content = data.get('content')
+    
+    try:
+        user = User.objects.get(pk=user_id)
+        community = Community.objects.get(pk=community_id)
+    except User.DoesNotExist:
+        return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+    except Community.DoesNotExist:
+        return Response({'error': 'Community not found'}, status=status.HTTP_404_NOT_FOUND)
+    
+    post = Posts(user=user, community=community, content=content)
+    post.save()
+    
+    return Response(status=status.HTTP_201_CREATED)
+
+@api_view(['GET'])
+def posts(request):
+    posts = Posts.objects.all().order_by('-created_at')
+    serializer = PostSerializer(posts, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
