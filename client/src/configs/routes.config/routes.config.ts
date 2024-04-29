@@ -40,6 +40,16 @@ export const protectedRoutes = [
             headerContainer: true,
         },
     },
+    {
+        key: 'search',
+        path: '/search',
+        component: lazy(() => import('@/views/search/Search')),
+        authority: [],
+        meta: {
+            header: i18n.t('nav.search'),
+            headerContainer: true,
+        },
+    },
     // {
     //     key: 'community',
     //     path: '/community-detail/:id',

@@ -47,6 +47,16 @@ const navigationConfig: NavigationTree[] = [
         authority: [],
         subMenu: [],
     },
+    {
+        key: 'search',
+        path: '/search',
+        title: 'Search',
+        translateKey: 'nav.search',
+        icon: 'search',
+        type: NAV_ITEM_TYPE_ITEM,
+        authority: [],
+        subMenu: [],
+    },
 ]
 
 export default navigationConfig

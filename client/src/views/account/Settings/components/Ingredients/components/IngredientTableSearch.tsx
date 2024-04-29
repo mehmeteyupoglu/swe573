@@ -28,7 +28,7 @@ const IngredientTableSearch = forwardRef<
         <Input
             ref={ref}
             className="max-w-md md:w-52 mb-4"
-            placeholder="Ara"
+            placeholder="Search"
             prefix={<HiOutlineSearch className="text-lg" />}
             onChange={handleInputChange}
         />
