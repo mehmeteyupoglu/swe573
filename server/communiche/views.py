@@ -1,4 +1,5 @@
 from django.http import JsonResponse
+from django.db.models import Q
 from .models import Template, User, Posts
 from .serializers import TemplateSerializer, UserSerializer, CommunitySerializer, JoinRequestSerializer, TemplateCommunitySerializer, PostSerializer
 from rest_framework.decorators import api_view
@@ -416,3 +417,18 @@ def posts(request):
     posts = Posts.objects.all().order_by('-created_at')
     serializer = PostSerializer(posts, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def search(request):
+    query = request.query_params.get('query', '')
+
+    communities = Community.objects.filter(Q(name__icontains=query) | Q(description__icontains=query))
+    posts = Posts.objects.filter(content__icontains=query)
+
+    community_serializer = CommunitySerializer(communities, many=True)
+    post_serializer = PostSerializer(posts, many=True)
+
+    return Response({
+        'communities': community_serializer.data,
+        'posts': post_serializer.data,
+    })
