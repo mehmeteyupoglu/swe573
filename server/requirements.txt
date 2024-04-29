@@ -1,5 +1,10 @@
+asgiref==3.7.2
 Django==3.2.8
+django-cors-headers==4.1.0
 djangorestframework==3.12.4
+mysqlclient==2.0.3
 PyJWT==2.1.0
 python-dotenv==0.19.1
-mysqlclient==2.0.3
+pytz==2024.1
+sqlparse==0.4.4
+typing_extensions==4.7.1
