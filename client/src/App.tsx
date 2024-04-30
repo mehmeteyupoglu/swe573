@@ -18,6 +18,7 @@ if (environment !== 'production' && appConfig.enableMock) {
     mockServer({ environment })
 }
 function App() {
+    console.log('mode ', import.meta.env.MODE) // TODO: Remove this line after checking the environment
     return (
         <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
