@@ -15,10 +15,10 @@ const appConfig: AppConfig = {
     locale: 'en',
     enableMock: false,
     url:
-        import.meta.env.MODE === 'production'
-            ? import.meta.env.VITE_APP_PRODUCTION_URL ?? ''
-            : import.meta.env.VITE_APP_DEVELOPMENT_URL ??
-              'http://13.49.73.218:8000',
+        // import.meta.env.MODE === 'production'
+        //     ? import.meta.env.VITE_APP_PRODUCTION_URL ?? ''
+        //     : import.meta.env.VITE_APP_DEVELOPMENT_URL ??
+        'http://13.49.73.218:8000',
 }
 
 export default appConfig
