@@ -15,7 +15,10 @@ const appConfig: AppConfig = {
     tourPath: '/',
     locale: 'en',
     enableMock: false,
-    url: 'http://127.0.0.1:8000/',
+    url:
+        process.env.NODE_ENV === 'production'
+            ? 'http://13.49.73.218/'
+            : 'http://127.0.0.1:8000/',
 }
 
 export default appConfig
