@@ -7,7 +7,6 @@ export type AppConfig = {
     enableMock: boolean
     url: string
 }
-
 const appConfig: AppConfig = {
     apiPrefix: '/api',
     authenticatedEntryPath: '/home',
@@ -17,8 +16,8 @@ const appConfig: AppConfig = {
     enableMock: false,
     url:
         process.env.NODE_ENV === 'production'
-            ? 'http://13.49.73.218/'
-            : 'http://127.0.0.1:8000/',
+            ? process.env.REACT_APP_PRODUCTION_URL ?? ''
+            : process.env.REACT_APP_DEVELOPMENT_URL ?? 'http://127.0.0.1:8000',
 }
 
 export default appConfig
