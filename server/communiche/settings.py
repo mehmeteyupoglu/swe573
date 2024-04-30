@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure--x&acod-6vwu^!_s1t_(9*x!79=abpd+)ypt5@wg9)5v6aqcz@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1", ".vercel.app", ".now.sh"]
+ALLOWED_HOSTS = ["127.0.0.1", '13.49.73.218']
 
 
 # Application definition
@@ -57,6 +57,7 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:5173",
+    "https://communiche.vercel.app"
 ]
 
 ROOT_URLCONF = 'communiche.urls'
