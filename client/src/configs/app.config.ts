@@ -14,11 +14,11 @@ const appConfig: AppConfig = {
     tourPath: '/',
     locale: 'en',
     enableMock: false,
-    url: 'http://13.49.73.218:8000',
+    url:
+        import.meta.env.MODE === 'production'
+            ? import.meta.env.VITE_APP_PRODUCTION_URL ?? ''
+            : import.meta.env.VITE_APP_DEVELOPMENT_URL ??
+              'http://127.0.0.1:8000',
 }
-
-// import.meta.env.MODE === 'production'
-//     ? import.meta.env.VITE_APP_PRODUCTION_URL ?? ''
-//     : import.meta.env.VITE_APP_DEVELOPMENT_URL ??
 
 export default appConfig
