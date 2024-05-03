@@ -35,7 +35,7 @@ const Side = ({ children, content, ...rest }: SideProps) => {
                             <div className="font-semibold text-base">
                                 Mehmet Eyüpoğlu
                             </div>
-                            <span className="opacity-80">CTO, Communiche</span>
+                            <span className="opacity-80">Communiche</span>
                         </div>
                     </div>
                     <p className="text-lg text-white opacity-80">
