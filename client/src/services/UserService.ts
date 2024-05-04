@@ -48,3 +48,10 @@ export async function userOwnsIngredient(data: UserOwnsType) {
         method: userOwns ? 'delete' : 'post',
     })
 }
+
+export async function apiGetInvitations(userId: string) {
+    return ApiService.fetchData({
+        url: `/user/${userId}/invitations/`,
+        method: 'get',
+    })
+}

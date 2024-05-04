@@ -6,9 +6,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import Profile from './components/Profile'
 import { useAppSelector } from '@/store'
-import Password from './components/Password'
-import Meals from './components/Meals'
-import Ingredients from './components/Ingredients'
+import Invitations from './components/Invitations'
 
 const { TabNav, TabList } = Tabs
 
@@ -61,7 +59,7 @@ const Settings = () => {
                 <div className="px-1 py-2 md:px-4 md:py-6">
                     <Suspense fallback={<></>}>
                         {currentTab === 'profile' && <Profile data={user} />}
-                        {currentTab === 'invitations' && <div>Invitations</div>}
+                        {currentTab === 'invitations' && <Invitations />}
                     </Suspense>
                 </div>
             </AdaptableCard>
