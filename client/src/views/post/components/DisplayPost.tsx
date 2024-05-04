@@ -19,13 +19,27 @@ export default function DisplayPost({
         navigate(`/post/${id}`)
     }
     return (
-        <Card className="mt-3" onClick={handleClick} bodyClass="cursor-pointer">
+        <Card
+            className="mt-3"
+            onClick={!detailed ? handleClick : undefined}
+            bodyClass="cursor-pointer"
+        >
             <div className="header justify-between">
                 <h3>{content[0].field_value}</h3>
-                <div className="flex items-center">
-                    <p className="mr-3">{community.name}</p>
-                    <HiUserGroup />
-                </div>
+                {detailed ? (
+                    <ActionLink
+                        to={`/community/${community.id}/details`}
+                        className="text-blue-500 flex items-center"
+                    >
+                        {community.name}
+                        <HiUserGroup className="ml-3" />
+                    </ActionLink>
+                ) : (
+                    <div className="flex items-center">
+                        <p className="mr-3">{community.name}</p>
+                        <HiUserGroup />
+                    </div>
+                )}
             </div>
             <div className="body mt-5 mb-5">
                 <p>
@@ -45,7 +59,7 @@ export default function DisplayPost({
                             {' ' + user.firstname + ' ' + user.lastname}
                         </ActionLink>
                     ) : (
-                        <span className="italic">
+                        <span className="italic mr-2">
                             {' ' + user.firstname + ' ' + user.lastname}
                         </span>
                     )}
