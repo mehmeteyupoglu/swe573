@@ -1,4 +1,5 @@
 import { PostData } from '@/@types/post'
+import { ActionLink } from '@/components/shared'
 import { Card } from '@/components/ui'
 import { formatDate, truncateText } from '@/utils/helpers'
 import { HiUserGroup } from 'react-icons/hi'
@@ -36,9 +37,18 @@ export default function DisplayPost({
             <div className="footer flex justify-between">
                 <p>
                     Posted by
-                    <span className="italic">
-                        {' ' + user.firstname + ' ' + user.lastname}
-                    </span>{' '}
+                    {detailed ? (
+                        <ActionLink
+                            to={`/profile/${user.id}`}
+                            className="italic mr-2"
+                        >
+                            {' ' + user.firstname + ' ' + user.lastname}
+                        </ActionLink>
+                    ) : (
+                        <span className="italic">
+                            {' ' + user.firstname + ' ' + user.lastname}
+                        </span>
+                    )}
                     at{' '}
                     <span className="underline"> {formatDate(created_at)}</span>
                 </p>
