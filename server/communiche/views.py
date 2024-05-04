@@ -21,7 +21,8 @@ def user_list(request):
     # return json
 
     if request.method == 'GET':
-        users = User.objects.all()
+        query = request.query_params.get('query', '')
+        users = User.objects.filter(Q(username__icontains=query) | Q(email__icontains=query) | Q(firstname__icontains=query) | Q(lastname__icontains=query))
         serializer = UserSerializer(users, many=True)
         return Response(serializer.data)
 
