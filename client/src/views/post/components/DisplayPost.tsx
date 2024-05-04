@@ -1,6 +1,6 @@
 import { PostData } from '@/@types/post'
 import { Card } from '@/components/ui'
-import { formatDate } from '@/utils/helpers'
+import { formatDate, truncateText } from '@/utils/helpers'
 import { HiUserGroup } from 'react-icons/hi'
 import { useNavigate } from 'react-router-dom'
 
@@ -27,7 +27,11 @@ export default function DisplayPost({
                 </div>
             </div>
             <div className="body mt-5 mb-5">
-                <p>{content[1].field_value}</p>
+                <p>
+                    {!detailed
+                        ? truncateText(content[1].field_value, 60)
+                        : content[1].field_value}
+                </p>
             </div>
             <div className="footer flex justify-between">
                 <p>
