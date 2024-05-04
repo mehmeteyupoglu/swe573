@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from django.db.models import Q
 from .models import Template, User, Posts
-from .serializers import TemplateSerializer, UserSerializer, CommunitySerializer, JoinRequestSerializer, TemplateCommunitySerializer, PostSerializer
+from .serializers import TemplateSerializer, UserSerializer, CommunitySerializer, JoinRequestSerializer, TemplateCommunitySerializer, PostSerializer, Invitation
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -448,3 +448,17 @@ def search(request):
         'communities': community_serializer.data,
         'posts': post_serializer.data,
     })
+
+from rest_framework import status
+
+@api_view(['POST'])
+def send_invitation(request, community_id, user_id):
+    # Get community and user
+    community = Community.objects.get(pk=community_id)
+    user = User.objects.get(pk=user_id)
+
+    # Create invitation
+    invitation = Invitation(community=community, user=user)
+    invitation.save()
+
+    return Response(status=status.HTTP_200_OK)
