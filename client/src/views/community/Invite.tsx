@@ -27,7 +27,7 @@ const Invite = () => {
                 ref={inputRef}
                 onInputChange={handleInputChange}
             />
-            {data && data.communities && (
+            {data && data.users && (
                 <Card>
                     <h5>Users:</h5>
                 </Card>
