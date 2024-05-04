@@ -6,9 +6,8 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import Profile from './components/Profile'
 import { useAppSelector } from '@/store'
-import Password from './components/Password'
-import Meals from './components/Meals'
-import Ingredients from './components/Ingredients'
+import Invitations from './components/Invitations'
+import Communities from './components/Communities'
 
 const { TabNav, TabList } = Tabs
 
@@ -39,15 +38,8 @@ const Settings = () => {
         }
     > = {
         profile: { label: t('settings.profile.title'), path: 'profile' },
-        meals: { label: t('settings.meals.title'), path: 'meals' },
-        ingredients: {
-            label: t('settings.ingredients.title'),
-            path: 'ingredients',
-        },
-        password: {
-            label: t('settings.password.title'),
-            path: 'password',
-        },
+        invitations: { label: t('Invitations'), path: 'invitations' },
+        myCommunities: { label: t('My Communities'), path: 'myCommunities' },
     }
 
     return (
@@ -69,9 +61,8 @@ const Settings = () => {
                 <div className="px-1 py-2 md:px-4 md:py-6">
                     <Suspense fallback={<></>}>
                         {currentTab === 'profile' && <Profile data={user} />}
-                        {currentTab === 'meals' && <Meals />}
-                        {currentTab === 'ingredients' && <Ingredients />}
-                        {currentTab === 'password' && <Password />}
+                        {currentTab === 'invitations' && <Invitations />}
+                        {currentTab === 'myCommunities' && <Communities />}
                     </Suspense>
                 </div>
             </AdaptableCard>

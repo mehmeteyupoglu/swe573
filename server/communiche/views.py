@@ -1,14 +1,14 @@
 from django.http import JsonResponse
 from django.db.models import Q
 from .models import Template, User, Posts
-from .serializers import TemplateSerializer, UserSerializer, CommunitySerializer, JoinRequestSerializer, TemplateCommunitySerializer, PostSerializer
+from .serializers import TemplateSerializer, UserSerializer, CommunitySerializer, JoinRequestSerializer, TemplateCommunitySerializer, PostSerializer, InvitationSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.hashers import make_password
 import jwt
 from datetime import datetime, timedelta
-from .models import Community, JoinRequest, CommunityUser
+from .models import Community, JoinRequest, CommunityUser, Invitation
 from django.http import JsonResponse
 from . import constants
 from datetime import datetime, timedelta
@@ -21,7 +21,8 @@ def user_list(request):
     # return json
 
     if request.method == 'GET':
-        users = User.objects.all()
+        query = request.query_params.get('query', '')
+        users = User.objects.filter(Q(username__icontains=query) | Q(email__icontains=query) | Q(firstname__icontains=query) | Q(lastname__icontains=query))
         serializer = UserSerializer(users, many=True)
         return Response(serializer.data)
 
@@ -115,6 +116,20 @@ def communities(request):
         communities = Community.objects.all().order_by('-updated_at')
         serializer = CommunitySerializer(communities, context = {'request': request}, many=True)
         return Response(serializer.data)
+
+@api_view(['GET'])
+def user_communities(request, user_id):
+    try:
+        user = User.objects.get(pk=user_id)
+    except User.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    # Get all communities that the user is a member of
+    community_users = CommunityUser.objects.filter(user=user)
+    communities = [community_user.community for community_user in community_users]
+
+    serializer = CommunitySerializer(communities, context={'request': request}, many=True)
+    return Response(serializer.data)
 
 @api_view(['POST'])
 def add_community(request):
@@ -266,6 +281,11 @@ def leave_community(request, community_id, user_id):
 
     if user in community.members.all():
         community.members.remove(user)
+
+        invitation = Invitation.objects.filter(community=community, user=user).first()
+        if invitation:
+            invitation.delete()
+
         return Response(status=status.HTTP_200_OK)
     
     join_request = JoinRequest.objects.filter(community=community, user=user).first()
@@ -339,6 +359,30 @@ def community_members(request, community_id):
     
     return Response(serializer.data)
 
+@api_view(['GET'])
+def community_non_members(request, community_id):
+    community = Community.objects.get(pk=community_id)
+    members = community.members.all()
+
+    query = request.query_params.get('query', '')
+
+    # Get all users who are not members of the community and not invited
+    non_members = User.objects.filter(~Q(id__in=members))
+    non_members = non_members.filter(Q(username__icontains=query) | Q(email__icontains=query) | Q(firstname__icontains=query) | Q(lastname__icontains=query))
+    serializer = UserSerializer(non_members, many=True)
+    
+    # Add is_invited field to each member
+    for member in serializer.data:
+        user_id = member['id']
+        is_invited = Invitation.objects.filter(community=community, user_id=user_id).exists()
+        member['is_invited'] = is_invited
+    
+    return Response(serializer.data)
+
+    serializer = UserSerializer(non_members, many=True)
+
+    return Response(serializer.data)
+
 # TODO: Check this later 
 @api_view(['GET'])
 def join_requests(request, community_id):
@@ -380,6 +424,37 @@ def accept_reject_join_request(request, request_id):
         # Update join request status to rejected
         join_request.status = -1
         join_request.save()
+
+        return Response(status=status.HTTP_200_OK)
+    else:
+        return Response({'message': 'Invalid action'}, status=status.HTTP_400_BAD_REQUEST)
+
+from rest_framework import status
+
+@api_view(['POST'])
+def accept_reject_invitation(request, invitation_id):
+    try:
+        invitation = Invitation.objects.get(pk=invitation_id)
+        community = invitation.community
+        user = invitation.user
+    except (Invitation.DoesNotExist, Community.DoesNotExist, User.DoesNotExist):
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    action = int(request.data.get('action'))
+    if action == 1:
+        # Update invitation status to accepted
+        invitation.status = 1
+        invitation.save()
+
+        # Add user to communityuser table
+        community_user = CommunityUser(user=user, community=community)
+        community_user.save()
+
+        return Response(status=status.HTTP_200_OK)
+    elif action == -1:
+        # Update invitation status to rejected
+        invitation.status = -1
+        invitation.save()
 
         return Response(status=status.HTTP_200_OK)
     else:
@@ -432,3 +507,50 @@ def search(request):
         'communities': community_serializer.data,
         'posts': post_serializer.data,
     })
+
+@api_view(['POST'])
+def send_invitation(request, community_id, user_id):
+    # Get community and user
+    community = Community.objects.get(pk=community_id)
+    user = User.objects.get(pk=user_id)
+
+    # Create invitation
+    invitation = Invitation(community=community, user=user)
+    invitation.save()
+
+    return Response(status=status.HTTP_200_OK)
+
+from rest_framework import status
+
+@api_view(['GET'])
+def check_invitation(request, community_id, user_id):
+    # Check if invitation exists for the user and community
+    is_invited = Invitation.objects.filter(community_id=community_id, user_id=user_id).exists()
+
+    return Response(is_invited, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def invitations (request, user_id):
+    # Get all invitations for the user
+    invitations = Invitation.objects.filter(user_id=user_id)
+    serializer = InvitationSerializer(invitations, many=True)
+
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def community_posts(request, community_id):
+    community = Community.objects.get(pk=community_id)
+    posts = Posts.objects.filter(community=community).order_by('-updated_at')
+    serializer = PostSerializer(posts, many=True)
+    data = serializer.data
+    for post in data:
+        post.pop('community', None)
+    return Response(data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def post_detail(request, post_id):
+    post = Posts.objects.get(pk=post_id)
+    serializer = PostSerializer(post)
+    data = serializer.data
+    # data.pop('community', None)
+    return Response(data, status=status.HTTP_200_OK)

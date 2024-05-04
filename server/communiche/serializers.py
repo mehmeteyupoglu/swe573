@@ -1,6 +1,6 @@
 import json
 from rest_framework import serializers
-from .models import Template, User, Community, JoinRequest, CommunityUser, TemplateCommunity, Posts, PostComment
+from .models import Template, User, Community, JoinRequest, CommunityUser, TemplateCommunity, Posts, PostComment, Invitation
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -70,10 +70,15 @@ class JoinRequestSerializer(serializers.ModelSerializer):
         model = JoinRequest
         fields = ['id', 'community', 'created_at', 'updated_at', 'status', 'username', 'firstname', 'lastname']
 
+class InvitationSerializer(serializers.ModelSerializer):
+    community_name = serializers.CharField(source='community.name')
+
+    class Meta:
+        model = Invitation
+        fields = ['id', 'community', 'community_name', 'created_at', 'updated_at', 'status']
+
 class PostSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(source='user.username')
-    firstname = serializers.CharField(source='user.firstname')
-    lastname = serializers.CharField(source='user.lastname')
+    user = UserSerializer()
     community = CommunitySerializer()
     content = serializers.SerializerMethodField()
     # comments = serializers.SerializerMethodField()
@@ -81,7 +86,7 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Posts
-        fields = ['id', 'community', 'content', 'created_at', 'updated_at', 'username', 'firstname', 'lastname']
+        fields = ['id', 'community', 'content', 'created_at', 'updated_at', 'user']
 
     # def get_comments(self, obj):
     #     return PostCommentSerializer(obj.post_comments.all(), many=True).data

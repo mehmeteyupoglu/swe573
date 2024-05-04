@@ -11,6 +11,22 @@ export type UserType = {
     subscription: string
     authority: []
 }
+
+export type UserResponseType = {
+    id: string
+    username: string
+    firstname: string
+    lastname: string
+    email: string
+    phone: string
+    gender: string
+    avatar: string
+    verified: number
+    subscription: string
+    authority: []
+    is_invited: boolean
+}
+
 export type PasswordType = {
     userId: string
     newPassword: string
@@ -26,4 +42,12 @@ export type UserOwnsType = {
     id: number
     userId: number
     userOwns?: boolean
+}
+
+export type InvitationsType = {
+    id: number
+    community_name: string
+    created_at?: string
+    updated_at?: string
+    status: boolean
 }

@@ -14,6 +14,8 @@ import { AuthorityCheck } from '@/components/shared'
 import useFetchData from '@/utils/hooks/useFetchData'
 import { mapRoleToLabel } from '@/utils/helpers'
 import PendingRequests from './components/PendingRequests'
+import Invite from './Invite'
+import Posts from './components/Posts'
 
 const { TabNav, TabList } = Tabs
 
@@ -87,6 +89,11 @@ const Settings = () => {
             path: 'requests',
             authority: ['owner', 'moderator'],
         },
+        invite: {
+            label: 'Invite',
+            path: 'invite',
+            authority: ['owner', 'moderator'],
+        },
     }
 
     useEffect(() => {
@@ -157,10 +164,11 @@ const Settings = () => {
                         {currentTab === 'members' && (
                             <Members community={community} />
                         )}
-                        {currentTab === 'ingredients' && <div>Posts</div>}
+                        {currentTab === 'posts' && <Posts />}
                         {currentTab === 'requests' && (
                             <PendingRequests community={community} />
                         )}
+                        {currentTab === 'invite' && <Invite />}
                     </Suspense>
                 </div>
             </AdaptableCard>

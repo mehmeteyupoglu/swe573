@@ -45,10 +45,15 @@ const MembersTable = ({
         {
             header: 'Name',
             accessorKey: 'firstname',
-        },
-        {
-            header: 'Last Name',
-            accessorKey: 'lastname',
+            cell: (props) => {
+                const row = props.row.original
+                return (
+                    // TODO: Change the link to the user profile
+                    <ActionLink to={`/profile/${row.id}`}>
+                        {row.firstname} {row.lastname}
+                    </ActionLink>
+                )
+            },
         },
         {
             header: 'Username',

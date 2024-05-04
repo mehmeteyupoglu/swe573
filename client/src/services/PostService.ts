@@ -22,3 +22,17 @@ export async function apiGetPosts() {
         method: 'get',
     })
 }
+
+export async function apiGetCommunityPosts(communityId: string) {
+    return ApiService.fetchData({
+        url: `/community/${communityId}/posts/`,
+        method: 'get',
+    })
+}
+
+export async function apiGetPost(postId: string) {
+    return ApiService.fetchData({
+        url: `/post/${postId}/`,
+        method: 'get',
+    })
+}

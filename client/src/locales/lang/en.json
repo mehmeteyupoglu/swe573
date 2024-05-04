@@ -44,7 +44,9 @@
         "ingredients": "Ingredients",
         "settings": "Settings",
         "signOut": "Sign Out",
-        "password": "Password Settings"
+        "password": "Password Settings",
+        "invitations": "My Invitations",
+        "myCommunities": "My Communities"
     },
     "settings": {
         "title": "General",

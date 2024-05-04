@@ -26,18 +26,13 @@ const dropdownItemList: DropdownList[] = [
         icon: <HiOutlineUser />,
     },
     {
-        label: 'nav.meals',
-        path: '/app/account/settings/meals',
-        icon: <IoFastFoodOutline />,
+        label: 'nav.invitations',
+        path: '/app/account/settings/invitations',
+        icon: <HiOutlineKey />,
     },
     {
-        label: 'nav.ingredients',
-        path: '/app/account/settings/ingredients',
-        icon: <BsCardChecklist />,
-    },
-    {
-        label: 'nav.password',
-        path: '/app/account/settings/password',
+        label: 'nav.myCommunities',
+        path: '/app/account/settings/myCommunities',
         icon: <HiOutlineKey />,
     },
 ]
