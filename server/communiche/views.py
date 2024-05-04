@@ -1,14 +1,14 @@
 from django.http import JsonResponse
 from django.db.models import Q
 from .models import Template, User, Posts
-from .serializers import TemplateSerializer, UserSerializer, CommunitySerializer, JoinRequestSerializer, TemplateCommunitySerializer, PostSerializer, Invitation
+from .serializers import TemplateSerializer, UserSerializer, CommunitySerializer, JoinRequestSerializer, TemplateCommunitySerializer, PostSerializer, InvitationSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.hashers import make_password
 import jwt
 from datetime import datetime, timedelta
-from .models import Community, JoinRequest, CommunityUser
+from .models import Community, JoinRequest, CommunityUser, Invitation
 from django.http import JsonResponse
 from . import constants
 from datetime import datetime, timedelta
@@ -478,3 +478,11 @@ def check_invitation(request, community_id, user_id):
     is_invited = Invitation.objects.filter(community_id=community_id, user_id=user_id).exists()
 
     return Response(is_invited, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def invitations (request, user_id):
+    # Get all invitations for the user
+    invitations = Invitation.objects.filter(user_id=user_id)
+    serializer = InvitationSerializer(invitations, many=True)
+
+    return Response(serializer.data, status=status.HTTP_200_OK)
