@@ -1,6 +1,6 @@
 import json
 from rest_framework import serializers
-from .models import Template, User, Community, JoinRequest, CommunityUser, TemplateCommunity, Posts, PostComment
+from .models import Template, User, Community, JoinRequest, CommunityUser, TemplateCommunity, Posts, PostComment, Invitation
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -69,6 +69,11 @@ class JoinRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = JoinRequest
         fields = ['id', 'community', 'created_at', 'updated_at', 'status', 'username', 'firstname', 'lastname']
+
+class InvitationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Invitation
+        fields = ['id', 'community', 'created_at', 'updated_at', 'status']
 
 class PostSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username')
