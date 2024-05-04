@@ -117,6 +117,20 @@ def communities(request):
         serializer = CommunitySerializer(communities, context = {'request': request}, many=True)
         return Response(serializer.data)
 
+@api_view(['GET'])
+def user_communities(request, user_id):
+    try:
+        user = User.objects.get(pk=user_id)
+    except User.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    # Get all communities that the user is a member of
+    community_users = CommunityUser.objects.filter(user=user)
+    communities = [community_user.community for community_user in community_users]
+
+    serializer = CommunitySerializer(communities, context={'request': request}, many=True)
+    return Response(serializer.data)
+
 @api_view(['POST'])
 def add_community(request):
     if request.method == 'POST':
