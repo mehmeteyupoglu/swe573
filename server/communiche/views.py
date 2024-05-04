@@ -340,6 +340,21 @@ def community_members(request, community_id):
     
     return Response(serializer.data)
 
+@api_view(['GET'])
+def community_non_members(request, community_id):
+    community = Community.objects.get(pk=community_id)
+    members = community.members.all()
+
+    query = request.query_params.get('query', '')
+
+    # Get all users who are not members of the community
+    non_members = User.objects.filter(~Q(id__in=members))
+    non_members = non_members.filter(Q(username__icontains=query) | Q(email__icontains=query) | Q(firstname__icontains=query) | Q(lastname__icontains=query))
+
+    serializer = UserSerializer(non_members, many=True)
+
+    return Response(serializer.data)
+
 # TODO: Check this later 
 @api_view(['GET'])
 def join_requests(request, community_id):
