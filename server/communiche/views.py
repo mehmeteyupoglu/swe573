@@ -542,4 +542,7 @@ def community_posts(request, community_id):
     community = Community.objects.get(pk=community_id)
     posts = Posts.objects.filter(community=community).order_by('-updated_at')
     serializer = PostSerializer(posts, many=True)
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    data = serializer.data
+    for post in data:
+        post.pop('community', None)
+    return Response(data, status=status.HTTP_200_OK)
