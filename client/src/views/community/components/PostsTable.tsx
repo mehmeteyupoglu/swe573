@@ -3,7 +3,7 @@ import DataTable from '@/components/shared/DataTable'
 import type { ColumnDef, Row } from '@/components/shared/DataTable'
 import { apiAcceptRejectRequest } from '@/services/CommunityService'
 import { toggleFetchTrigger } from '@/store'
-import { formatDate } from '@/utils/helpers'
+import { formatDate, truncateText } from '@/utils/helpers'
 import useRequestWithNotification from '@/utils/hooks/useRequestWithNotification'
 import { useDispatch } from 'react-redux'
 import { PostData } from '@/@types/post'
@@ -37,12 +37,24 @@ const PostsTable = ({ posts }: { posts: PostData[] }) => {
             accessorKey: 'lastname',
             cell: (props) => {
                 const row = props.row.original
-                return <div className="flex">{row.content[1].field_value}</div>
+                return (
+                    <div className="flex">
+                        {truncateText(row.content[1].field_value, 60)}
+                    </div>
+                )
             },
         },
         {
             header: 'Posted by',
-            accessorKey: 'username',
+            accessorKey: 'user',
+            cell: (props) => {
+                const row = props.row.original
+                return (
+                    <div className="flex">
+                        {row.user.firstname} {row.user.lastname}
+                    </div>
+                )
+            },
         },
         {
             header: 'Posted on',
