@@ -410,6 +410,37 @@ def accept_reject_join_request(request, request_id):
     else:
         return Response({'message': 'Invalid action'}, status=status.HTTP_400_BAD_REQUEST)
 
+from rest_framework import status
+
+@api_view(['POST'])
+def accept_reject_invitation(request, invitation_id):
+    try:
+        invitation = Invitation.objects.get(pk=invitation_id)
+        community = invitation.community
+        user = invitation.user
+    except (Invitation.DoesNotExist, Community.DoesNotExist, User.DoesNotExist):
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    action = int(request.data.get('action'))
+    if action == 1:
+        # Update invitation status to accepted
+        invitation.status = 1
+        invitation.save()
+
+        # Add user to communityuser table
+        community_user = CommunityUser(user=user, community=community)
+        community_user.save()
+
+        return Response(status=status.HTTP_200_OK)
+    elif action == -1:
+        # Update invitation status to rejected
+        invitation.status = -1
+        invitation.save()
+
+        return Response(status=status.HTTP_200_OK)
+    else:
+        return Response({'message': 'Invalid action'}, status=status.HTTP_400_BAD_REQUEST)
+
 @api_view(['GET'])
 def community_templates(request, community_id):
     community = Community.objects.get(pk=community_id)
