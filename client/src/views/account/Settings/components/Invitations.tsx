@@ -20,7 +20,6 @@ export default function Invitations() {
                     String(userId) ?? ''
                 )
                 if (invitations.status === 200) {
-                    console.log('invitations', invitations.data)
                     setInvitations(invitations.data as InvitationsType[])
                 }
                 // fetch invitations data
