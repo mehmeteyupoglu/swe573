@@ -267,6 +267,11 @@ def leave_community(request, community_id, user_id):
 
     if user in community.members.all():
         community.members.remove(user)
+
+        invitation = Invitation.objects.filter(community=community, user=user).first()
+        if invitation:
+            invitation.delete()
+
         return Response(status=status.HTTP_200_OK)
     
     join_request = JoinRequest.objects.filter(community=community, user=user).first()
