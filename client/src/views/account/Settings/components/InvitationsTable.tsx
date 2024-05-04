@@ -8,6 +8,7 @@ import useRequestWithNotification from '@/utils/hooks/useRequestWithNotification
 import { useDispatch } from 'react-redux'
 import { InvitationsType } from '@/@types/user'
 import { apiAcceptRejectInvitation } from '@/services/UserService'
+import { ActionLink } from '@/components/shared'
 
 const InvitationsTable = ({
     invitations,
@@ -30,6 +31,14 @@ const InvitationsTable = ({
         {
             header: 'Community Name',
             accessorKey: 'community_name',
+            cell: (props) => {
+                const row = props.row.original
+                return (
+                    <ActionLink to={`/community/${row.community}/details`}>
+                        {row.community_name}
+                    </ActionLink>
+                )
+            },
         },
         {
             header: 'Invitation Date',
