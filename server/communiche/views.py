@@ -347,9 +347,18 @@ def community_non_members(request, community_id):
 
     query = request.query_params.get('query', '')
 
-    # Get all users who are not members of the community
+    # Get all users who are not members of the community and not invited
     non_members = User.objects.filter(~Q(id__in=members))
     non_members = non_members.filter(Q(username__icontains=query) | Q(email__icontains=query) | Q(firstname__icontains=query) | Q(lastname__icontains=query))
+    serializer = UserSerializer(non_members, many=True)
+    
+    # Add is_invited field to each member
+    for member in serializer.data:
+        user_id = member['id']
+        is_invited = Invitation.objects.filter(community=community, user_id=user_id).exists()
+        member['is_invited'] = is_invited
+    
+    return Response(serializer.data)
 
     serializer = UserSerializer(non_members, many=True)
 
@@ -449,8 +458,6 @@ def search(request):
         'posts': post_serializer.data,
     })
 
-from rest_framework import status
-
 @api_view(['POST'])
 def send_invitation(request, community_id, user_id):
     # Get community and user
@@ -470,4 +477,4 @@ def check_invitation(request, community_id, user_id):
     # Check if invitation exists for the user and community
     is_invited = Invitation.objects.filter(community_id=community_id, user_id=user_id).exists()
 
-    return Response({'invited': is_invited}, status=status.HTTP_200_OK)
+    return Response(is_invited, status=status.HTTP_200_OK)
