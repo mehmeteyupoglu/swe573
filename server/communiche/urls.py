@@ -52,5 +52,6 @@ urlpatterns = [
     path('community/<int:community_id>/templates/', views.community_templates, name='community-templates'),
     path('post/', views.post, name='post'),
     path('posts/', views.posts, name='posts'),
+    path('community/<int:community_id>/posts/', views.community_posts, name='community-posts'),
     path('search/', views.search, name='search'),
 ]
