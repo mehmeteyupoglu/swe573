@@ -462,3 +462,12 @@ def send_invitation(request, community_id, user_id):
     invitation.save()
 
     return Response(status=status.HTTP_200_OK)
+
+from rest_framework import status
+
+@api_view(['GET'])
+def check_invitation(request, community_id, user_id):
+    # Check if invitation exists for the user and community
+    is_invited = Invitation.objects.filter(community_id=community_id, user_id=user_id).exists()
+
+    return Response({'invited': is_invited}, status=status.HTTP_200_OK)
