@@ -38,6 +38,7 @@ const Settings = () => {
     > = {
         profile: { label: t('settings.profile.title'), path: 'profile' },
         invitations: { label: t('Invitations'), path: 'invitations' },
+        myCommunities: { label: t('My Communities'), path: 'myCommunities' },
     }
 
     return (
@@ -60,6 +61,9 @@ const Settings = () => {
                     <Suspense fallback={<></>}>
                         {currentTab === 'profile' && <Profile data={user} />}
                         {currentTab === 'invitations' && <Invitations />}
+                        {currentTab === 'myCommunities' && (
+                            <div>My Communities</div>
+                        )}
                     </Suspense>
                 </div>
             </AdaptableCard>

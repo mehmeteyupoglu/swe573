@@ -45,7 +45,8 @@
         "settings": "Settings",
         "signOut": "Sign Out",
         "password": "Password Settings",
-        "invitations": "Invitations"
+        "invitations": "My Invitations",
+        "myCommunities": "My Communities"
     },
     "settings": {
         "title": "General",

@@ -30,6 +30,11 @@ const dropdownItemList: DropdownList[] = [
         path: '/app/account/settings/invitations',
         icon: <HiOutlineKey />,
     },
+    {
+        label: 'nav.myCommunities',
+        path: '/app/account/settings/myCommunities',
+        icon: <HiOutlineKey />,
+    },
 ]
 
 const _UserDropdown = ({ className }: CommonProps) => {
