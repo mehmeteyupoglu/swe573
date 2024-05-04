@@ -13,6 +13,16 @@ export async function getUsers() {
     })
 }
 
+export async function apiSearchUsers(query: string) {
+    return ApiService.fetchData({
+        url: `/users/`,
+        method: 'get',
+        params: {
+            query,
+        },
+    })
+}
+
 export async function updateProfile(data: UserType) {
     const { id, authority, avatar, ..._data } = data
     authority
