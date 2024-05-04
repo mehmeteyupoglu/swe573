@@ -1,4 +1,5 @@
-import { CommunityType, Field } from './community'
+import { CommunityType } from './community'
+import { UserResponseType } from './user'
 
 export type PostData = {
     id: number
@@ -6,9 +7,10 @@ export type PostData = {
     content: _Field[]
     created_at: string
     updated_at: string
-    username: string
-    firstname: string
-    lastname: string
+    username?: string
+    firstname?: string
+    lastname?: string
+    user: UserResponseType
 }
 
 export type _Field = {

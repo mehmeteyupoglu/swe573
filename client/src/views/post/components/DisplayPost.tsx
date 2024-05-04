@@ -2,11 +2,17 @@ import { PostData } from '@/@types/post'
 import { Card } from '@/components/ui'
 import { formatDate } from '@/utils/helpers'
 import { HiUserGroup } from 'react-icons/hi'
+import { useNavigate } from 'react-router-dom'
 
 export default function DisplayPost({ post }: { post: PostData }) {
-    const { firstname, lastname, content, community, created_at } = post
+    const { firstname, lastname, content, community, created_at, id } = post
+    const navigate = useNavigate()
+
+    const handleClick = () => {
+        navigate(`/post/${id}`)
+    }
     return (
-        <Card className="mt-3">
+        <Card className="mt-3" onClick={handleClick} bodyClass="cursor-pointer">
             <div className="header justify-between">
                 <h3>{content[0].field_value}</h3>
                 <div className="flex items-center">
