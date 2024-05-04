@@ -15,6 +15,7 @@ import useFetchData from '@/utils/hooks/useFetchData'
 import { mapRoleToLabel } from '@/utils/helpers'
 import PendingRequests from './components/PendingRequests'
 import Invite from './Invite'
+import Posts from './components/Posts'
 
 const { TabNav, TabList } = Tabs
 
@@ -163,6 +164,7 @@ const Settings = () => {
                         {currentTab === 'members' && (
                             <Members community={community} />
                         )}
+                        {currentTab === 'posts' && <Posts />}
                         {currentTab === 'requests' && (
                             <PendingRequests community={community} />
                         )}
