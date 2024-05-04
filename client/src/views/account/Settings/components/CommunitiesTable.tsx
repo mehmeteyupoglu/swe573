@@ -2,7 +2,7 @@ import { useState } from 'react'
 import DataTable from '@/components/shared/DataTable'
 import type { ColumnDef } from '@/components/shared/DataTable'
 import { Badge, Button } from '@/components/ui'
-import { toggleFetchTrigger } from '@/store'
+import { toggleFetchTrigger, useAppSelector } from '@/store'
 import { formatDate } from '@/utils/helpers'
 import useRequestWithNotification from '@/utils/hooks/useRequestWithNotification'
 import { useDispatch } from 'react-redux'
@@ -11,6 +11,7 @@ import { apiAcceptRejectInvitation } from '@/services/UserService'
 import { ActionLink } from '@/components/shared'
 import { CommunityType } from '@/@types/community'
 import { useNavigate } from 'react-router-dom'
+import { apiLeaveCommunity } from '@/services/CommunityService'
 
 const CommunitiesTable = ({
     communities,
@@ -18,17 +19,17 @@ const CommunitiesTable = ({
     communities: CommunityType[]
 }) => {
     const [isLoading, setIsLoading] = useState<boolean>(false)
+    const userId = useAppSelector((state) => state.auth.user?.id)
     const navigate = useNavigate()
 
     const dispatch = useDispatch()
 
-    const [handleAcceptReject, isHandleAccepRejecting] =
-        useRequestWithNotification(
-            apiAcceptRejectInvitation,
-            'Action taken successfully',
-            'Error taking action',
-            () => dispatch(toggleFetchTrigger())
-        )
+    const [handleLeaveCommunity, isLeaving] = useRequestWithNotification(
+        apiLeaveCommunity,
+        'You have left the community!',
+        'Error leaving the community',
+        () => dispatch(toggleFetchTrigger())
+    )
 
     const columns: ColumnDef<any>[] = [
         {
@@ -64,11 +65,11 @@ const CommunitiesTable = ({
             },
         },
         {
-            header: 'Member Since',
-            accessorKey: 'created_at',
+            header: 'Last Activity',
+            accessorKey: 'updated_at',
             cell: (props) => {
                 const row = props.row.original
-                const formattedDate = formatDate(row.created_at)
+                const formattedDate = formatDate(row.updated_at)
                 return <div className="flex">{formattedDate}</div>
             },
         },
@@ -77,8 +78,6 @@ const CommunitiesTable = ({
             accessorKey: 'actions',
             cell: (props) => {
                 const row = props.row.original
-
-                const { id, status } = row
 
                 return (
                     <div>
@@ -91,6 +90,20 @@ const CommunitiesTable = ({
                             }}
                         >
                             Visit
+                        </Button>
+                        <Button
+                            className="bg-red-500 text-white ml-5"
+                            size="sm"
+                            variant="solid"
+                            onClick={() => {
+                                if (
+                                    typeof handleLeaveCommunity === 'function'
+                                ) {
+                                    handleLeaveCommunity(row.id, userId, 0)
+                                }
+                            }}
+                        >
+                            Leave
                         </Button>
                     </div>
                 )
