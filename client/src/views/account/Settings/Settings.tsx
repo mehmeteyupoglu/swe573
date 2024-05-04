@@ -39,15 +39,7 @@ const Settings = () => {
         }
     > = {
         profile: { label: t('settings.profile.title'), path: 'profile' },
-        meals: { label: t('settings.meals.title'), path: 'meals' },
-        ingredients: {
-            label: t('settings.ingredients.title'),
-            path: 'ingredients',
-        },
-        password: {
-            label: t('settings.password.title'),
-            path: 'password',
-        },
+        invitations: { label: t('Invitations'), path: 'invitations' },
     }
 
     return (
@@ -69,9 +61,7 @@ const Settings = () => {
                 <div className="px-1 py-2 md:px-4 md:py-6">
                     <Suspense fallback={<></>}>
                         {currentTab === 'profile' && <Profile data={user} />}
-                        {currentTab === 'meals' && <Meals />}
-                        {currentTab === 'ingredients' && <Ingredients />}
-                        {currentTab === 'password' && <Password />}
+                        {currentTab === 'invitations' && <div>Invitations</div>}
                     </Suspense>
                 </div>
             </AdaptableCard>
