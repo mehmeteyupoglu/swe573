@@ -554,3 +554,9 @@ def post_detail(request, post_id):
     data = serializer.data
     # data.pop('community', None)
     return Response(data, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+def like_post(request, user_id, post_id):
+    post = Posts.objects.get(pk=post_id)
+    post.likes.add(user_id)
+    return Response(status=status.HTTP_200_OK)
