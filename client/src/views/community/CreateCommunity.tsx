@@ -76,6 +76,9 @@ const CreateCommunity = ({
                         placement: 'top-center',
                     }
                 )
+
+                setSubmitting(false)
+                navigate('/communities')
             }
         } catch (error) {
             console.log('error', error)
