@@ -4,7 +4,13 @@ import { formatDate } from '@/utils/helpers'
 import { HiUserGroup } from 'react-icons/hi'
 import { useNavigate } from 'react-router-dom'
 
-export default function DisplayPost({ post }: { post: PostData }) {
+export default function DisplayPost({
+    post,
+    detailed = false,
+}: {
+    post: PostData
+    detailed?: boolean
+}) {
     const { user, content, community, created_at, id } = post
     const navigate = useNavigate()
 
