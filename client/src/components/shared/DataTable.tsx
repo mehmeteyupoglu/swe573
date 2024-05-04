@@ -37,7 +37,7 @@ type DataTableProps<T> = {
         pageIndex: number
         pageSize: number
     }
-    handleClick: (row: Row<T>) => void
+    handleClick?: (row: Row<T>) => void
 }
 
 type CheckBoxChangeEvent = ChangeEvent<HTMLInputElement>
@@ -101,7 +101,7 @@ function _DataTable<T>(props: DataTableProps<T>) {
         onSort,
         selectable = false,
         skeletonAvatarProps,
-        handleClick,
+        handleClick = () => {},
     } = props
 
     const handleCheckBoxChange = (checked: boolean, row: T) => {
