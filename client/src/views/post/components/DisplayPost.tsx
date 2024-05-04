@@ -5,7 +5,7 @@ import { HiUserGroup } from 'react-icons/hi'
 import { useNavigate } from 'react-router-dom'
 
 export default function DisplayPost({ post }: { post: PostData }) {
-    const { firstname, lastname, content, community, created_at, id } = post
+    const { user, content, community, created_at, id } = post
     const navigate = useNavigate()
 
     const handleClick = () => {
@@ -27,7 +27,7 @@ export default function DisplayPost({ post }: { post: PostData }) {
                 <p>
                     Posted by
                     <span className="italic">
-                        {' ' + firstname + ' ' + lastname}
+                        {' ' + user.firstname + ' ' + user.lastname}
                     </span>{' '}
                     at{' '}
                     <span className="underline"> {formatDate(created_at)}</span>
