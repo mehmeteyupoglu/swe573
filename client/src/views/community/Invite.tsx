@@ -2,18 +2,21 @@ import { useRef, useState } from 'react'
 import IngredientTableSearch from '../account/Settings/components/Ingredients/components/IngredientTableSearch'
 import { SearchType } from '@/@types/search'
 import { Button, Card } from '@/components/ui'
-import { apiSearchUsers } from '@/services/UserService'
 import { UserResponseType, UserType } from '@/@types/user'
+import { apiFetchNonMembers } from '@/services/CommunityService'
+import { useParams } from 'react-router-dom'
 
 const Invite = () => {
     const inputRef = useRef<HTMLInputElement>(null)
     const [data, setData] = useState<any>(null)
 
+    const { id } = useParams<{ id: string }>()
+
     const handleInputChange = async (val: string) => {
         const query = val
 
         try {
-            const response = await apiSearchUsers(query)
+            const response = await apiFetchNonMembers(id ?? '', query)
             console.log('response', response.data)
             setData(response.data as SearchType)
             // Handle the response data here
