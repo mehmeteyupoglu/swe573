@@ -51,7 +51,12 @@ const Invite = () => {
                     <Card>
                         <h5>Users:</h5>
                         {data.map((user: UserResponseType) => {
-                            const { firstname, lastname, username } = user
+                            const {
+                                firstname,
+                                lastname,
+                                username,
+                                is_invited,
+                            } = user
                             return (
                                 <div key={user.id} className="mt-5">
                                     <p>
@@ -60,6 +65,7 @@ const Invite = () => {
                                             {username}
                                         </span>
                                         <Button
+                                            disabled={is_invited}
                                             className="bg-blue-500 text-white ml-5"
                                             size="xs"
                                             variant="solid"
@@ -75,7 +81,7 @@ const Invite = () => {
                                                 }
                                             }}
                                         >
-                                            Invite
+                                            {is_invited ? 'Invited' : 'Invite'}
                                         </Button>
                                     </p>
                                 </div>
