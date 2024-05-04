@@ -552,5 +552,5 @@ def post_detail(request, post_id):
     post = Posts.objects.get(pk=post_id)
     serializer = PostSerializer(post)
     data = serializer.data
-    data.pop('community', None)
+    # data.pop('community', None)
     return Response(data, status=status.HTTP_200_OK)
