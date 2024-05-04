@@ -11,6 +11,21 @@ export type UserType = {
     subscription: string
     authority: []
 }
+
+export type UserResponseType = {
+    id: string
+    username: string
+    firstname: string
+    lastname: string
+    email: string
+    phone: string
+    gender: string
+    avatar: string
+    verified: number
+    subscription: string
+    authority: []
+}
+
 export type PasswordType = {
     userId: string
     newPassword: string
