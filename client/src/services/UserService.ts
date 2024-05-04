@@ -55,3 +55,16 @@ export async function apiGetInvitations(userId: string) {
         method: 'get',
     })
 }
+
+export async function apiAcceptRejectInvitation(
+    invitationId: string,
+    status: number
+) {
+    return ApiService.fetchData({
+        url: `/user/${invitationId}/accept_reject_invitation/`,
+        method: 'post',
+        data: {
+            action: status,
+        },
+    })
+}

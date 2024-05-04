@@ -1,14 +1,13 @@
 import { useState } from 'react'
 import DataTable from '@/components/shared/DataTable'
 import type { ColumnDef } from '@/components/shared/DataTable'
-
 import { Badge, Button } from '@/components/ui'
-import { apiAcceptRejectRequest } from '@/services/CommunityService'
 import { toggleFetchTrigger } from '@/store'
 import { formatDate } from '@/utils/helpers'
 import useRequestWithNotification from '@/utils/hooks/useRequestWithNotification'
 import { useDispatch } from 'react-redux'
 import { InvitationsType } from '@/@types/user'
+import { apiAcceptRejectInvitation } from '@/services/UserService'
 
 const InvitationsTable = ({
     invitations,
@@ -21,7 +20,7 @@ const InvitationsTable = ({
 
     const [handleAcceptReject, isHandleAccepRejecting] =
         useRequestWithNotification(
-            apiAcceptRejectRequest,
+            apiAcceptRejectInvitation,
             'Action taken successfully',
             'Error taking action',
             () => dispatch(toggleFetchTrigger())
