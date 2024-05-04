@@ -3,14 +3,28 @@ import IngredientTableSearch from '../account/Settings/components/Ingredients/co
 import { SearchType } from '@/@types/search'
 import { Button, Card } from '@/components/ui'
 import { UserResponseType, UserType } from '@/@types/user'
-import { apiFetchNonMembers } from '@/services/CommunityService'
+import {
+    apiFetchNonMembers,
+    apiSendInvitation,
+} from '@/services/CommunityService'
 import { useParams } from 'react-router-dom'
+import useRequestWithNotification from '@/utils/hooks/useRequestWithNotification'
+import { useDispatch } from 'react-redux'
+import { toggleFetchTrigger } from '@/store'
 
 const Invite = () => {
     const inputRef = useRef<HTMLInputElement>(null)
     const [data, setData] = useState<any>(null)
 
     const { id } = useParams<{ id: string }>()
+    const dispatch = useDispatch()
+
+    const [handleSendInvitation, isInviting] = useRequestWithNotification(
+        apiSendInvitation,
+        'You have successfully sent invitation!',
+        'Error sending invitation!',
+        () => dispatch(toggleFetchTrigger())
+    )
 
     const handleInputChange = async (val: string) => {
         const query = val
@@ -37,9 +51,9 @@ const Invite = () => {
                     <Card>
                         <h5>Users:</h5>
                         {data.map((user: UserResponseType) => {
-                            const { id, firstname, lastname, username } = user
+                            const { firstname, lastname, username } = user
                             return (
-                                <div key={id} className="mt-5">
+                                <div key={user.id} className="mt-5">
                                     <p>
                                         {firstname} {lastname}{' '}
                                         <span className="ml-5 italic">
@@ -49,9 +63,17 @@ const Invite = () => {
                                             className="bg-blue-500 text-white ml-5"
                                             size="xs"
                                             variant="solid"
-                                            onClick={() =>
-                                                console.log('Invite user:', id)
-                                            }
+                                            onClick={() => {
+                                                if (
+                                                    typeof handleSendInvitation ===
+                                                    'function'
+                                                ) {
+                                                    handleSendInvitation(
+                                                        id,
+                                                        user.id
+                                                    )
+                                                }
+                                            }}
                                         >
                                             Invite
                                         </Button>

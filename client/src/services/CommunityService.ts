@@ -89,6 +89,13 @@ export async function apiFetchNonMembers(communityId: string, query: string) {
     })
 }
 
+export async function apiSendInvitation(communityId: string, userId: string) {
+    return ApiService.fetchData({
+        url: `/community/${communityId}/invites/${userId}/`,
+        method: 'post',
+    })
+}
+
 export async function apiChangeUserRole(
     communityId: string,
     userId: string,
