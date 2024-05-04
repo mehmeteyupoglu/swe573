@@ -71,9 +71,11 @@ class JoinRequestSerializer(serializers.ModelSerializer):
         fields = ['id', 'community', 'created_at', 'updated_at', 'status', 'username', 'firstname', 'lastname']
 
 class InvitationSerializer(serializers.ModelSerializer):
+    community_name = serializers.CharField(source='community.name')
+
     class Meta:
         model = Invitation
-        fields = ['id', 'community', 'created_at', 'updated_at', 'status']
+        fields = ['id', 'community', 'community_name', 'created_at', 'updated_at', 'status']
 
 class PostSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username')

@@ -99,3 +99,11 @@ export type JoinRequest = {
     updated_at?: string
     status: boolean
 }
+
+export type Invitations = {
+    id: number
+    community_name: string
+    created_at?: string
+    updated_at?: string
+    status: boolean
+}

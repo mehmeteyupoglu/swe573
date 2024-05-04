@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import DataTable from '@/components/shared/DataTable'
 import type { ColumnDef } from '@/components/shared/DataTable'
-import { JoinRequest } from '@/@types/community'
+import { Invitations } from '@/@types/community'
 
 import { Badge, Button } from '@/components/ui'
 import { apiAcceptRejectRequest } from '@/services/CommunityService'
@@ -10,7 +10,7 @@ import { formatDate } from '@/utils/helpers'
 import useRequestWithNotification from '@/utils/hooks/useRequestWithNotification'
 import { useDispatch } from 'react-redux'
 
-const InvitationsTable = ({ invitations }: { invitations: JoinRequest[] }) => {
+const InvitationsTable = ({ invitations }: { invitations: Invitations[] }) => {
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const dispatch = useDispatch()
@@ -26,7 +26,7 @@ const InvitationsTable = ({ invitations }: { invitations: JoinRequest[] }) => {
     const columns: ColumnDef<any>[] = [
         {
             header: 'Community Name',
-            accessorKey: 'name',
+            accessorKey: 'community_name',
         },
         {
             header: 'Invitation Date',
