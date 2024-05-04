@@ -34,7 +34,7 @@ export default function DisplayPost({ post }: { post: PostData }) {
                 </p>
                 <div className="flex ">
                     <p>Comments (3)</p>
-                    <p className="ml-3">Upvote (8) </p>
+                    <p className="ml-3">Likes (8) </p>
                 </div>
             </div>
         </Card>
