@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import IngredientTableSearch from '../account/Settings/components/Ingredients/components/IngredientTableSearch'
 import { SearchType } from '@/@types/search'
 import { Button, Card } from '@/components/ui'
@@ -10,11 +10,14 @@ import {
 import { useParams } from 'react-router-dom'
 import useRequestWithNotification from '@/utils/hooks/useRequestWithNotification'
 import { useDispatch } from 'react-redux'
-import { toggleFetchTrigger } from '@/store'
+import { toggleFetchTrigger, useAppSelector } from '@/store'
 
 const Invite = () => {
     const inputRef = useRef<HTMLInputElement>(null)
     const [data, setData] = useState<any>(null)
+    const fetchTrigger = useAppSelector(
+        (state) => state.community.community.fetchTrigger
+    )
 
     const { id } = useParams<{ id: string }>()
     const dispatch = useDispatch()
@@ -38,6 +41,10 @@ const Invite = () => {
             // Handle any errors here
         }
     }
+
+    useEffect(() => {
+        handleInputChange(inputRef.current?.value ?? '')
+    }, [fetchTrigger])
 
     return (
         <div className="">
