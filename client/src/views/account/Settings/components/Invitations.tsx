@@ -1,12 +1,12 @@
-import { JoinRequest } from '@/@types/community'
 import { Card } from '@/components/ui'
 import { useAppSelector } from '@/store'
 import { useEffect, useState } from 'react'
 import InvitationsTable from './InvitationsTable'
 import { apiGetInvitations } from '@/services/UserService'
+import { InvitationsType } from '@/@types/user'
 
 export default function Invitations() {
-    const [invitations, setInvitations] = useState<JoinRequest[]>([]) // TODO: Change to Invitations type
+    const [invitations, setInvitations] = useState<InvitationsType[]>([]) // TODO: Change to Invitations type
     const fetchTrigger = useAppSelector(
         (state) => state.community.community.fetchTrigger
     )
@@ -21,7 +21,7 @@ export default function Invitations() {
                 )
                 if (invitations.status === 200) {
                     console.log('invitations', invitations.data)
-                    setInvitations(invitations.data as JoinRequest[])
+                    setInvitations(invitations.data as InvitationsType[])
                 }
                 // fetch invitations data
                 console.log('fetching invitations')

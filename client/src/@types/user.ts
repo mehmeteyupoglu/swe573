@@ -43,3 +43,11 @@ export type UserOwnsType = {
     userId: number
     userOwns?: boolean
 }
+
+export type InvitationsType = {
+    id: number
+    community_name: string
+    created_at?: string
+    updated_at?: string
+    status: boolean
+}

@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import DataTable from '@/components/shared/DataTable'
 import type { ColumnDef } from '@/components/shared/DataTable'
-import { Invitations } from '@/@types/community'
 
 import { Badge, Button } from '@/components/ui'
 import { apiAcceptRejectRequest } from '@/services/CommunityService'
@@ -9,8 +8,13 @@ import { toggleFetchTrigger } from '@/store'
 import { formatDate } from '@/utils/helpers'
 import useRequestWithNotification from '@/utils/hooks/useRequestWithNotification'
 import { useDispatch } from 'react-redux'
+import { InvitationsType } from '@/@types/user'
 
-const InvitationsTable = ({ invitations }: { invitations: Invitations[] }) => {
+const InvitationsTable = ({
+    invitations,
+}: {
+    invitations: InvitationsType[]
+}) => {
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const dispatch = useDispatch()
