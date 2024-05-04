@@ -55,6 +55,12 @@ export async function apiGetInvitations(userId: string) {
         method: 'get',
     })
 }
+export async function apiGetUserCommunities(userId: string) {
+    return ApiService.fetchData({
+        url: `/user/${userId}/communities/`,
+        method: 'get',
+    })
+}
 
 export async function apiAcceptRejectInvitation(
     invitationId: string,

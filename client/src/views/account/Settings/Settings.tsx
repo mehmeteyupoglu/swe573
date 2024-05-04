@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next'
 import Profile from './components/Profile'
 import { useAppSelector } from '@/store'
 import Invitations from './components/Invitations'
+import Communities from './components/Communities'
 
 const { TabNav, TabList } = Tabs
 
@@ -61,9 +62,7 @@ const Settings = () => {
                     <Suspense fallback={<></>}>
                         {currentTab === 'profile' && <Profile data={user} />}
                         {currentTab === 'invitations' && <Invitations />}
-                        {currentTab === 'myCommunities' && (
-                            <div>My Communities</div>
-                        )}
+                        {currentTab === 'myCommunities' && <Communities />}
                     </Suspense>
                 </div>
             </AdaptableCard>
