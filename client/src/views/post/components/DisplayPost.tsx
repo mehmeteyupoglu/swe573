@@ -1,8 +1,13 @@
 import { PostData } from '@/@types/post'
 import { ActionLink } from '@/components/shared'
-import { Card } from '@/components/ui'
+import { Badge, Card } from '@/components/ui'
+import { apiLikePost } from '@/services/PostService'
+import { toggleFetchTrigger } from '@/store'
 import { formatDate, truncateText } from '@/utils/helpers'
-import { HiUserGroup } from 'react-icons/hi'
+import useRequestWithNotification from '@/utils/hooks/useRequestWithNotification'
+import { FaCommentAlt, FaRegThumbsUp, FaThumbsUp } from 'react-icons/fa'
+import { HiOutlineThumbUp, HiThumbUp, HiUserGroup } from 'react-icons/hi'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 export default function DisplayPost({
@@ -12,12 +17,20 @@ export default function DisplayPost({
     post: PostData
     detailed?: boolean
 }) {
-    const { user, content, community, created_at, id } = post
+    const { user, content, community, created_at, id, likes } = post
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     const handleClick = () => {
         navigate(`/post/${id}`)
     }
+
+    const [handleLike, isLiking] = useRequestWithNotification(
+        apiLikePost,
+        'Action successful!',
+        'Action failed!',
+        () => dispatch(toggleFetchTrigger())
+    )
     return (
         <Card
             className="mt-3"
@@ -66,9 +79,24 @@ export default function DisplayPost({
                     at{' '}
                     <span className="underline"> {formatDate(created_at)}</span>
                 </p>
-                <div className="flex ">
-                    <p>Comments (3)</p>
-                    <p className="ml-3">Likes (8) </p>
+                <div className="flex items-end justify-between">
+                    <div className="comments flex items-center justify-between mr-5">
+                        <FaCommentAlt className="" size={20} />
+                        <p>(3)</p>
+                    </div>
+
+                    <div className="likes flex items-center justify-between">
+                        <FaRegThumbsUp
+                            className=""
+                            size={25}
+                            onClick={() => {
+                                if (typeof handleLike === 'function') {
+                                    handleLike(user.id, id)
+                                }
+                            }}
+                        />
+                        <p>{`(${likes})`}</p>
+                    </div>
                 </div>
             </div>
         </Card>

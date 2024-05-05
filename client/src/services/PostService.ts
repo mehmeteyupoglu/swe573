@@ -36,3 +36,10 @@ export async function apiGetPost(postId: string) {
         method: 'get',
     })
 }
+
+export async function apiLikePost(userId: string, postId: string) {
+    return ApiService.fetchData({
+        url: `/user/${userId}/likes/${postId}`,
+        method: 'post',
+    })
+}

@@ -11,6 +11,7 @@ export type PostData = {
     firstname?: string
     lastname?: string
     user: UserResponseType
+    likes?: number
 }
 
 export type _Field = {
