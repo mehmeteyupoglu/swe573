@@ -1,3 +1,4 @@
+import { useAppSelector } from '@/store'
 import { useState, useEffect, useRef } from 'react'
 
 const useFetchData = <T>(
@@ -7,6 +8,9 @@ const useFetchData = <T>(
     const [data, setData] = useState<T | null>(null)
     const apiFuncRef = useRef(apiFunc)
     const argsRef = useRef(args)
+    const fetchTrigger = useAppSelector(
+        (state) => state.community.community.fetchTrigger
+    )
 
     useEffect(() => {
         apiFuncRef.current = apiFunc
@@ -24,7 +28,7 @@ const useFetchData = <T>(
         }
 
         fetchData()
-    }, [])
+    }, [fetchTrigger])
 
     return data
 }
