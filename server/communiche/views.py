@@ -1,14 +1,14 @@
 from django.http import JsonResponse
 from django.db.models import Q
 from .models import Template, User, Posts
-from .serializers import TemplateSerializer, UserSerializer, CommunitySerializer, JoinRequestSerializer, TemplateCommunitySerializer, PostSerializer, InvitationSerializer
+from .serializers import TemplateSerializer, UserSerializer, CommunitySerializer, JoinRequestSerializer, TemplateCommunitySerializer, PostSerializer, InvitationSerializer 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.hashers import make_password
 import jwt
 from datetime import datetime, timedelta
-from .models import Community, JoinRequest, CommunityUser, Invitation
+from .models import Community, JoinRequest, CommunityUser, Invitation, PostComment
 from django.http import JsonResponse
 from . import constants
 from datetime import datetime, timedelta
@@ -572,3 +572,13 @@ def like_post(request, user_id, post_id):
     else:
         post.likes.add(user)
         return Response({'message': 'Post liked'}, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+def comment(request, post_id):
+    post = Posts.objects.get(pk=post_id)
+    user = User.objects.get(pk=request.data.get('user_id'))
+    content = request.data.get('content')
+    post_comment = PostComment(user=user, post=post, content=content)
+    post_comment.save()
+    
+    return Response(status=status.HTTP_201_CREATED)

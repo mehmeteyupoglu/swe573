@@ -99,3 +99,10 @@ class PostSerializer(serializers.ModelSerializer):
             return json.loads(obj.content)
         except json.JSONDecodeError:
             return None  # or return some default value
+
+class PostCommentSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+
+    class Meta:
+        model = PostComment
+        fields = ['id', 'post', 'content', 'created_at', 'updated_at', 'user']
