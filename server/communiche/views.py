@@ -552,6 +552,12 @@ def post_detail(request, post_id):
     post = Posts.objects.get(pk=post_id)
     serializer = PostSerializer(post)
     data = serializer.data
+
+    user = request.user
+    if user:
+        data['is_liked'] = user in post.likes.all()
+    else:
+        data['is_liked'] = False
     # data.pop('community', None)
     return Response(data, status=status.HTTP_200_OK)
 
