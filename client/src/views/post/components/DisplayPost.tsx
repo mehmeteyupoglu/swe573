@@ -17,7 +17,7 @@ export default function DisplayPost({
     post: PostData
     detailed?: boolean
 }) {
-    const { user, content, community, created_at, id, likes } = post
+    const { user, content, community, created_at, id, likes, is_liked } = post
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
@@ -86,15 +86,27 @@ export default function DisplayPost({
                     </div>
 
                     <div className="likes flex items-center justify-between">
-                        <FaRegThumbsUp
-                            className=""
-                            size={25}
-                            onClick={() => {
-                                if (typeof handleLike === 'function') {
-                                    handleLike(user.id, id)
-                                }
-                            }}
-                        />
+                        {is_liked ? (
+                            <HiThumbUp
+                                className=""
+                                size={25}
+                                onClick={() => {
+                                    if (typeof handleLike === 'function') {
+                                        handleLike(user.id, id)
+                                    }
+                                }}
+                            />
+                        ) : (
+                            <HiOutlineThumbUp
+                                className=""
+                                size={25}
+                                onClick={() => {
+                                    if (typeof handleLike === 'function') {
+                                        handleLike(user.id, id)
+                                    }
+                                }}
+                            />
+                        )}
                         <p>{`(${likes})`}</p>
                     </div>
                 </div>

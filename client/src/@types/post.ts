@@ -12,6 +12,7 @@ export type PostData = {
     lastname?: string
     user: UserResponseType
     likes?: number
+    is_liked?: boolean
 }
 
 export type _Field = {

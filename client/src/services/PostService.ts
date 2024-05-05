@@ -30,10 +30,13 @@ export async function apiGetCommunityPosts(communityId: string) {
     })
 }
 
-export async function apiGetPost(postId: string) {
+export async function apiGetPost(postId: string, userId?: string) {
     return ApiService.fetchData({
         url: `/post/${postId}/`,
-        method: 'get',
+        method: 'post',
+        data: {
+            user_id: userId,
+        },
     })
 }
 
