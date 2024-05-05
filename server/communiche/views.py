@@ -558,5 +558,10 @@ def post_detail(request, post_id):
 @api_view(['POST'])
 def like_post(request, user_id, post_id):
     post = Posts.objects.get(pk=post_id)
-    post.likes.add(user_id)
-    return Response(status=status.HTTP_200_OK)
+    user = User.objects.get(pk=user_id)
+    if user in post.likes.all():
+        post.likes.remove(user)
+        return Response({'message': 'Post unliked'}, status=status.HTTP_200_OK)
+    else:
+        post.likes.add(user)
+        return Response({'message': 'Post liked'}, status=status.HTTP_200_OK)
