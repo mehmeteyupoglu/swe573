@@ -588,3 +588,10 @@ def remove_comment(request, comment_id):
     comment = PComment.objects.get(pk=comment_id)
     comment.delete()
     return Response(status=status.HTTP_200_OK)
+
+@api_view(['PUT'])
+def edit_comment(request, comment_id):
+    comment = PComment.objects.get(pk=comment_id)
+    comment.content = request.data.get('content')
+    comment.save()
+    return Response(status=status.HTTP_200_OK)
