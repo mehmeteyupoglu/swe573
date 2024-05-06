@@ -1,6 +1,6 @@
 import json
 from rest_framework import serializers
-from .models import Template, User, Community, JoinRequest, CommunityUser, TemplateCommunity, Posts, PostComment, Invitation
+from .models import Template, User, Community, JoinRequest, CommunityUser, TemplateCommunity, Posts, PComment, Invitation
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -100,9 +100,10 @@ class PostSerializer(serializers.ModelSerializer):
         except json.JSONDecodeError:
             return None  # or return some default value
 
-class PostCommentSerializer(serializers.ModelSerializer):
+class CommentSerializer(serializers.ModelSerializer):
     user = UserSerializer()
 
     class Meta:
-        model = PostComment
+        model = PComment
         fields = ['id', 'post', 'content', 'created_at', 'updated_at', 'user']
+        ordering = ['-created_at']

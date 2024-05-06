@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from django.db.models import Q
 from .models import Template, User, Posts
-from .serializers import TemplateSerializer, UserSerializer, CommunitySerializer, JoinRequestSerializer, TemplateCommunitySerializer, PostSerializer, InvitationSerializer 
+from .serializers import TemplateSerializer, UserSerializer, CommunitySerializer, JoinRequestSerializer, TemplateCommunitySerializer, PostSerializer, InvitationSerializer, CommentSerializer 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -595,3 +595,10 @@ def edit_comment(request, comment_id):
     comment.content = request.data.get('content')
     comment.save()
     return Response(status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def comments(request, post_id):
+    post = Posts.objects.get(pk=post_id)
+    comments = PComment.objects.filter(post=post)
+    serializer = CommentSerializer(comments, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
