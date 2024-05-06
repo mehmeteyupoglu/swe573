@@ -125,7 +125,9 @@ export default function DisplayPost({
                                     setShowComment(!showComment)
                                 }}
                             />
-                            <p>({comments.data.length ?? null})</p>
+                            <p>
+                                ({(comments && comments.data.length) ?? null})
+                            </p>
                         </div>
 
                         <div className="likes flex items-center justify-between">

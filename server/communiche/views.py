@@ -583,7 +583,7 @@ def comment(request, post_id):
     
     return Response(status=status.HTTP_201_CREATED)
 
-@api_view(['POST'])
+@api_view(['DELETE'])
 def remove_comment(request, comment_id):
     comment = PComment.objects.get(pk=comment_id)
     comment.delete()

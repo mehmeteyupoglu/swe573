@@ -69,3 +69,10 @@ export async function apiPostComment(
         },
     })
 }
+
+export async function apiRemoveComment(commentId: string) {
+    return ApiService.fetchData({
+        url: `/comment/${commentId}/remove`,
+        method: 'delete',
+    })
+}

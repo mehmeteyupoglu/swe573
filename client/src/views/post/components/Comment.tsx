@@ -1,16 +1,28 @@
 import { CommentResponseType } from '@/@types/post'
 import { ActionLink } from '@/components/shared'
 import { Button, Card } from '@/components/ui'
-import { useAppSelector } from '@/store'
+import { apiRemoveComment } from '@/services/PostService'
+import { toggleFetchTrigger, useAppSelector } from '@/store'
 import { formatDate, truncateText } from '@/utils/helpers'
+import useRequestWithNotification from '@/utils/hooks/useRequestWithNotification'
 import { useState } from 'react'
 import { HiChevronDown } from 'react-icons/hi'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 export default function Comment({ comment }: { comment: CommentResponseType }) {
     const [isOpen, setIsOpen] = useState(false)
     const navigate = useNavigate()
     const userId = useAppSelector((state) => state.auth.user.id)
+    const dispatch = useDispatch()
+
+    const [handleRemove, isRemoving] = useRequestWithNotification(
+        apiRemoveComment,
+        'Comment removed successfully!',
+        'Error removing comment!',
+        () => dispatch(toggleFetchTrigger())
+    )
+
     return (
         <Card
             className="min-w-[320px] md:min-w-[450px] mt-3 ml-5"
@@ -55,7 +67,9 @@ export default function Comment({ comment }: { comment: CommentResponseType }) {
                     <Button
                         className="text-red-500"
                         onClick={() => {
-                            console.log('delete')
+                            if (typeof handleRemove === 'function') {
+                                handleRemove(comment.id)
+                            }
                         }}
                     >
                         Delete
