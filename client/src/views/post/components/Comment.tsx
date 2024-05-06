@@ -1,11 +1,14 @@
 import { CommentResponseType } from '@/@types/post'
+import { ActionLink } from '@/components/shared'
 import { Card } from '@/components/ui'
-import { truncateText } from '@/utils/helpers'
+import { formatDate, truncateText } from '@/utils/helpers'
 import { useState } from 'react'
 import { HiChevronDown } from 'react-icons/hi'
+import { useNavigate } from 'react-router-dom'
 
 export default function Comment({ comment }: { comment: CommentResponseType }) {
     const [isOpen, setIsOpen] = useState(false)
+    const navigate = useNavigate()
     return (
         <Card
             className="min-w-[320px] md:min-w-[450px] mt-3 ml-5"
@@ -29,6 +32,17 @@ export default function Comment({ comment }: { comment: CommentResponseType }) {
                     <div className="text-gray">
                         {truncateText(comment.content, 50)}
                     </div>
+                </div>
+                <div className="flex">
+                    <ActionLink
+                        className="mr-2 cursor-pointer"
+                        onClick={() => {
+                            navigate(`/profile/${comment.user.id}`)
+                        }}
+                    >
+                        {comment.user.firstname} {comment.user.lastname}
+                    </ActionLink>
+                    <p>{formatDate(comment.created_at)}</p>
                 </div>
             </div>
             {isOpen && (
