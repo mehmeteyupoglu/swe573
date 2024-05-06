@@ -1,7 +1,7 @@
-import { PostData } from '@/@types/post'
+import { CommentResponseType, PostData } from '@/@types/post'
 import { ActionLink } from '@/components/shared'
 import { Badge, Card } from '@/components/ui'
-import { apiLikePost } from '@/services/PostService'
+import { apiGetComments, apiLikePost } from '@/services/PostService'
 import { toggleFetchTrigger } from '@/store'
 import { formatDate, truncateText } from '@/utils/helpers'
 import useRequestWithNotification from '@/utils/hooks/useRequestWithNotification'
@@ -10,7 +10,9 @@ import { HiOutlineThumbUp, HiThumbUp, HiUserGroup } from 'react-icons/hi'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import Comment from './Comment'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import useFetchData from '@/utils/hooks/useFetchData'
+import { AxiosResponse } from 'axios'
 
 export default function DisplayPost({
     post,
@@ -24,6 +26,8 @@ export default function DisplayPost({
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
+    const comments = useFetchData(apiGetComments, [id]) as AxiosResponse
+
     const handleClick = () => {
         navigate(`/post/${id}`)
     }
@@ -34,6 +38,12 @@ export default function DisplayPost({
         'Action failed!',
         () => dispatch(toggleFetchTrigger())
     )
+
+    useEffect(() => {
+        if (comments) {
+            console.log(comments.data)
+        }
+    }, [comments])
     return (
         <div>
             <Card
@@ -125,7 +135,12 @@ export default function DisplayPost({
                     </div>
                 </div>
             </Card>
-            {detailed && showComment && <Comment />}
+            {detailed &&
+                showComment &&
+                comments.data &&
+                comments.data.map((item: CommentResponseType) => {
+                    return <Comment comment={item} />
+                })}
         </div>
     )
 }

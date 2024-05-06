@@ -46,3 +46,11 @@ export async function apiLikePost(userId: string, postId: string) {
         method: 'post',
     })
 }
+
+// comments
+export async function apiGetComments(postId: string) {
+    return ApiService.fetchData({
+        url: `/post/${postId}/comments`,
+        method: 'get',
+    })
+}

@@ -1,8 +1,10 @@
+import { CommentResponseType } from '@/@types/post'
 import { Card } from '@/components/ui'
+import { truncateText } from '@/utils/helpers'
 import { useState } from 'react'
 import { HiChevronDown } from 'react-icons/hi'
 
-export default function Comment() {
+export default function Comment({ comment }: { comment: CommentResponseType }) {
     const [isOpen, setIsOpen] = useState(false)
     return (
         <Card
@@ -24,10 +26,14 @@ export default function Comment() {
                     ) : (
                         <HiChevronDown size="30" className="mr-3 transform" />
                     )}
-                    <div className="text-gray">Comment</div>
+                    <div className="text-gray">
+                        {truncateText(comment.content, 50)}
+                    </div>
                 </div>
             </div>
-            {isOpen && <div className="body">{<div>Comment body</div>}</div>}
+            {isOpen && (
+                <div className="body">{<div>{comment.content}</div>}</div>
+            )}
         </Card>
     )
 }
