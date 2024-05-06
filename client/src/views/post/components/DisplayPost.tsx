@@ -1,8 +1,13 @@
 import { CommentResponseType, PostData } from '@/@types/post'
 import { ActionLink } from '@/components/shared'
-import { Badge, Card } from '@/components/ui'
-import { apiGetComments, apiLikePost } from '@/services/PostService'
-import { toggleFetchTrigger } from '@/store'
+import { Badge, Button, Card, Input } from '@/components/ui'
+import {
+    apiGetComments,
+    apiLikePost,
+    apiPost,
+    apiPostComment,
+} from '@/services/PostService'
+import { toggleFetchTrigger, useAppSelector } from '@/store'
 import { formatDate, truncateText } from '@/utils/helpers'
 import useRequestWithNotification from '@/utils/hooks/useRequestWithNotification'
 import { FaCommentAlt } from 'react-icons/fa'
@@ -21,7 +26,12 @@ export default function DisplayPost({
     post: PostData
     detailed?: boolean
 }) {
+    const [comment, setComment] = useState('')
     const [showComment, setShowComment] = useState(false)
+    const [showComments, setShowComments] = useState(showComment && detailed)
+    const fetchTrigger = useAppSelector(
+        (state) => state.community.community.fetchTrigger
+    )
     const { user, content, community, created_at, id, likes, is_liked } = post
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -40,10 +50,20 @@ export default function DisplayPost({
     )
 
     useEffect(() => {
-        if (comments) {
-            console.log(comments.data)
-        }
-    }, [comments])
+        setShowComments(showComment && detailed)
+    }, [showComment, detailed])
+
+    useEffect(() => {
+        setComment('')
+    }, [fetchTrigger])
+
+    const [handleComment, isCommenting] = useRequestWithNotification(
+        apiPostComment,
+        'Comment posted successfully!',
+        'Error posting comment!',
+        () => dispatch(toggleFetchTrigger())
+    )
+
     return (
         <div>
             <Card
@@ -135,8 +155,30 @@ export default function DisplayPost({
                     </div>
                 </div>
             </Card>
-            {detailed &&
-                showComment &&
+            {showComments && (
+                <div className="comment-action ml-5 mt-2">
+                    <Input
+                        type="text"
+                        autoComplete="off"
+                        name="comment"
+                        placeholder="Enter your comment here..."
+                        textArea
+                        value={comment}
+                        onChange={(e) => setComment(e.target.value)}
+                    />
+                    <Button
+                        onClick={() => {
+                            typeof handleComment === 'function' &&
+                                handleComment(id, user.id, comment)
+                        }}
+                        disabled={isCommenting || !comment ? true : undefined}
+                    >
+                        Comment
+                    </Button>
+                </div>
+            )}
+
+            {showComments &&
                 comments.data &&
                 comments.data.map((item: CommentResponseType) => {
                     return <Comment comment={item} />

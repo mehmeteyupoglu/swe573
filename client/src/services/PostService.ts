@@ -54,3 +54,18 @@ export async function apiGetComments(postId: string) {
         method: 'get',
     })
 }
+
+export async function apiPostComment(
+    postId: string,
+    userId: string,
+    content: string
+) {
+    return ApiService.fetchData({
+        url: `/post/${postId}/comment/`,
+        method: 'post',
+        data: {
+            user_id: userId,
+            content,
+        },
+    })
+}
