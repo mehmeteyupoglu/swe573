@@ -106,4 +106,3 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = PComment
         fields = ['id', 'post', 'content', 'created_at', 'updated_at', 'user']
-        ordering = ['-created_at']

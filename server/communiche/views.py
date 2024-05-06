@@ -599,6 +599,6 @@ def edit_comment(request, comment_id):
 @api_view(['GET'])
 def comments(request, post_id):
     post = Posts.objects.get(pk=post_id)
-    comments = PComment.objects.filter(post=post)
+    comments = PComment.objects.filter(post=post).order_by('-created_at')
     serializer = CommentSerializer(comments, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
