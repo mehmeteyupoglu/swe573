@@ -8,7 +8,7 @@ from rest_framework import status
 from django.contrib.auth.hashers import make_password
 import jwt
 from datetime import datetime, timedelta
-from .models import Community, JoinRequest, CommunityUser, Invitation, PostComment
+from .models import Community, JoinRequest, CommunityUser, Invitation, PComment
 from django.http import JsonResponse
 from . import constants
 from datetime import datetime, timedelta
@@ -578,7 +578,13 @@ def comment(request, post_id):
     post = Posts.objects.get(pk=post_id)
     user = User.objects.get(pk=request.data.get('user_id'))
     content = request.data.get('content')
-    post_comment = PostComment(user=user, post=post, content=content)
-    post_comment.save()
+    p_comment = PComment(user=user, post=post, content=content)
+    p_comment.save()
     
     return Response(status=status.HTTP_201_CREATED)
+
+@api_view(['POST'])
+def remove_comment(request, comment_id):
+    comment = PComment.objects.get(pk=comment_id)
+    comment.delete()
+    return Response(status=status.HTTP_200_OK)
