@@ -1,6 +1,7 @@
 import { CommentResponseType } from '@/@types/post'
 import { ActionLink } from '@/components/shared'
-import { Card } from '@/components/ui'
+import { Button, Card } from '@/components/ui'
+import { useAppSelector } from '@/store'
 import { formatDate, truncateText } from '@/utils/helpers'
 import { useState } from 'react'
 import { HiChevronDown } from 'react-icons/hi'
@@ -9,6 +10,7 @@ import { useNavigate } from 'react-router-dom'
 export default function Comment({ comment }: { comment: CommentResponseType }) {
     const [isOpen, setIsOpen] = useState(false)
     const navigate = useNavigate()
+    const userId = useAppSelector((state) => state.auth.user.id)
     return (
         <Card
             className="min-w-[320px] md:min-w-[450px] mt-3 ml-5"
@@ -47,6 +49,18 @@ export default function Comment({ comment }: { comment: CommentResponseType }) {
             </div>
             {isOpen && (
                 <div className="body">{<div>{comment.content}</div>}</div>
+            )}
+            {isOpen && comment.id === userId && (
+                <div className="footer mt-5">
+                    <Button
+                        className="text-red-500"
+                        onClick={() => {
+                            console.log('delete')
+                        }}
+                    >
+                        Delete
+                    </Button>
+                </div>
             )}
         </Card>
     )
