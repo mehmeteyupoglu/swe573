@@ -35,6 +35,7 @@ export default function DisplayPost({
     const { user, content, community, created_at, id, likes, is_liked } = post
     const navigate = useNavigate()
     const dispatch = useDispatch()
+    const userId = useAppSelector((state) => state.auth.user.id)
 
     const comments = useFetchData(apiGetComments, [id]) as AxiosResponse
 
@@ -171,7 +172,7 @@ export default function DisplayPost({
                     <Button
                         onClick={() => {
                             typeof handleComment === 'function' &&
-                                handleComment(id, user.id, comment)
+                                handleComment(id, userId, comment)
                         }}
                         disabled={isCommenting || !comment ? true : undefined}
                     >

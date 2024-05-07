@@ -62,7 +62,7 @@ export default function Comment({ comment }: { comment: CommentResponseType }) {
             {isOpen && (
                 <div className="body">{<div>{comment.content}</div>}</div>
             )}
-            {isOpen && comment.id === userId && (
+            {isOpen && comment.user.id === userId && (
                 <div className="footer mt-5">
                     <Button
                         className="text-red-500"
