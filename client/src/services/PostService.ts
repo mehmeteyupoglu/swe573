@@ -30,9 +30,49 @@ export async function apiGetCommunityPosts(communityId: string) {
     })
 }
 
-export async function apiGetPost(postId: string) {
+export async function apiGetPost(postId: string, userId?: string) {
     return ApiService.fetchData({
         url: `/post/${postId}/`,
+        method: 'post',
+        data: {
+            user_id: userId,
+        },
+    })
+}
+
+export async function apiLikePost(userId: string, postId: string) {
+    return ApiService.fetchData({
+        url: `/user/${userId}/likes/${postId}`,
+        method: 'post',
+    })
+}
+
+// comments
+export async function apiGetComments(postId: string) {
+    return ApiService.fetchData({
+        url: `/post/${postId}/comments`,
         method: 'get',
+    })
+}
+
+export async function apiPostComment(
+    postId: string,
+    userId: string,
+    content: string
+) {
+    return ApiService.fetchData({
+        url: `/post/${postId}/comment/`,
+        method: 'post',
+        data: {
+            user_id: userId,
+            content,
+        },
+    })
+}
+
+export async function apiRemoveComment(commentId: string) {
+    return ApiService.fetchData({
+        url: `/comment/${commentId}/remove`,
+        method: 'delete',
     })
 }

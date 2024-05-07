@@ -1,14 +1,14 @@
 from django.http import JsonResponse
 from django.db.models import Q
 from .models import Template, User, Posts
-from .serializers import TemplateSerializer, UserSerializer, CommunitySerializer, JoinRequestSerializer, TemplateCommunitySerializer, PostSerializer, InvitationSerializer
+from .serializers import TemplateSerializer, UserSerializer, CommunitySerializer, JoinRequestSerializer, TemplateCommunitySerializer, PostSerializer, InvitationSerializer, CommentSerializer 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.hashers import make_password
 import jwt
 from datetime import datetime, timedelta
-from .models import Community, JoinRequest, CommunityUser, Invitation
+from .models import Community, JoinRequest, CommunityUser, Invitation, PComment
 from django.http import JsonResponse
 from . import constants
 from datetime import datetime, timedelta
@@ -547,10 +547,58 @@ def community_posts(request, community_id):
         post.pop('community', None)
     return Response(data, status=status.HTTP_200_OK)
 
-@api_view(['GET'])
+@api_view(['POST'])
 def post_detail(request, post_id):
     post = Posts.objects.get(pk=post_id)
     serializer = PostSerializer(post)
     data = serializer.data
+
+    user = request.data.get('user_id')
+    user = User.objects.get(pk=user) if user else None
+    if user:
+        data['is_liked'] = user in post.likes.all()
+    else:
+        data['is_liked'] = False
     # data.pop('community', None)
     return Response(data, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+def like_post(request, user_id, post_id):
+    post = Posts.objects.get(pk=post_id)
+    user = User.objects.get(pk=user_id)
+    if user in post.likes.all():
+        post.likes.remove(user)
+        return Response({'message': 'Post unliked'}, status=status.HTTP_200_OK)
+    else:
+        post.likes.add(user)
+        return Response({'message': 'Post liked'}, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+def comment(request, post_id):
+    post = Posts.objects.get(pk=post_id)
+    user = User.objects.get(pk=request.data.get('user_id'))
+    content = request.data.get('content')
+    p_comment = PComment(user=user, post=post, content=content)
+    p_comment.save()
+    
+    return Response(status=status.HTTP_201_CREATED)
+
+@api_view(['DELETE'])
+def remove_comment(request, comment_id):
+    comment = PComment.objects.get(pk=comment_id)
+    comment.delete()
+    return Response(status=status.HTTP_200_OK)
+
+@api_view(['PUT'])
+def edit_comment(request, comment_id):
+    comment = PComment.objects.get(pk=comment_id)
+    comment.content = request.data.get('content')
+    comment.save()
+    return Response(status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def comments(request, post_id):
+    post = Posts.objects.get(pk=post_id)
+    comments = PComment.objects.filter(post=post).order_by('-created_at')
+    serializer = CommentSerializer(comments, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)

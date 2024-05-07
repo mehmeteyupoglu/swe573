@@ -1,9 +1,23 @@
-import { PostData } from '@/@types/post'
+import { CommentResponseType, PostData } from '@/@types/post'
 import { ActionLink } from '@/components/shared'
-import { Card } from '@/components/ui'
+import { Badge, Button, Card, Input } from '@/components/ui'
+import {
+    apiGetComments,
+    apiLikePost,
+    apiPost,
+    apiPostComment,
+} from '@/services/PostService'
+import { toggleFetchTrigger, useAppSelector } from '@/store'
 import { formatDate, truncateText } from '@/utils/helpers'
-import { HiUserGroup } from 'react-icons/hi'
+import useRequestWithNotification from '@/utils/hooks/useRequestWithNotification'
+import { FaCommentAlt } from 'react-icons/fa'
+import { HiOutlineThumbUp, HiThumbUp, HiUserGroup } from 'react-icons/hi'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import Comment from './Comment'
+import { useEffect, useState } from 'react'
+import useFetchData from '@/utils/hooks/useFetchData'
+import { AxiosResponse } from 'axios'
 
 export default function DisplayPost({
     post,
@@ -12,65 +26,165 @@ export default function DisplayPost({
     post: PostData
     detailed?: boolean
 }) {
-    const { user, content, community, created_at, id } = post
+    const [comment, setComment] = useState('')
+    const [showComment, setShowComment] = useState(false)
+    const [showComments, setShowComments] = useState(showComment && detailed)
+    const fetchTrigger = useAppSelector(
+        (state) => state.community.community.fetchTrigger
+    )
+    const { user, content, community, created_at, id, likes, is_liked } = post
     const navigate = useNavigate()
+    const dispatch = useDispatch()
+
+    const comments = useFetchData(apiGetComments, [id]) as AxiosResponse
 
     const handleClick = () => {
         navigate(`/post/${id}`)
     }
+
+    const [handleLike, isLiking] = useRequestWithNotification(
+        apiLikePost,
+        'Action successful!',
+        'Action failed!',
+        () => dispatch(toggleFetchTrigger())
+    )
+
+    useEffect(() => {
+        setShowComments(showComment && detailed)
+    }, [showComment, detailed])
+
+    useEffect(() => {
+        setComment('')
+    }, [fetchTrigger])
+
+    const [handleComment, isCommenting] = useRequestWithNotification(
+        apiPostComment,
+        'Comment posted successfully!',
+        'Error posting comment!',
+        () => dispatch(toggleFetchTrigger())
+    )
+
     return (
-        <Card
-            className="mt-3"
-            onClick={!detailed ? handleClick : undefined}
-            bodyClass="cursor-pointer"
-        >
-            <div className="header justify-between">
-                <h3>{content[0].field_value}</h3>
-                {detailed ? (
-                    <ActionLink
-                        to={`/community/${community.id}/details`}
-                        className="text-blue-500 flex items-center"
-                    >
-                        {community.name}
-                        <HiUserGroup className="ml-3" />
-                    </ActionLink>
-                ) : (
-                    <div className="flex items-center">
-                        <p className="mr-3">{community.name}</p>
-                        <HiUserGroup />
-                    </div>
-                )}
-            </div>
-            <div className="body mt-5 mb-5">
-                <p>
-                    {!detailed
-                        ? truncateText(content[1].field_value, 60)
-                        : content[1].field_value}
-                </p>
-            </div>
-            <div className="footer flex justify-between">
-                <p>
-                    Posted by
+        <div>
+            <Card
+                className="mt-3"
+                onClick={!detailed ? handleClick : undefined}
+                bodyClass="cursor-pointer"
+            >
+                <div className="header justify-between">
+                    <h3>{content[0].field_value}</h3>
                     {detailed ? (
                         <ActionLink
-                            to={`/profile/${user.id}`}
-                            className="italic mr-2"
+                            to={`/community/${community.id}/details`}
+                            className="text-blue-500 flex items-center"
                         >
-                            {' ' + user.firstname + ' ' + user.lastname}
+                            {community.name}
+                            <HiUserGroup className="ml-3" />
                         </ActionLink>
                     ) : (
-                        <span className="italic mr-2">
-                            {' ' + user.firstname + ' ' + user.lastname}
-                        </span>
+                        <div className="flex items-center">
+                            <p className="mr-3">{community.name}</p>
+                            <HiUserGroup />
+                        </div>
                     )}
-                    at{' '}
-                    <span className="underline"> {formatDate(created_at)}</span>
-                </p>
-                <div className="flex ">
-                    <p>Comments (3)</p>
-                    <p className="ml-3">Likes (8) </p>
                 </div>
-            </div>
-        </Card>
+                <div className="body mt-5 mb-5">
+                    <p>
+                        {!detailed
+                            ? truncateText(content[1].field_value, 60)
+                            : content[1].field_value}
+                    </p>
+                </div>
+                <div className="footer flex justify-between">
+                    <p>
+                        Posted by
+                        {detailed ? (
+                            <ActionLink
+                                to={`/profile/${user.id}`}
+                                className="italic mr-2"
+                            >
+                                {' ' + user.firstname + ' ' + user.lastname}
+                            </ActionLink>
+                        ) : (
+                            <span className="italic mr-2">
+                                {' ' + user.firstname + ' ' + user.lastname}
+                            </span>
+                        )}
+                        at{' '}
+                        <span className="underline">
+                            {' '}
+                            {formatDate(created_at)}
+                        </span>
+                    </p>
+                    <div className="flex items-end justify-between">
+                        <div className="comments flex items-center justify-between mr-5">
+                            <FaCommentAlt
+                                className=""
+                                size={20}
+                                onClick={() => {
+                                    setShowComment(!showComment)
+                                }}
+                            />
+                            <p>
+                                ({(comments && comments.data.length) ?? null})
+                            </p>
+                        </div>
+
+                        <div className="likes flex items-center justify-between">
+                            {is_liked ? (
+                                <HiThumbUp
+                                    className=""
+                                    size={25}
+                                    onClick={() => {
+                                        if (typeof handleLike === 'function') {
+                                            handleLike(user.id, id)
+                                        }
+                                    }}
+                                />
+                            ) : (
+                                <HiOutlineThumbUp
+                                    className=""
+                                    size={25}
+                                    onClick={() => {
+                                        if (typeof handleLike === 'function') {
+                                            handleLike(user.id, id)
+                                        }
+                                    }}
+                                />
+                            )}
+                            <p>{`(${likes})`}</p>
+                        </div>
+                    </div>
+                </div>
+            </Card>
+            {showComments && (
+                <div className="comment-action ml-5 mt-2">
+                    <Input
+                        type="text"
+                        autoComplete="off"
+                        name="comment"
+                        placeholder="Enter your comment here..."
+                        textArea
+                        value={comment}
+                        onChange={(e) => setComment(e.target.value)}
+                    />
+                    <Button
+                        onClick={() => {
+                            typeof handleComment === 'function' &&
+                                handleComment(id, user.id, comment)
+                        }}
+                        disabled={isCommenting || !comment ? true : undefined}
+                    >
+                        Comment
+                    </Button>
+                </div>
+            )}
+
+            {showComments &&
+                comments.data &&
+                comments.data.map((item: CommentResponseType) => {
+                    return <Comment comment={item} />
+                })}
+        </div>
     )
 }

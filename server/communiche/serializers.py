@@ -1,6 +1,6 @@
 import json
 from rest_framework import serializers
-from .models import Template, User, Community, JoinRequest, CommunityUser, TemplateCommunity, Posts, PostComment, Invitation
+from .models import Template, User, Community, JoinRequest, CommunityUser, TemplateCommunity, Posts, PComment, Invitation
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -82,20 +82,27 @@ class PostSerializer(serializers.ModelSerializer):
     community = CommunitySerializer()
     content = serializers.SerializerMethodField()
     # comments = serializers.SerializerMethodField()
-    # likes = serializers.SerializerMethodField()
+    likes = serializers.SerializerMethodField()
 
     class Meta:
         model = Posts
-        fields = ['id', 'community', 'content', 'created_at', 'updated_at', 'user']
+        fields = ['id', 'community', 'content', 'created_at', 'updated_at', 'user', 'likes']
 
     # def get_comments(self, obj):
     #     return PostCommentSerializer(obj.post_comments.all(), many=True).data
 
-    # def get_likes(self, obj):
-    #     return obj.likes.count()
+    def get_likes(self, obj):
+        return obj.likes.count()
 
     def get_content(self, obj):
         try:
             return json.loads(obj.content)
         except json.JSONDecodeError:
             return None  # or return some default value
+
+class CommentSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+
+    class Meta:
+        model = PComment
+        fields = ['id', 'post', 'content', 'created_at', 'updated_at', 'user']

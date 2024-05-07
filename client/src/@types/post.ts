@@ -11,10 +11,21 @@ export type PostData = {
     firstname?: string
     lastname?: string
     user: UserResponseType
+    likes?: number
+    is_liked?: boolean
 }
 
 export type _Field = {
     field_name: string
     field_type: string
     field_value: string
+}
+
+export type CommentResponseType = {
+    id: number
+    post: number
+    user: UserResponseType
+    content: string
+    created_at: string
+    updated_at: string
 }
