@@ -573,6 +573,32 @@ def like_post(request, user_id, post_id):
         post.likes.add(user)
         return Response({'message': 'Post liked'}, status=status.HTTP_200_OK)
 
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .models import Posts, User, CommunityUser
+from . import constants
+
+@api_view(['DELETE'])
+def remove_post(request, post_id):
+    post = Posts.objects.get(pk=post_id)
+    user_id = request.data.get('user_id')
+    user = User.objects.get(pk=user_id)
+
+    # Check if the user is the creator of the post
+    if post.user == user:
+        post.delete()
+        return Response(status=status.HTTP_200_OK)
+
+    # Check if the user is the owner or an admin of the community
+    community = post.community
+    community_user = community.communityuser_set.filter(user=user).first()
+    if community_user and (community_user.role == -1 or community_user.role == 1):
+        post.delete()
+        return Response(status=status.HTTP_200_OK)
+
+    return Response({'message': 'User is not authorized to delete this post'}, status=status.HTTP_403_FORBIDDEN)
+
 @api_view(['POST'])
 def comment(request, post_id):
     post = Posts.objects.get(pk=post_id)

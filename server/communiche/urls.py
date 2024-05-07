@@ -56,6 +56,7 @@ urlpatterns = [
     # post
     path('post/', views.post, name='post'),
     path('post/<int:post_id>/', views.post_detail, name='post-detail'),
+    path('post/<int:post_id>/remove', views.remove_post, name='remove-post'),
     path('user/<int:user_id>/likes/<int:post_id>', views.like_post, name='like-post'),
     path('posts/', views.posts, name='posts'),
     path('post/<int:post_id>/comment/', views.comment, name='comment'),
