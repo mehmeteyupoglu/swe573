@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { SLICE_BASE_NAME } from './constants'
-import { TemplateType } from '@/@types/community'
+import { FieldType, TemplateType } from '@/@types/community'
 
 const initialState: TemplateType = {
     name: '',
@@ -9,6 +9,7 @@ const initialState: TemplateType = {
         {
             field_name: '',
             field_type: '',
+            isRequired: false,
         },
     ],
     templateDialogOpen: false,
@@ -27,19 +28,14 @@ const templateSlice = createSlice({
             action: PayloadAction<{
                 templateName: string
                 templateDescription: string
-                fields: { name: string; type: string }[]
+                fields: FieldType[]
             }>
         ) {
-            console.log(action.payload)
             const { templateName, templateDescription, fields } = action.payload
+            console.log(templateName, templateDescription, fields)
             state.name = templateName
             state.description = templateDescription
-            state.fields = [
-                {
-                    field_name: fields[0].name,
-                    field_type: fields[0].type,
-                },
-            ]
+            state.fields = fields
         },
         toggleTemplateDialog(state) {
             state.templateDialogOpen = !state.templateDialogOpen
