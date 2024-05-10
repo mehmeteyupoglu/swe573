@@ -6,6 +6,7 @@ import { FormContainer } from '@/components/ui/Form'
 import { apiGetDataTypes } from '@/services/CommunityService'
 import { DataTypeOption, DataTypeResponse, FieldType } from '@/@types/community'
 import { Select, Switcher } from '@/components/ui'
+import { toSentenceCase } from '@/utils/helpers'
 
 export default function AddFieldForm({
     handleSave,
@@ -33,7 +34,7 @@ export default function AddFieldForm({
 
     const options: DataTypeOption[] = dataTypes?.map((dataType) => ({
         value: dataType,
-        label: dataType,
+        label: toSentenceCase(dataType),
     }))
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
