@@ -138,7 +138,7 @@ export default function DisplayPost({
                                     size={25}
                                     onClick={() => {
                                         if (typeof handleLike === 'function') {
-                                            handleLike(user.id, id)
+                                            handleLike(userId, id)
                                         }
                                     }}
                                 />
@@ -148,7 +148,7 @@ export default function DisplayPost({
                                     size={25}
                                     onClick={() => {
                                         if (typeof handleLike === 'function') {
-                                            handleLike(user.id, id)
+                                            handleLike(userId, id)
                                         }
                                     }}
                                 />
