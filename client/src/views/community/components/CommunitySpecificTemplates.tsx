@@ -1,6 +1,9 @@
-import { TemplateResponse } from '@/@types/community'
+import { TemplateResponse, TemplateType } from '@/@types/community'
 import { Card, Button, Dialog } from '@/components/ui'
-import { apiGetCommunityTemplates } from '@/services/CommunityService'
+import {
+    apiGetCommunityTemplates,
+    apiGetDefaultTemplate,
+} from '@/services/CommunityService'
 import React, { useEffect, useState } from 'react'
 import { HiChevronDown } from 'react-icons/hi'
 import Template from './Template'
@@ -15,6 +18,7 @@ import { useParams } from 'react-router-dom'
 
 export default function CommunitySpecificTemplates() {
     const [isOpen, setIsOpen] = React.useState(false)
+    const [defaultTemplate, setDefaultTemplate] = useState<TemplateType>()
     const [templates, setTemplates] = useState<TemplateResponse[]>([])
     const isDialogOpen = useAppSelector(
         (state: RootState) => state.community.template.templateDialogOpen
@@ -50,7 +54,24 @@ export default function CommunitySpecificTemplates() {
             }
         }
 
-        fetchTemplates()
+        const fetchDefaultTemplate = async () => {
+            try {
+                const defaultTemplate = await apiGetDefaultTemplate()
+                if (defaultTemplate.status === 200) {
+                    setDefaultTemplate(defaultTemplate.data as TemplateType)
+                }
+                // fetch default templates data
+                console.log('fetching default templates')
+            } catch (error) {
+                console.error('Error fetching default templates', error)
+            }
+        }
+
+        if (postId) {
+            fetchTemplates()
+        } else {
+            fetchDefaultTemplate()
+        }
     }, [fetchTrigger])
 
     const handleToggle = () => {
@@ -94,7 +115,7 @@ export default function CommunitySpecificTemplates() {
                         </Button>
                     </div>
                 </div>
-                {isOpen && (
+                {isOpen && !!postId && (
                     <div className="body">
                         {templates.map((item) => (
                             <div key={item.id}>
@@ -102,6 +123,10 @@ export default function CommunitySpecificTemplates() {
                             </div>
                         ))}
                     </div>
+                )}
+
+                {!isOpen && defaultTemplate && (
+                    <Template template={defaultTemplate} />
                 )}
                 <Dialog isOpen={isDialogOpen ?? false} onClose={handleToggle}>
                     <h5 className="mb-4">Add Template</h5>
