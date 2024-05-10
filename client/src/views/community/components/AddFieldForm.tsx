@@ -123,6 +123,7 @@ export default function AddFieldForm({
                                 isRequired: false,
                             })
                         }}
+                        disabled={!field.field_name || !field.field_type}
                     >
                         Add field
                     </Button>
