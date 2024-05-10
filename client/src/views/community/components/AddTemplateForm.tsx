@@ -6,9 +6,15 @@ import { FormContainer, FormItem } from '@/components/ui/Form'
 import * as Yup from 'yup'
 import { FieldType } from '@/@types/community'
 import { useDispatch } from 'react-redux'
-import { addTemplate, toggleTemplateDialog } from '@/store/slices/community'
+import {
+    addTemplate,
+    toggleFetchTrigger,
+    toggleTemplateDialog,
+} from '@/store/slices/community'
 import AddFieldForm from './AddFieldForm'
 import MapField from './MapField'
+import useRequestWithNotification from '@/utils/hooks/useRequestWithNotification'
+import { apiAddTemplate } from '@/services/CommunityService'
 
 export default function AddTemplateForm() {
     const [templateName, setTemplateName] = useState('')
@@ -33,7 +39,26 @@ export default function AddTemplateForm() {
     const handleSave = () => {
         dispatch(toggleTemplateDialog())
         dispatch(addTemplate({ templateName, templateDescription, fields }))
+
+        console.log({
+            templateName,
+            templateDescription,
+            fields: JSON.stringify(fields),
+            typeoffields: typeof fields,
+        })
     }
+    const postAction = () => {
+        dispatch(toggleTemplateDialog())
+        dispatch(toggleFetchTrigger())
+    }
+
+    const [handleCreateTemplate, isTemplateCreating] =
+        useRequestWithNotification(
+            apiAddTemplate,
+            'You have successfully created the template!',
+            'Error leaving community',
+            postAction
+        )
 
     const validationSchema = Yup.object().shape({
         name: Yup.string().required('Please enter a name'),
@@ -90,7 +115,18 @@ export default function AddTemplateForm() {
                                 loading={isSubmitting}
                                 variant="solid"
                                 type="submit"
-                                onClick={handleSave}
+                                onClick={() => {
+                                    if (
+                                        typeof handleCreateTemplate ===
+                                        'function'
+                                    ) {
+                                        handleCreateTemplate({
+                                            templateName,
+                                            templateDescription,
+                                            fields: JSON.stringify(fields),
+                                        })
+                                    }
+                                }}
                                 color="green-600"
                                 className="mt-5"
                             >
