@@ -94,6 +94,11 @@ const Settings = () => {
             path: 'invite',
             authority: ['owner', 'moderator'],
         },
+        templates: {
+            label: 'Templates',
+            path: 'templates',
+            authority: ['owner', 'moderator'],
+        },
     }
 
     useEffect(() => {
@@ -169,6 +174,7 @@ const Settings = () => {
                             <PendingRequests community={community} />
                         )}
                         {currentTab === 'invite' && <Invite />}
+                        {currentTab === 'templates' && <div>templates</div>}
                     </Suspense>
                 </div>
             </AdaptableCard>
