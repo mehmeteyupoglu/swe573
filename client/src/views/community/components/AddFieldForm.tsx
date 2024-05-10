@@ -6,9 +6,7 @@ import { FormContainer } from '@/components/ui/Form'
 import { apiGetDataTypes } from '@/services/CommunityService'
 import { DataTypeOption, DataTypeResponse, FieldType } from '@/@types/community'
 import { Select, Switcher } from '@/components/ui'
-import { CustomSelectOption } from '@/components/shared/CustomSelectOption'
 import { useDispatch } from 'react-redux'
-import { OptionProps } from 'react-select'
 
 export default function AddFieldForm({
     handleSave,
@@ -20,12 +18,6 @@ export default function AddFieldForm({
         field_type: '',
         isRequired: false,
     })
-    const dispatch = useDispatch()
-
-    const handleAddField = () => {
-        console.log(field)
-        setField({ field_name: '', field_type: '', isRequired: false })
-    }
 
     const [dataTypes, setDataTypes] = useState<
         (
