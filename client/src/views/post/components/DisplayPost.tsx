@@ -158,7 +158,7 @@ export default function DisplayPost({
                     </div>
                 </div>
             </Card>
-            {showComments && (
+            {detailed && (
                 <div className="comment-action ml-5 mt-2">
                     <Input
                         type="text"
@@ -173,6 +173,7 @@ export default function DisplayPost({
                         onClick={() => {
                             typeof handleComment === 'function' &&
                                 handleComment(id, userId, comment)
+                            setShowComments(true)
                         }}
                         disabled={isCommenting || !comment ? true : undefined}
                     >
