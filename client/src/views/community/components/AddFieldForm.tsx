@@ -20,14 +20,14 @@ export default function AddFieldForm({
 
     const [dataTypes, setDataTypes] = useState<
         (
-            | 'Text'
-            | 'Date'
-            | 'Geolocation'
-            | 'Number'
-            | 'Image'
-            | 'Video'
-            | 'Audio'
-            | 'File'
+            | 'text'
+            | 'date'
+            | 'geolocation'
+            | 'number'
+            | 'image'
+            | 'video'
+            | 'audio'
+            | 'file'
         )[]
     >([])
 

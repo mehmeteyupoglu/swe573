@@ -30,14 +30,14 @@ export type TemplateResponse = {
 
 export interface DataTypeResponse {
     data_types: (
-        | 'Text'
-        | 'Date'
-        | 'Geolocation'
-        | 'Number'
-        | 'Image'
-        | 'Video'
-        | 'Audio'
-        | 'File'
+        | 'text'
+        | 'date'
+        | 'geolocation'
+        | 'number'
+        | 'image'
+        | 'video'
+        | 'audio'
+        | 'file'
     )[]
 }
 
