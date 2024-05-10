@@ -15,10 +15,12 @@ import AddFieldForm from './AddFieldForm'
 import MapField from './MapField'
 import useRequestWithNotification from '@/utils/hooks/useRequestWithNotification'
 import { apiAddTemplate } from '@/services/CommunityService'
+import { useParams } from 'react-router-dom'
 
 export default function AddTemplateForm() {
     const [templateName, setTemplateName] = useState('')
     const [templateDescription, setTemplateDescription] = useState('')
+    const communityId = useParams<{ id: string }>().id
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
@@ -124,6 +126,7 @@ export default function AddTemplateForm() {
                                             templateName,
                                             templateDescription,
                                             fields: JSON.stringify(fields),
+                                            communityId,
                                         })
                                     }
                                 }}

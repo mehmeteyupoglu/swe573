@@ -149,7 +149,7 @@ export async function apiGetCommunityTemplates(communityId: string) {
 
 export async function apiAddTemplate(data: any) {
     return ApiService.fetchData({
-        url: '/add_template/',
+        url: `/community/${data.communityId}/add_template/`,
         method: 'post',
         data: {
             name: data.templateName,
