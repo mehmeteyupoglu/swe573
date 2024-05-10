@@ -16,6 +16,7 @@ import { mapRoleToLabel } from '@/utils/helpers'
 import PendingRequests from './components/PendingRequests'
 import Invite from './Invite'
 import Posts from './components/Posts'
+import CommunitySpecificTemplates from './components/CommunitySpecificTemplates'
 
 const { TabNav, TabList } = Tabs
 
@@ -174,7 +175,9 @@ const Settings = () => {
                             <PendingRequests community={community} />
                         )}
                         {currentTab === 'invite' && <Invite />}
-                        {currentTab === 'templates' && <div>templates</div>}
+                        {currentTab === 'templates' && (
+                            <CommunitySpecificTemplates />
+                        )}
                     </Suspense>
                 </div>
             </AdaptableCard>

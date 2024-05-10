@@ -117,7 +117,7 @@ const CreateCommunity = ({
                 {({ values, touched, errors, isSubmitting, resetForm }) => {
                     const validatorProps = { touched, errors }
                     return (
-                        <Form>
+                        <Form className="mb-4">
                             <FormContainer>
                                 <FormDesription
                                     title=""

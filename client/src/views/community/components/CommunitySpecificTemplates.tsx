@@ -8,6 +8,7 @@ import AddTemplateForm from './AddTemplateForm'
 import { useDispatch } from 'react-redux'
 import { toggleTemplateDialog } from '@/store/slices/community'
 import { useAppSelector, RootState } from '@/store'
+import { useParams } from 'react-router-dom'
 
 export default function CommunitySpecificTemplates() {
     const [isOpen, setIsOpen] = React.useState(false)
@@ -15,6 +16,14 @@ export default function CommunitySpecificTemplates() {
     const isDialogOpen = useAppSelector(
         (state: RootState) => state.community.template.templateDialogOpen
     )
+
+    const postId = useParams<{ id: string }>().id
+
+    useEffect(() => {
+        if (postId) {
+            setIsOpen(true)
+        }
+    }, [postId])
 
     const dispatch = useDispatch()
 
@@ -34,10 +43,7 @@ export default function CommunitySpecificTemplates() {
 
     return (
         <div>
-            <Card
-                className="min-w-[320px] md:min-w-[450px] mt-3"
-                bodyClass="md:p-4"
-            >
+            <Card className="min-w-[320px] md:min-w-[450px]" bodyClass="md:p-4">
                 <div className="flex justify-between items-center header">
                     <div
                         className="flex items-center cursor-pointer"
