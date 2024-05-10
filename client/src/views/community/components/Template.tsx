@@ -9,14 +9,20 @@ export default function Template({ template }: { template: TemplateType }) {
             <div className="text-gray font-bold">{template.name}:</div>
             <div className="flex underline text-gray font-bold mt-2">
                 <div className="mr-2 w-1/6">Field Name</div>
-                <div>Field Type</div>
+                <div className="mr-2 w-1/6">Field Type</div>
+                <div>Required</div>
             </div>
             {template?.fields.map((field, index) => (
                 <div key={index} className="flex">
                     <div className="mr-2 w-1/6">
                         {toSentenceCase(field.field_name)}
                     </div>
-                    <div>{toSentenceCase(field.field_type)}</div>
+                    <div className="mr-2 w-1/6">
+                        {toSentenceCase(field.field_type)}
+                    </div>
+                    <div className="mr-2 w-1/6">
+                        {field.isRequired ? 'Yes' : 'No'}
+                    </div>
                 </div>
             ))}
         </Card>

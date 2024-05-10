@@ -48,10 +48,6 @@ export default function AddFieldForm({
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
 
-        console.log({
-            name,
-            value,
-        })
         setField({
             ...field,
             [name]: value,

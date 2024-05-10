@@ -1,4 +1,4 @@
-import { Field } from '@/@types/community'
+import { FieldType } from '@/@types/community'
 import { Button } from '@/components/ui'
 import { FormItem } from '@/components/ui/Form'
 import { toSentenceCase } from '@/utils/helpers'
@@ -16,7 +16,7 @@ const FieldComponent = ({
     value,
     onChange,
 }: {
-    field: Field
+    field: FieldType
     value: string
     onChange: (value: string) => void
 }) => {
@@ -47,7 +47,7 @@ const FieldComponent = ({
     )
 }
 
-export default function MapFields({ fields }: { fields: Field[] }) {
+export default function MapFields({ fields }: { fields: FieldType[] }) {
     const [fieldValues, setFieldValues] = useState<{ [key: string]: string }>(
         {}
     )
