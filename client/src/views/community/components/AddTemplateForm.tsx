@@ -41,7 +41,7 @@ export default function AddTemplateForm() {
     })
 
     return (
-        <div className="max-h-96 overflow-hidden overflow-y-auto custom-scrollbar">
+        <div className="overflow-hidden overflow-y-auto custom-scrollbar">
             <Formik
                 initialValues={{}}
                 validationSchema={validationSchema}
