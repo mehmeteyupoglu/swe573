@@ -6,7 +6,10 @@ import { HiChevronDown } from 'react-icons/hi'
 import Template from './Template'
 import AddTemplateForm from './AddTemplateForm'
 import { useDispatch } from 'react-redux'
-import { toggleTemplateDialog } from '@/store/slices/community'
+import {
+    toggleFetchTrigger,
+    toggleTemplateDialog,
+} from '@/store/slices/community'
 import { useAppSelector, RootState } from '@/store'
 import { useParams } from 'react-router-dom'
 
@@ -52,6 +55,7 @@ export default function CommunitySpecificTemplates() {
 
     const handleToggle = () => {
         dispatch(toggleTemplateDialog())
+        dispatch(toggleFetchTrigger())
     }
 
     return (
