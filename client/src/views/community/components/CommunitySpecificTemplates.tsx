@@ -37,7 +37,7 @@ export default function CommunitySpecificTemplates() {
         fetchDefaultTemplate()
     }, [])
 
-    const onTemplateDialogOpen = () => {
+    const handleToggle = () => {
         dispatch(toggleTemplateDialog())
     }
 
@@ -71,7 +71,7 @@ export default function CommunitySpecificTemplates() {
                         <Button
                             variant="twoTone"
                             type="submit"
-                            onClick={onTemplateDialogOpen}
+                            onClick={handleToggle}
                         >
                             Add Template
                         </Button>
@@ -86,7 +86,7 @@ export default function CommunitySpecificTemplates() {
                         )}
                     </div>
                 )}
-                <Dialog isOpen={isDialogOpen ?? false}>
+                <Dialog isOpen={isDialogOpen ?? false} onClose={handleToggle}>
                     <h5 className="mb-4">Add Template</h5>
                     <AddTemplateForm />
                 </Dialog>
