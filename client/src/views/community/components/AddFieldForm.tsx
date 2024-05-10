@@ -6,7 +6,6 @@ import { FormContainer } from '@/components/ui/Form'
 import { apiGetDataTypes } from '@/services/CommunityService'
 import { DataTypeOption, DataTypeResponse, FieldType } from '@/@types/community'
 import { Select, Switcher } from '@/components/ui'
-import { useDispatch } from 'react-redux'
 
 export default function AddFieldForm({
     handleSave,
