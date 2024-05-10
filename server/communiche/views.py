@@ -129,6 +129,12 @@ def user_communities(request, user_id):
     communities = [community_user.community for community_user in community_users]
 
     serializer = CommunitySerializer(communities, context={'request': request}, many=True)
+    
+    # Add number of posts under each community
+    for community in serializer.data:
+        number_of_posts = Posts.objects.filter(community=community['id']).count()
+        community['number_of_posts'] = number_of_posts
+
     return Response(serializer.data)
 
 @api_view(['POST'])

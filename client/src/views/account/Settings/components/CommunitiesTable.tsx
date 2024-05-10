@@ -58,7 +58,7 @@ const CommunitiesTable = ({
                 return (
                     <Badge
                         className="mr-4"
-                        content={'TBD'}
+                        content={row.number_of_posts}
                         innerClass="bg-blue-500"
                     />
                 )
