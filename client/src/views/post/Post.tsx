@@ -15,7 +15,7 @@ export default function Post() {
     const { id } = useParams<{ id: string }>()
 
     useEffect(() => {
-        const fetchMembers = async () => {
+        const fetchTemplates = async () => {
             try {
                 const templates = await apiGetCommunityTemplates(
                     String(id) ?? ''
@@ -30,7 +30,7 @@ export default function Post() {
             }
         }
 
-        fetchMembers()
+        fetchTemplates()
     }, [fetchTrigger])
 
     const community = useFetchCommunity(id ?? '', fetchTrigger)
