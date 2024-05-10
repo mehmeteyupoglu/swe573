@@ -90,26 +90,38 @@ export default function AddFieldForm({
                         }}
                     />
 
-                    <Field
-                        name="isRequired"
-                        component={Switcher}
-                        className="mb-5"
-                        label="Is Required"
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    <div>
+                        <label className="block text-sm font-medium">
+                            Required
+                        </label>
+                    </div>
+                    <Switcher
+                        checked={field.isRequired}
+                        onChange={(
+                            checked: boolean,
+                            e: React.ChangeEvent<HTMLInputElement>
+                        ) => {
                             setField({
                                 ...field,
                                 isRequired: e.target.checked,
                             })
                         }}
+                        name="isRequired"
+                        className="mb-5"
                     />
 
                     <Button
                         block
                         variant="twoTone"
                         type="button"
-                        onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
+                        onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                             handleSave(field)
-                        }
+                            setField({
+                                field_name: '',
+                                field_type: '',
+                                isRequired: false,
+                            })
+                        }}
                     >
                         Add field
                     </Button>
