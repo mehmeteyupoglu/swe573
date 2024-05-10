@@ -6,11 +6,12 @@ import { Formik, Form, Field, FieldProps } from 'formik'
 import { FormContainer, FormItem } from '@/components/ui/Form'
 import * as Yup from 'yup'
 import { apiGetDataTypes } from '@/services/CommunityService'
-import { DataTypeOption, DataTypeResponse } from '@/@types/community'
+import { DataTypeOption, DataTypeResponse, FieldType } from '@/@types/community'
 import { Select } from '@/components/ui'
 import { CustomSelectOption } from '@/components/shared/CustomSelectOption'
 import { useDispatch } from 'react-redux'
 import { addTemplate, toggleTemplateDialog } from '@/store/slices/community'
+import AddFieldForm from './AddFieldForm'
 
 export default function AddTemplateForm() {
     const [templateName, setTemplateName] = useState('')
@@ -25,11 +26,11 @@ export default function AddTemplateForm() {
         }
     }
 
-    const [fields, setFields] = useState([{ name: '', type: '' }])
+    const [fields, setFields] = useState([] as FieldType[])
     const dispatch = useDispatch()
 
-    const handleAddField = () => {
-        setFields([...fields, { name: '', type: '' }])
+    const handleAddField = (field: FieldType) => {
+        setFields([...fields, field])
     }
 
     const handleSave = () => {
@@ -41,36 +42,6 @@ export default function AddTemplateForm() {
         name: Yup.string().required('Please enter a name'),
         description: Yup.string().required('Please enter a description'),
     })
-
-    const [dataTypes, setDataTypes] = useState<
-        (
-            | 'Text'
-            | 'Date'
-            | 'Geolocation'
-            | 'Number'
-            | 'Image'
-            | 'Video'
-            | 'Audio'
-            | 'File'
-        )[]
-    >([])
-
-    const options: DataTypeOption[] = dataTypes?.map((dataType) => ({
-        value: dataType,
-        label: dataType,
-    }))
-
-    useEffect(() => {
-        const fetchDataType = async () => {
-            const resp = await apiGetDataTypes()
-            if (resp.status == 200) {
-                setDataTypes(
-                    (resp.data as DataTypeResponse['data_types']) || []
-                )
-            }
-        }
-        fetchDataType()
-    }, [])
 
     return (
         <div className="max-h-96 overflow-hidden overflow-y-auto custom-scrollbar">
@@ -110,88 +81,7 @@ export default function AddTemplateForm() {
                             <FormItem>
                                 <hr />
                             </FormItem>
-                            {fields.map((field, index) => (
-                                <div key={index}>
-                                    <Field
-                                        name={'name'}
-                                        type="text"
-                                        autoComplete="off"
-                                        value={field.name}
-                                        onChange={(
-                                            e: React.ChangeEvent<HTMLInputElement>
-                                        ) => {
-                                            const newFields = [...fields]
-                                            newFields[index].name =
-                                                e.target.value
-                                            setFields(newFields)
-                                        }}
-                                        placeholder="Field Name"
-                                        component={Input}
-                                        className="mb-1"
-                                    />
-
-                                    <Field
-                                        name={`type`}
-                                        value={`${field}`}
-                                        placeholder="Field Type"
-                                    >
-                                        {({ field, form }: FieldProps) => (
-                                            <Select<DataTypeOption>
-                                                className="mb-5"
-                                                field={field}
-                                                form={form}
-                                                options={options}
-                                                placeholder={
-                                                    'Select a data type'
-                                                }
-                                                components={{
-                                                    Option: CustomSelectOption,
-                                                }}
-                                                value={options.find(
-                                                    (option) =>
-                                                        option.value ===
-                                                        field.value
-                                                )}
-                                                onChange={(option) => {
-                                                    form.setFieldValue(
-                                                        field.name,
-                                                        option?.value
-                                                    )
-
-                                                    // Update the fields state
-                                                    const updatedFields: {
-                                                        name: string
-                                                        type: string
-                                                    }[] = fields.map((f) => {
-                                                        if (
-                                                            f.name ===
-                                                            field.name
-                                                        ) {
-                                                            return {
-                                                                ...f,
-                                                                type:
-                                                                    option?.value ||
-                                                                    '', // Set a default value for the type property
-                                                            }
-                                                        }
-                                                        return f
-                                                    })
-                                                    setFields(updatedFields)
-                                                }}
-                                            />
-                                        )}
-                                    </Field>
-                                </div>
-                            ))}
-                            <Button
-                                block
-                                loading={isSubmitting}
-                                variant="twoTone"
-                                type="submit"
-                                onClick={handleAddField}
-                            >
-                                Add field
-                            </Button>
+                            <AddFieldForm handleSave={handleAddField} />
                             <Button
                                 block
                                 loading={isSubmitting}
