@@ -197,12 +197,14 @@ def templates(request):
         return Response(serializer.data)
 
 @api_view(['POST'])
-def add_template(request):
+def add_template(request, community_id):
     if request.method == 'POST':
         serializer = TemplateSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            template = serializer.save()
+            community = Community.objects.get(id=community_id)
+            template_community = TemplateCommunity.objects.create(template=template, community=community)
+            return Response(TemplateCommunitySerializer(template_community).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 @api_view(['GET'])
