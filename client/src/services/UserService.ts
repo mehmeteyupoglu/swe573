@@ -1,10 +1,5 @@
 import ApiService from './ApiService'
-import type {
-    UserType,
-    PasswordType,
-    UserMealLikeType,
-    UserOwnsType,
-} from '@/@types/user'
+import type { UserType, PasswordType } from '@/@types/user'
 
 export async function getUsers() {
     return ApiService.fetchData({
@@ -32,23 +27,6 @@ export async function updatePassword(data: PasswordType) {
     })
 }
 
-export async function userMealLike(data: UserMealLikeType) {
-    const { mealId, userId, isLiked } = data
-    return ApiService.fetchData({
-        url: `/users/${userId}/likes/${mealId}`,
-        method: isLiked ? 'delete' : 'post',
-    })
-}
-
-export async function userOwnsIngredient(data: UserOwnsType) {
-    const { id, userId, userOwns } = data
-    // id => ingredient id
-    return ApiService.fetchData({
-        url: `/users/${userId}/ingredients/${id}`,
-        method: userOwns ? 'delete' : 'post',
-    })
-}
-
 export async function apiGetInvitations(userId: string) {
     return ApiService.fetchData({
         url: `/user/${userId}/invitations/`,
@@ -72,5 +50,12 @@ export async function apiAcceptRejectInvitation(
         data: {
             action: status,
         },
+    })
+}
+
+export async function apiGetUserInformation(userId: string) {
+    return ApiService.fetchData({
+        url: `/users/${userId}/`,
+        method: 'get',
     })
 }

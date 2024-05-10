@@ -51,3 +51,27 @@ export type InvitationsType = {
     updated_at?: string
     status: boolean
 }
+
+export type ProfileType = {
+    id: number
+    firstname: string
+    lastname: string
+    username: string
+    email: string
+    dob: string | null
+    country: string | null
+    phone: string | null
+    short_bio: string | null
+    posts: Post[]
+    communities: Community[]
+}
+
+export type Post = {
+    id: number
+    content: string
+}
+
+export type Community = {
+    id: number
+    name: string
+}

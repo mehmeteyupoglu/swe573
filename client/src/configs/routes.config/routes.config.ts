@@ -60,6 +60,16 @@ export const protectedRoutes = [
             headerContainer: true,
         },
     },
+    {
+        key: 'post',
+        path: '/profile/:id',
+        component: lazy(() => import('@/views/profile/Profile')),
+        authority: [],
+        meta: {
+            header: i18n.t('User Profile'),
+            headerContainer: true,
+        },
+    },
     // {
     //     key: 'community',
     //     path: '/community-detail/:id',
