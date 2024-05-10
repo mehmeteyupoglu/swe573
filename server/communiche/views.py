@@ -487,6 +487,10 @@ def post(request):
     post = Posts(user=user, community=community, content=content)
     post.save()
     
+    # Update the community's updated_at field
+    community.updated_at = datetime.now()
+    community.save()
+    
     return Response(status=status.HTTP_201_CREATED)
 
 @api_view(['GET'])
