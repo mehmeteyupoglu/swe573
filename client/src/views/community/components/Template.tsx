@@ -1,12 +1,12 @@
 import { Card } from '@/components/ui'
 import { TemplateType } from '@/@types/community'
-import Field from './Field'
+import MapField from './MapField'
 
 export default function Template({ template }: { template: TemplateType }) {
     return (
         <Card bordered className="mt-5">
             <div className="text-gray font-bold">{template.name}:</div>
-            <Field fields={template.fields} />
+            <MapField fields={template.fields} />
         </Card>
     )
 }

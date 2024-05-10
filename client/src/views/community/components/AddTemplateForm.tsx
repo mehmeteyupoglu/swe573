@@ -1,17 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Input from '@/components/ui/Input'
 import Button from '@/components/ui/Button'
-import Checkbox from '@/components/ui/Checkbox'
-import { Formik, Form, Field, FieldProps } from 'formik'
+import { Formik, Form, Field } from 'formik'
 import { FormContainer, FormItem } from '@/components/ui/Form'
 import * as Yup from 'yup'
-import { apiGetDataTypes } from '@/services/CommunityService'
-import { DataTypeOption, DataTypeResponse, FieldType } from '@/@types/community'
-import { Select } from '@/components/ui'
-import { CustomSelectOption } from '@/components/shared/CustomSelectOption'
+import { FieldType } from '@/@types/community'
 import { useDispatch } from 'react-redux'
 import { addTemplate, toggleTemplateDialog } from '@/store/slices/community'
 import AddFieldForm from './AddFieldForm'
+import MapField from './MapField'
 
 export default function AddTemplateForm() {
     const [templateName, setTemplateName] = useState('')
@@ -81,6 +78,12 @@ export default function AddTemplateForm() {
                             <FormItem>
                                 <hr />
                             </FormItem>
+                            <div className="mb-5">
+                                {fields.length > 0 && (
+                                    <MapField fields={fields} />
+                                )}
+                            </div>
+
                             <AddFieldForm handleSave={handleAddField} />
                             <Button
                                 block
