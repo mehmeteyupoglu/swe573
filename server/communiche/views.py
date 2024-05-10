@@ -41,7 +41,19 @@ def user_detail(request, id):
 
     if request.method == 'GET':
         serializer = UserSerializer(user)
-        return Response(serializer.data)
+        user_data = serializer.data
+        
+        # Get the communities that the user is a member of
+        community_users = CommunityUser.objects.filter(user=user)
+        communities = [community_user.community for community_user in community_users]
+        community_data = [{'id': community.id, 'name': community.name} for community in communities]
+        user_data['communities'] = community_data
+        
+        # Get the posts that the user has posted
+        posts = Posts.objects.filter(user=user).values('id', 'content')
+        user_data['posts'] = list(posts)
+        
+        return Response(user_data)
     
 
     elif request.method == 'PUT':
