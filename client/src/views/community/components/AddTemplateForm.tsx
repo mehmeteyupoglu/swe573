@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Input from '@/components/ui/Input'
 import Button from '@/components/ui/Button'
 import { Formik, Form, Field } from 'formik'
@@ -16,6 +16,7 @@ import MapField from './MapField'
 import useRequestWithNotification from '@/utils/hooks/useRequestWithNotification'
 import { apiAddTemplate } from '@/services/CommunityService'
 import { useParams } from 'react-router-dom'
+import { defaultTemplate } from '@/utils/helpers'
 
 export default function AddTemplateForm() {
     const [templateName, setTemplateName] = useState('')
@@ -32,27 +33,22 @@ export default function AddTemplateForm() {
     }
 
     const [fields, setFields] = useState([] as FieldType[])
+
     const dispatch = useDispatch()
 
     const handleAddField = (field: FieldType) => {
         setFields([...fields, field])
     }
 
-    const handleSave = () => {
-        dispatch(toggleTemplateDialog())
-        dispatch(addTemplate({ templateName, templateDescription, fields }))
-
-        console.log({
-            templateName,
-            templateDescription,
-            fields: JSON.stringify(fields),
-            typeoffields: typeof fields,
-        })
-    }
     const postAction = () => {
         dispatch(toggleTemplateDialog())
         dispatch(toggleFetchTrigger())
     }
+
+    useEffect(() => {
+        const defaultTemplateFields = defaultTemplate()
+        setFields(defaultTemplateFields)
+    }, [])
 
     const [handleCreateTemplate, isTemplateCreating] =
         useRequestWithNotification(
@@ -68,7 +64,7 @@ export default function AddTemplateForm() {
     })
 
     return (
-        <div className="overflow-hidden overflow-y-auto custom-scrollbar">
+        <div className="min-h-fit">
             <Formik
                 initialValues={{}}
                 validationSchema={validationSchema}

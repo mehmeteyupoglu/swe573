@@ -86,11 +86,7 @@ export default function CommunitySpecificTemplates() {
                         )}
                     </div>
                 )}
-                <Dialog
-                    isOpen={isDialogOpen ?? false}
-                    onClose={handleToggle}
-                    height={650}
-                >
+                <Dialog isOpen={isDialogOpen ?? false} onClose={handleToggle}>
                     <h5 className="mb-4">Add Template</h5>
                     <AddTemplateForm />
                 </Dialog>

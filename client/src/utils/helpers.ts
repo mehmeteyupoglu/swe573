@@ -26,3 +26,18 @@ export const truncateText = (text: string, maxLength: number) => {
         return text.slice(0, maxLength) + '...'
     }
 }
+
+export const defaultTemplate = () => {
+    return [
+        {
+            field_name: 'title',
+            field_type: 'text',
+            isRequired: true,
+        },
+        {
+            field_name: 'description',
+            field_type: 'textarea',
+            isRequired: false,
+        },
+    ]
+}
