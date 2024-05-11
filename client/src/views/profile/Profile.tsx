@@ -1,8 +1,10 @@
 import { Community, Post } from '@/@types/user'
 import { ActionLink } from '@/components/shared'
 import { apiGetUserInformation } from '@/services/UserService'
+import { useAppSelector } from '@/store'
 import useFetchData from '@/utils/hooks/useFetchData'
 import { AxiosResponse } from 'axios'
+import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 
 type CustomerInfoFieldProps = {
@@ -23,6 +25,7 @@ const CustomerInfoField = ({ title, value }: CustomerInfoFieldProps) => {
 
 export default function Profile() {
     const userId = useParams<{ id: string }>().id
+    const authUser = useAppSelector((state) => state.auth.user)
 
     const userInfo = useFetchData<AxiosResponse>(apiGetUserInformation, [
         userId,
@@ -33,6 +36,10 @@ export default function Profile() {
 
     return (
         <div>
+            {
+                // Check if the user is the same as the logged in user
+                authUser?.id == userId && 'This is your profile page'
+            }
             <div className="grid grid-cols-1 xl:grid-cols-2 xl:grid-cols-1 gap-y-7 gap-x-4 mt-8">
                 <CustomerInfoField
                     title="Full Name"
