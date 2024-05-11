@@ -17,6 +17,7 @@ import useRequestWithNotification from '@/utils/hooks/useRequestWithNotification
 import { apiAddTemplate } from '@/services/CommunityService'
 import { useParams } from 'react-router-dom'
 import { defaultTemplate } from '@/utils/helpers'
+import { Alert } from '@/components/ui'
 
 export default function AddTemplateForm() {
     const [templateName, setTemplateName] = useState('')
@@ -106,6 +107,10 @@ export default function AddTemplateForm() {
                                     <MapField fields={fields} />
                                 )}
                             </div>
+                            <Alert showIcon className="mb-4" type="info">
+                                The fields above are the default fields for any
+                                template. You can add more fields below.
+                            </Alert>
 
                             <AddFieldForm handleSave={handleAddField} />
                             <Button
