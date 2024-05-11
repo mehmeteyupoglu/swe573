@@ -42,19 +42,6 @@ const Settings = () => {
 
     const userRole = useFetchData(apiGetUserRole, [id, userId])
 
-    // useEffect(() => {
-    //     const fetchUserRole = async () => {
-    //         try {
-    //             const resp = await apiGetUserRole(id ?? '', userId ?? '')
-    //             setMappedRole(mapRoleToLabel((resp.data as any)?.role || ''))
-    //         } catch (error) {
-    //             console.error('Error fetching user role:', error)
-    //         }
-    //     }
-
-    //     fetchUserRole()
-    // }, [])
-
     useEffect(() => {
         if (userRole) {
             setMappedRole(mapRoleToLabel((userRole as any)?.data?.role))
@@ -138,6 +125,10 @@ const Settings = () => {
     return (
         <Container>
             <AdaptableCard>
+                <h2 className="text-xl font-semibold mb-5">
+                    Name: {community?.name || 'Community'}
+                </h2>
+
                 {mappedRole && (
                     <Tabs
                         value={currentTab}
