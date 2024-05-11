@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import Input from '@/components/ui/Input'
-import Select from '@/components/ui/Select'
 import TextArea from '@/components/ui/TextArea'
 
 const useFieldToComponent = (fieldType: string) => {
@@ -13,6 +12,8 @@ const useFieldToComponent = (fieldType: string) => {
             text: Input,
             number: Input,
             textarea: TextArea,
+            image: Input,
+            geolocation: Input,
         }
 
         setComponent(componentMap[fieldType] || Input)
