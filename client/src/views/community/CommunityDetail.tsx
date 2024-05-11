@@ -3,11 +3,10 @@ import Tabs from '@/components/ui/Tabs'
 import AdaptableCard from '@/components/shared/AdaptableCard'
 import Container from '@/components/shared/Container'
 import { useNavigate, useLocation, useParams } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
 import { useAppSelector } from '@/store'
 import { IndividualCommunityType } from '@/@types/community'
 import { apiGetCommunity, apiGetUserRole } from '@/services/CommunityService'
-import { Button, Notification, toast } from '@/components/ui'
+import { Notification, Tag, toast } from '@/components/ui'
 import CommunityDetail from './components/CommunityDetail'
 import Members from './components/Members'
 import { AuthorityCheck } from '@/components/shared'
@@ -125,9 +124,9 @@ const Settings = () => {
     return (
         <Container>
             <AdaptableCard>
-                <h2 className="text-xl font-semibold mb-5">
+                <Tag className="text-white bg-emerald-600 border-0 mb-5">
                     Name: {community?.name || 'Community'}
-                </h2>
+                </Tag>
 
                 {mappedRole && (
                     <Tabs
