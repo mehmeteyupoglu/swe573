@@ -14,13 +14,15 @@ import {
     HiOutlineMail,
     HiOutlineUser,
     HiCheck,
+    HiOutlineMap,
+    HiOutlineAcademicCap,
 } from 'react-icons/hi'
 import * as Yup from 'yup'
 import type { OptionProps } from 'react-select'
 import type { FormikProps, FieldInputProps, FieldProps } from 'formik'
 import { useTranslation } from 'react-i18next'
 import { updateProfile } from '@/services/UserService'
-import { UserResponseType, UserType } from '@/@types/user'
+import { UserResponseType } from '@/@types/user'
 
 type ProfileProps = {
     data?: UserResponseType
@@ -219,6 +221,55 @@ const Profile = ({
                                     component={Input}
                                     prefix={
                                         <HiOutlineMail className="text-xl" />
+                                    }
+                                />
+                            </FormRow>
+                            <FormRow
+                                name="dob"
+                                label={t('Date of Birth')}
+                                {...validatorProps}
+                            >
+                                <Field
+                                    autoComplete="off"
+                                    name="dob"
+                                    type="date"
+                                    placeholder={t('Date of Birth')}
+                                    component={Input}
+                                    prefix={
+                                        <HiOutlineUser className="text-xl" />
+                                    }
+                                />
+                            </FormRow>
+                            <FormRow
+                                name="country"
+                                label={t('Country')}
+                                {...validatorProps}
+                            >
+                                <Field
+                                    type="text"
+                                    autoComplete="off"
+                                    name="country"
+                                    placeholder={t('Country')}
+                                    component={Input}
+                                    prefix={
+                                        <HiOutlineMap className="text-xl" />
+                                    }
+                                />
+                            </FormRow>
+                            <FormRow
+                                name="short_bio"
+                                label={t('Short Bio')}
+                                {...validatorProps}
+                            >
+                                <Field
+                                    type="text"
+                                    textArea
+                                    autoComplete="off"
+                                    name="short_bio"
+                                    placeholder={t('Short Bio')}
+                                    component={Input}
+                                    prefix={
+                                        <HiOutlineAcademicCap className="text-xl" />
                                     }
                                 />
                             </FormRow>

@@ -1,5 +1,5 @@
 import ApiService from './ApiService'
-import type { UserType, PasswordType, UserResponseType } from '@/@types/user'
+import type { PasswordType, UserResponseType } from '@/@types/user'
 
 export async function getUsers() {
     return ApiService.fetchData({
@@ -10,6 +10,8 @@ export async function getUsers() {
 
 export async function updateProfile(data: UserResponseType) {
     const { id, ..._data } = data
+
+    console.log('data', data)
 
     return ApiService.fetchData({
         url: `/users/${id}`,

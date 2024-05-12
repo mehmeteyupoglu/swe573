@@ -1,17 +1,3 @@
-export type UserType = {
-    id: string
-    username: string
-    firstName: string
-    lastName: string
-    email: string
-    phone: string
-    gender: string
-    avatar: string
-    verified: number
-    subscription: string
-    authority: []
-}
-
 export type UserResponseType = {
     country: string | null
     dob: string | null
