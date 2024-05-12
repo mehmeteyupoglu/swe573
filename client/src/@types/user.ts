@@ -8,6 +8,7 @@ export type UserResponseType = {
     phone: string
     short_bio: string | null
     username: string
+    is_invited?: boolean
 }
 
 export type PasswordType = {
