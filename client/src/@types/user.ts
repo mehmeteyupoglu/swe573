@@ -24,7 +24,7 @@ export type UserResponseType = {
     verified: number
     subscription: string
     authority: []
-    is_invited: boolean
+    is_invited?: boolean
 }
 
 export type PasswordType = {

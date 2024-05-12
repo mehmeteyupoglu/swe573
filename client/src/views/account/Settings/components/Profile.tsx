@@ -20,20 +20,20 @@ import type { OptionProps } from 'react-select'
 import type { FormikProps, FieldInputProps, FieldProps } from 'formik'
 import { useTranslation } from 'react-i18next'
 import { updateProfile } from '@/services/UserService'
-import { UserType } from '@/@types/user'
+import { UserResponseType, UserType } from '@/@types/user'
 
 type ProfileProps = {
-    data?: UserType
+    data?: UserResponseType
 }
 
 // TODO: translation needed
 const validationSchema = Yup.object().shape({
     username: Yup.string().required('Username Required'),
-    firstName: Yup.string()
+    firstname: Yup.string()
         .min(3, 'Too Short!')
         .max(12, 'Too Long!')
         .required('First Name Required'),
-    lastName: Yup.string()
+    lastname: Yup.string()
         .min(3, 'Too Short!')
         .max(12, 'Too Long!')
         .required('Last Name Required'),
@@ -72,8 +72,8 @@ const Profile = ({
     data = {
         id: '',
         username: '',
-        firstName: '',
-        lastName: '',
+        firstname: '',
+        lastname: '',
         email: '',
         phone: '',
         gender: '',
@@ -85,15 +85,15 @@ const Profile = ({
 }: ProfileProps) => {
     const { t } = useTranslation()
     const onSetFormFile = (
-        form: FormikProps<UserType>,
-        field: FieldInputProps<UserType>,
+        form: FormikProps<UserResponseType>,
+        field: FieldInputProps<UserResponseType>,
         file: File[]
     ) => {
         form.setFieldValue(field.name, URL.createObjectURL(file[0]))
     }
 
     const onFormSubmit = async (
-        values: UserType,
+        values: UserResponseType,
         setSubmitting: (isSubmitting: boolean) => void
     ) => {
         try {
@@ -175,14 +175,14 @@ const Profile = ({
                                 />
                             </FormRow>
                             <FormRow
-                                name="firstName"
+                                name="firstname"
                                 label={t('application.user.firstName')}
                                 {...validatorProps}
                             >
                                 <Field
                                     type="text"
                                     autoComplete="off"
-                                    name="firstName"
+                                    name="firstname"
                                     placeholder={t(
                                         'application.user.firstName'
                                     )}
@@ -193,14 +193,14 @@ const Profile = ({
                                 />
                             </FormRow>
                             <FormRow
-                                name="lastName"
+                                name="lastname"
                                 label={t('application.user.lastName')}
                                 {...validatorProps}
                             >
                                 <Field
                                     type="text"
                                     autoComplete="off"
-                                    name="lastName"
+                                    name="lastname"
                                     placeholder={t('application.user.lastName')}
                                     component={Input}
                                     prefix={

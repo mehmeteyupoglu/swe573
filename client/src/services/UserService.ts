@@ -1,5 +1,5 @@
 import ApiService from './ApiService'
-import type { UserType, PasswordType } from '@/@types/user'
+import type { UserType, PasswordType, UserResponseType } from '@/@types/user'
 
 export async function getUsers() {
     return ApiService.fetchData({
@@ -8,10 +8,11 @@ export async function getUsers() {
     })
 }
 
-export async function updateProfile(data: UserType) {
+export async function updateProfile(data: UserResponseType) {
     const { id, authority, avatar, ..._data } = data
     authority
     avatar
+
     return ApiService.fetchData({
         url: `/users/${id}`,
         method: 'put',
