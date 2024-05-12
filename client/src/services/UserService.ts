@@ -1,5 +1,6 @@
 import ApiService from './ApiService'
 import type { PasswordType, UserResponseType } from '@/@types/user'
+import dayjs from 'dayjs'
 
 export async function getUsers() {
     return ApiService.fetchData({
@@ -9,14 +10,15 @@ export async function getUsers() {
 }
 
 export async function updateProfile(data: UserResponseType) {
-    const { id, ..._data } = data
-
-    console.log('data', data)
+    const { id, dob, ..._data } = data
 
     return ApiService.fetchData({
-        url: `/users/${id}`,
+        url: `/users/${id}/`,
         method: 'put',
-        data: _data,
+        data: {
+            ..._data,
+            dob: dob ? dayjs(dob).format('YYYY-MM-DDTHH:mm:ss') : null,
+        },
     })
 }
 

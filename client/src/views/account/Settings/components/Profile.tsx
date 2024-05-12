@@ -23,6 +23,8 @@ import type { FormikProps, FieldInputProps, FieldProps } from 'formik'
 import { useTranslation } from 'react-i18next'
 import { updateProfile } from '@/services/UserService'
 import { UserResponseType } from '@/@types/user'
+import { useDispatch } from 'react-redux'
+import { setUser } from '@/store'
 
 type ProfileProps = {
     data?: UserResponseType
@@ -84,6 +86,8 @@ const Profile = ({
     },
 }: ProfileProps) => {
     const { t } = useTranslation()
+
+    const dispatch = useDispatch()
     const onSetFormFile = (
         form: FormikProps<UserResponseType>,
         field: FieldInputProps<UserResponseType>,
@@ -101,6 +105,7 @@ const Profile = ({
             console.log('resp', resp)
 
             if (resp.data) {
+                dispatch(setUser(resp.data as UserResponseType))
                 // TODO: add english i18n version
                 toast.push(
                     <Notification
