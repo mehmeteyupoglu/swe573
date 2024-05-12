@@ -70,17 +70,15 @@ const CustomSelectOption = ({
 
 const Profile = ({
     data = {
-        id: '',
-        username: '',
+        id: -1,
+        country: '',
+        dob: '',
+        email: '',
         firstname: '',
         lastname: '',
-        email: '',
         phone: '',
-        gender: '',
-        avatar: '',
-        verified: 0,
-        subscription: '',
-        authority: [],
+        short_bio: '',
+        username: '',
     },
 }: ProfileProps) => {
     const { t } = useTranslation()
@@ -223,81 +221,6 @@ const Profile = ({
                                         <HiOutlineMail className="text-xl" />
                                     }
                                 />
-                            </FormRow>
-                            <FormRow
-                                name="avatar"
-                                label={t('application.user.avatar')}
-                                {...validatorProps}
-                            >
-                                <Field name="avatar">
-                                    {({ field, form }: FieldProps) => {
-                                        const avatarProps = field.value
-                                            ? { src: field.value }
-                                            : {}
-                                        return (
-                                            <Upload
-                                                className="cursor-pointer"
-                                                showList={false}
-                                                uploadLimit={1}
-                                                onChange={(files) =>
-                                                    onSetFormFile(
-                                                        form,
-                                                        field,
-                                                        files
-                                                    )
-                                                }
-                                                onFileRemove={(files) =>
-                                                    onSetFormFile(
-                                                        form,
-                                                        field,
-                                                        files
-                                                    )
-                                                }
-                                            >
-                                                <Avatar
-                                                    className="border-2 border-white dark:border-gray-800 shadow-lg"
-                                                    size={60}
-                                                    shape="circle"
-                                                    icon={<HiOutlineUser />}
-                                                    {...avatarProps}
-                                                />
-                                            </Upload>
-                                        )
-                                    }}
-                                </Field>
-                            </FormRow>
-                            <FormRow
-                                name="gender"
-                                label={t('application.user.gender')}
-                                {...validatorProps}
-                            >
-                                <Field name="gender">
-                                    {({ field, form }: FieldProps) => (
-                                        <Select<GenderOption>
-                                            field={field}
-                                            form={form}
-                                            options={genderOptions}
-                                            placeholder={t(
-                                                'application.select.placeholder'
-                                            )}
-                                            components={{
-                                                Option: CustomSelectOption,
-                                                // Control: CustomControl,
-                                            }}
-                                            value={genderOptions.filter(
-                                                (option) =>
-                                                    option.value ===
-                                                    values?.gender
-                                            )}
-                                            onChange={(option) =>
-                                                form.setFieldValue(
-                                                    field.name,
-                                                    option?.value
-                                                )
-                                            }
-                                        />
-                                    )}
-                                </Field>
                             </FormRow>
                             <div className="mt-4 ltr:text-right">
                                 <Button

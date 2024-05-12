@@ -13,18 +13,15 @@ export type UserType = {
 }
 
 export type UserResponseType = {
-    id: string
-    username: string
-    firstname: string
-    lastname: string
+    country: string | null
+    dob: string | null
     email: string
+    firstname: string
+    id: number
+    lastname: string
     phone: string
-    gender: string
-    avatar: string
-    verified: number
-    subscription: string
-    authority: []
-    is_invited?: boolean
+    short_bio: string | null
+    username: string
 }
 
 export type PasswordType = {

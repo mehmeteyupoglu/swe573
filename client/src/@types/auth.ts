@@ -1,3 +1,5 @@
+import { UserResponseType } from './user'
+
 export type SignInCredential = {
     username: string
     password: string
@@ -5,19 +7,7 @@ export type SignInCredential = {
 
 export type SignInResponse = {
     token: string
-    user: {
-        id: number
-        avatar: string
-        firstName: string
-        lastName: string
-        phone: string
-        username: string
-        email: string
-        verified: boolean
-        authority: string[]
-        created_at: string
-        updated_at: string
-    }
+    user: UserResponseType
 }
 
 export type SignUpResponse = SignInResponse

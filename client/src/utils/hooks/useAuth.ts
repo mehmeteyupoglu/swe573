@@ -36,12 +36,9 @@ function useAuth() {
             const resp = await apiSignIn(values)
             if (resp.data) {
                 const { token } = resp.data
-                const { created_at, updated_at, ..._data } = resp.data.user
-                created_at
-                updated_at
                 dispatch(signInSuccess(token))
                 if (resp.data.user) {
-                    dispatch(setUser(_data))
+                    dispatch(setUser(resp.data.user))
                 }
                 const redirectUrl = query.get(REDIRECT_URL_KEY)
                 navigate(
@@ -104,14 +101,14 @@ function useAuth() {
         dispatch(
             setUser({
                 id: -1,
-                avatar: '',
-                firstName: '',
-                lastName: '',
-                phone: '',
-                username: '',
+                country: '',
+                dob: '',
                 email: '',
-                verified: false,
-                authority: [],
+                firstname: '',
+                lastname: '',
+                phone: '',
+                short_bio: '',
+                username: '',
             })
         )
         navigate(appConfig.unAuthenticatedEntryPath)
