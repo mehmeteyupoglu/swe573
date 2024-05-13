@@ -186,6 +186,14 @@ def transfer_ownership(request, community_id, owner_id, new_owner_id):
         if not CommunityUser.objects.filter(community=community, user=new_owner).exists():
             return Response("New owner is not a member of the community.", status=status.HTTP_400_BAD_REQUEST)
 
+        # Update the role of the new owner to -1
+        community_user = CommunityUser.objects.get(community=community, user=new_owner)
+        community_user.role = -1
+
+        # Update the role of the current owner to 0
+        current_owner_community_user = CommunityUser.objects.get(community=community, user=current_owner)
+        current_owner_community_user.role = 0
+
         return Response({"message": "Ownership transferred successfully."}, status=status.HTTP_200_OK)
 
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
