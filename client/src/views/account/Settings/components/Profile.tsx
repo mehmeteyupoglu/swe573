@@ -21,10 +21,12 @@ import * as Yup from 'yup'
 import type { OptionProps } from 'react-select'
 import type { FormikProps, FieldInputProps, FieldProps } from 'formik'
 import { useTranslation } from 'react-i18next'
-import { updateProfile } from '@/services/UserService'
+import { deleteUser, updateProfile } from '@/services/UserService'
 import { UserResponseType } from '@/@types/user'
 import { useDispatch } from 'react-redux'
-import { setUser } from '@/store'
+import { setUser, toggleFetchTrigger } from '@/store'
+import useRequestWithNotification from '@/utils/hooks/useRequestWithNotification'
+import useAuth from '@/utils/hooks/useAuth'
 
 type ProfileProps = {
     data?: UserResponseType
@@ -86,6 +88,7 @@ const Profile = ({
     },
 }: ProfileProps) => {
     const { t } = useTranslation()
+    const { signOut } = useAuth()
 
     const dispatch = useDispatch()
     const onSetFormFile = (
@@ -144,6 +147,18 @@ const Profile = ({
         { value: 'female', label: t(`settings.profile.genders.Female`) },
         { value: 'other', label: t(`settings.profile.genders.Other`) },
     ]
+
+    const [handleDelete, isDeleting] = useRequestWithNotification(
+        deleteUser,
+        'You have left the community!',
+        'Error leaving the community',
+        () => postAction()
+    )
+
+    const postAction = () => {
+        dispatch(toggleFetchTrigger())
+        signOut()
+    }
 
     return (
         <Formik
@@ -282,9 +297,12 @@ const Profile = ({
                                 <Button
                                     className="ltr:mr-2 rtl:ml-2"
                                     type="button"
-                                    onClick={() => resetForm()}
+                                    onClick={() =>
+                                        typeof handleDelete === 'function' &&
+                                        handleDelete(data.id)
+                                    }
                                 >
-                                    {t('settings.profile.buttons.reset')}
+                                    {t('Delete Account')}
                                 </Button>
                                 <Button
                                     variant="solid"

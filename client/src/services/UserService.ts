@@ -22,6 +22,13 @@ export async function updateProfile(data: UserResponseType) {
     })
 }
 
+export async function deleteUser(userId: string) {
+    return ApiService.fetchData({
+        url: `/users/${userId}/`,
+        method: 'delete',
+    })
+}
+
 export async function updatePassword(data: PasswordType) {
     return ApiService.fetchData({
         url: `/update-password`,
