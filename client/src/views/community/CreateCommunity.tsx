@@ -7,23 +7,19 @@ import { FormContainer } from '@/components/ui/Form'
 import FormDesription from '../account/Settings/components/FormDesription'
 import FormRow from '../account/Settings/components/FormRow'
 import { Field, Form, Formik } from 'formik'
-import { components } from 'react-select'
 import { HiOutlineBriefcase } from 'react-icons/hi'
 import * as Yup from 'yup'
 import { useNavigate, useParams } from 'react-router-dom'
 import { CommunityFormModel } from '@/@types/community'
-import { apiAddCommunity, apiGetCommunity } from '@/services/CommunityService'
+import {
+    apiAddCommunity,
+    apiUpdateCommunity,
+} from '@/services/CommunityService'
 import { t } from 'i18next'
 import CommunitySpecificTemplates from './components/CommunitySpecificTemplates'
 import { useAppSelector } from '@/store'
 import { useEffect, useState } from 'react'
-import useFetchData from '@/utils/hooks/useFetchData'
-
-type CommunityProps = {
-    data?: CommunityFormModel
-}
-
-const { Control } = components
+import { useFetchCommunity } from '@/utils/hooks/useFetchCommunity'
 
 const validationSchema = Yup.object().shape({
     name: Yup.string()
@@ -35,18 +31,34 @@ const validationSchema = Yup.object().shape({
     isPublic: Yup.boolean(),
 })
 
-const CreateCommunity = ({
-    data = {
+const CreateCommunity = () => {
+    const [data, setData] = useState<CommunityFormModel>({
         name: '',
         description: '',
-        avatar: '',
-        isPublic: false,
-    },
-}: CommunityProps) => {
+        is_public: false,
+    })
     const cid = useParams<{ id: string }>().id
     const [editMode, setEditMode] = useState(false)
     const navigate = useNavigate()
     const userId = useAppSelector((state) => state.auth.user?.id)
+    const fetchTrigger = useAppSelector(
+        (state) => state.community.community.fetchTrigger
+    )
+
+    const community = cid ? useFetchCommunity(cid, fetchTrigger) : null
+
+    useEffect(() => {
+        if (community) {
+            console.log('community', community)
+
+            const { name, description, is_public } = community
+            setData({
+                name,
+                description,
+                is_public,
+            })
+        }
+    }, [community])
 
     const onFormSubmit = async (
         values: CommunityFormModel,
@@ -95,11 +107,55 @@ const CreateCommunity = ({
         }
     }
 
+    const onFormUpdate = async (
+        values: CommunityFormModel,
+        setSubmitting: (isSubmitting: boolean) => void
+    ) => {
+        try {
+            const resp = await apiUpdateCommunity({
+                ...values,
+                cid,
+            })
+
+            if (resp.status == 200) {
+                // TODO: add english i18n version
+                toast.push(
+                    <Notification
+                        title={t('Update successful') || 'Update successful'}
+                        type="success"
+                    />,
+                    {
+                        placement: 'top-center',
+                    }
+                )
+
+                setSubmitting(false)
+                navigate('/communities')
+            }
+        } catch (error) {
+            console.log('error', error)
+            toast.push(
+                <Notification
+                    title={
+                        t('Update not successful') || 'Update not successful'
+                    }
+                    type="danger"
+                />,
+                {
+                    placement: 'top-center',
+                }
+            )
+        } finally {
+            setSubmitting(false)
+        }
+    }
+
     useEffect(() => {
         if (cid) {
             setEditMode(true)
         }
     }, [cid])
+
     return (
         <div>
             <Formik
@@ -109,7 +165,9 @@ const CreateCommunity = ({
                 onSubmit={(values, { setSubmitting }) => {
                     setSubmitting(true)
                     setTimeout(() => {
-                        onFormSubmit(values, setSubmitting)
+                        editMode
+                            ? onFormUpdate(values, setSubmitting)
+                            : onFormSubmit(values, setSubmitting)
                     }, 1000)
                 }}
             >
@@ -154,18 +212,18 @@ const CreateCommunity = ({
                                 </FormRow>
 
                                 <FormRow
-                                    name="isPublic"
+                                    name="is_public"
                                     label="Visibility"
                                     {...validatorProps}
                                     border={false}
                                 >
                                     <div className="flex">
                                         <Field
-                                            name="isPublic"
+                                            name="is_public"
                                             component={Switcher}
                                         />
                                         <div className="ml-3">
-                                            {values.isPublic
+                                            {values.is_public
                                                 ? 'Public'
                                                 : 'Private'}
                                         </div>
