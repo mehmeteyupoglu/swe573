@@ -166,6 +166,28 @@ def add_community(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['POST'])
+def transfer_ownership(request, community_id, owner_id, new_owner_id):
+    if request.method == 'POST':
+        # Get the community
+        community = Community.objects.get(pk=community_id)
+
+        # Check if the current user is the owner of the community
+        current_owner = User.objects.get(pk=owner_id)
+
+        # Get the new owner
+        new_owner = User.objects.get(pk=new_owner_id)
+
+        # Transfer ownership
+        community.owner = new_owner
+        community.save()
+
+        # Check if the new owner is a member of the community
+        if not CommunityUser.objects.filter(community=community, user=new_owner).exists():
+            return Response("New owner is not a member of the community.", status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({"message": "Ownership transferred successfully."}, status=status.HTTP_200_OK)
+
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
 def community_detail(request, id):
     try:
