@@ -158,3 +158,12 @@ export async function apiAddTemplate(data: any) {
         },
     })
 }
+
+export async function apiTransferOwnership(data: any) {
+    console.log('data', data)
+    const { community_id, user_id, new_owner_id } = data
+    return ApiService.fetchData({
+        url: `/community/${community_id}/transfer_ownership/${user_id}/${new_owner_id}`,
+        method: 'post',
+    })
+}

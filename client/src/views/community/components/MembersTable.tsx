@@ -8,8 +8,9 @@ import { Button } from '@/components/ui'
 import {
     apiChangeUserRole,
     apiLeaveCommunity,
+    apiTransferOwnership,
 } from '@/services/CommunityService'
-import { toggleFetchTrigger } from '@/store'
+import { toggleFetchTrigger, useAppSelector } from '@/store'
 import { formatDate, mapRoleToLabel } from '@/utils/helpers'
 import useRequestWithNotification from '@/utils/hooks/useRequestWithNotification'
 import { useDispatch } from 'react-redux'
@@ -24,6 +25,7 @@ const MembersTable = ({
 }) => {
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const { is_owner, id } = community
+    const userId = useAppSelector((state) => state.auth.user.id)
 
     const dispatch = useDispatch()
 
@@ -38,6 +40,13 @@ const MembersTable = ({
         apiLeaveCommunity,
         'You have successfully removed the member!',
         'Error removing member',
+        () => dispatch(toggleFetchTrigger())
+    )
+
+    const [handleTransferOwnership, isTransfering] = useRequestWithNotification(
+        apiTransferOwnership,
+        'You have successfully transferred the ownership!',
+        'Error transfering ownership!',
         () => dispatch(toggleFetchTrigger())
     )
 
@@ -135,9 +144,6 @@ const MembersTable = ({
                         <div className="flex justify-between items-center">
                             <Button
                                 // disabled={is_owner}
-                                className="bg-blue-500 text-white"
-                                size="sm"
-                                variant="solid"
                                 onClick={() => {
                                     if (
                                         typeof handleChangeRole === 'function'
@@ -147,6 +153,23 @@ const MembersTable = ({
                                 }}
                             >
                                 Unassign Moderator
+                            </Button>
+                            <Button
+                                // disabled={is_owner}
+                                onClick={() => {
+                                    if (
+                                        typeof handleTransferOwnership ===
+                                        'function'
+                                    ) {
+                                        handleTransferOwnership({
+                                            community_id: id,
+                                            user_id: userId,
+                                            new_owner_id: row.id,
+                                        })
+                                    }
+                                }}
+                            >
+                                Transfer Ownership{' '}
                             </Button>
                             <ActionLink
                                 onClick={() => {
