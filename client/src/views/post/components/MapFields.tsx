@@ -33,6 +33,7 @@ const FieldComponent = ({
             label={field_name}
             invalid={false}
             errorMessage=""
+            asterisk={field.isRequired}
         >
             {Component && (
                 <Component

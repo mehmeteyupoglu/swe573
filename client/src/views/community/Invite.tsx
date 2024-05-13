@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import IngredientTableSearch from '../account/Settings/components/Ingredients/components/IngredientTableSearch'
 import { SearchType } from '@/@types/search'
 import { Button, Card } from '@/components/ui'
-import { UserResponseType, UserType } from '@/@types/user'
+import { UserResponseType } from '@/@types/user'
 import {
     apiFetchNonMembers,
     apiSendInvitation,

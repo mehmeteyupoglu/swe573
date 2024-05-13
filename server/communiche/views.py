@@ -13,6 +13,7 @@ from django.http import JsonResponse
 from . import constants
 from datetime import datetime, timedelta
 from .models import Community, TemplateCommunity
+from django.utils import timezone
 
 @api_view(['GET', 'POST'])
 def user_list(request):
@@ -57,7 +58,7 @@ def user_detail(request, id):
     
 
     elif request.method == 'PUT':
-        serializer = UserSerializer(user, data=request.data)
+        serializer = UserSerializer(user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -130,7 +131,9 @@ def communities(request):
         return Response(serializer.data)
 
 @api_view(['GET'])
-def user_communities(request, user_id):
+def user_communities(request):
+    
+    user_id = request.query_params.get('user_id')
     try:
         user = User.objects.get(pk=user_id)
     except User.DoesNotExist:
@@ -164,6 +167,36 @@ def add_community(request):
             
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def transfer_ownership(request, community_id, owner_id, new_owner_id):
+    if request.method == 'POST':
+        # Get the community
+        community = Community.objects.get(pk=community_id)
+
+        # Check if the current user is the owner of the community
+        current_owner = User.objects.get(pk=owner_id)
+
+        # Get the new owner
+        new_owner = User.objects.get(pk=new_owner_id)
+
+        # Transfer ownership
+        community.owner = new_owner
+        community.save()
+
+        # Check if the new owner is a member of the community
+        if not CommunityUser.objects.filter(community=community, user=new_owner).exists():
+            return Response("New owner is not a member of the community.", status=status.HTTP_400_BAD_REQUEST)
+
+        # Update the role of the new owner to -1
+        community_user = CommunityUser.objects.get(community=community, user=new_owner)
+        community_user.role = -1
+
+        # Update the role of the current owner to 0
+        current_owner_community_user = CommunityUser.objects.get(community=community, user=current_owner)
+        current_owner_community_user.role = 0
+
+        return Response({"message": "Ownership transferred successfully."}, status=status.HTTP_200_OK)
 
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
 def community_detail(request, id):
@@ -420,6 +453,22 @@ def join_requests(request, community_id):
     combined_requests = pending_serializer.data + accepted_or_rejected_serializer.data
     return Response(combined_requests)
 
+def auto_accept_old_requests():
+    # Get the date a week ago
+    one_week_ago = timezone.now() - timezone.timedelta(weeks=1)
+
+    # Get pending requests that are older than a week
+    old_requests = JoinRequest.objects.filter(status=0, created_at__lte=one_week_ago)
+
+    # Loop through the old requests and accept them
+    for join_request in old_requests:
+        join_request.status = 1  # 1 is the status for accepted requests
+        join_request.save()
+
+        # Add the user to the community
+        community = join_request.community
+        community.members.add(join_request.user)
+
 @api_view(['POST'])
 def accept_reject_join_request(request, request_id):
     try:
@@ -510,6 +559,16 @@ def post(request):
     community.save()
     
     return Response(status=status.HTTP_201_CREATED)
+
+@api_view(['DELETE'])
+def delete_post(request, post_id):
+    try:
+        post = Posts.objects.get(pk=post_id)
+    except Posts.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    post.delete()
+    return Response(status=status.HTTP_200_OK)
 
 @api_view(['GET'])
 def posts(request):

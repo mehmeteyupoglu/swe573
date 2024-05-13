@@ -106,7 +106,6 @@ class Posts(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     likes = models.ManyToManyField(User, related_name='post_likes')
-    comments = models.ManyToManyField('PostComment', related_name='post_comments')
 
 class PostComment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

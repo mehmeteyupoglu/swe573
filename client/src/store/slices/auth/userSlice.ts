@@ -1,35 +1,24 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { SLICE_BASE_NAME } from './constants'
+import { UserResponseType } from '@/@types/user'
 
-interface UserState {
-    id: number
-    avatar: string
-    firstName: string
-    lastName: string
-    phone: string
-    username: string
-    email: string
-    verified: boolean
-    authority: string[]
-}
-
-const initialState: UserState = {
+const initialState: UserResponseType = {
     id: -1,
-    avatar: '',
-    firstName: '',
-    lastName: '',
-    phone: '',
-    username: '',
+    country: '',
+    dob: '',
     email: '',
-    verified: false,
-    authority: [],
+    firstname: '',
+    lastname: '',
+    phone: '',
+    short_bio: '',
+    username: '',
 }
 
 const userSlice = createSlice({
     name: `${SLICE_BASE_NAME}/user`,
     initialState,
     reducers: {
-        setUser(state, action: PayloadAction<UserState>) {
+        setUser(state, action: PayloadAction<UserResponseType>) {
             // Use immer's draft syntax to modify the state
             Object.assign(state, action.payload)
         },

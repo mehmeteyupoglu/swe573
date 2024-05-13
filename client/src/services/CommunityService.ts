@@ -48,6 +48,13 @@ export async function apiGetCommunity(id: string, userId: string) {
     })
 }
 
+export async function apiDeleteCommunity(communityId: string) {
+    return ApiService.fetchData({
+        url: `/community/${communityId}/`,
+        method: 'delete',
+    })
+}
+
 export async function apiJoinCommunity(communityId: string, userId: string) {
     return ApiService.fetchData({
         url: `/join_community/${communityId}/${userId}/`,
@@ -156,5 +163,14 @@ export async function apiAddTemplate(data: any) {
             description: data.templateDescription,
             fields: data.fields,
         },
+    })
+}
+
+export async function apiTransferOwnership(data: any) {
+    console.log('data', data)
+    const { community_id, user_id, new_owner_id } = data
+    return ApiService.fetchData({
+        url: `/community/${community_id}/transfer_ownership/${user_id}/${new_owner_id}`,
+        method: 'post',
     })
 }

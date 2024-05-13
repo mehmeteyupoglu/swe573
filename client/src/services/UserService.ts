@@ -1,5 +1,6 @@
 import ApiService from './ApiService'
-import type { UserType, PasswordType } from '@/@types/user'
+import type { PasswordType, UserResponseType } from '@/@types/user'
+import dayjs from 'dayjs'
 
 export async function getUsers() {
     return ApiService.fetchData({
@@ -8,14 +9,23 @@ export async function getUsers() {
     })
 }
 
-export async function updateProfile(data: UserType) {
-    const { id, authority, avatar, ..._data } = data
-    authority
-    avatar
+export async function updateProfile(data: UserResponseType) {
+    const { id, dob, ..._data } = data
+
     return ApiService.fetchData({
-        url: `/users/${id}`,
+        url: `/users/${id}/`,
         method: 'put',
-        data: _data,
+        data: {
+            ..._data,
+            dob: dob ? dayjs(dob).format('YYYY-MM-DDTHH:mm:ss') : null,
+        },
+    })
+}
+
+export async function deleteUser(userId: string) {
+    return ApiService.fetchData({
+        url: `/users/${userId}/`,
+        method: 'delete',
     })
 }
 
@@ -33,10 +43,14 @@ export async function apiGetInvitations(userId: string) {
         method: 'get',
     })
 }
+
 export async function apiGetUserCommunities(userId: string) {
     return ApiService.fetchData({
-        url: `/user/${userId}/communities/`,
+        url: `/user/communities/`,
         method: 'get',
+        params: {
+            user_id: userId,
+        },
     })
 }
 

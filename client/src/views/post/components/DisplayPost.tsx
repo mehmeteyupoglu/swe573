@@ -1,7 +1,8 @@
 import { CommentResponseType, PostData } from '@/@types/post'
 import { ActionLink } from '@/components/shared'
-import { Badge, Button, Card, Input } from '@/components/ui'
+import { Button, Card, Input } from '@/components/ui'
 import {
+    apiDeletePost,
     apiGetComments,
     apiLikePost,
     apiPost,
@@ -48,6 +49,15 @@ export default function DisplayPost({
         'Action successful!',
         'Action failed!',
         () => dispatch(toggleFetchTrigger())
+    )
+
+    const [handleDelete, isDeleting] = useRequestWithNotification(
+        apiDeletePost,
+        'Action successful!',
+        'Action failed!',
+        () => {
+            navigate('/')
+        }
     )
 
     useEffect(() => {
@@ -157,6 +167,17 @@ export default function DisplayPost({
                         </div>
                     </div>
                 </div>
+                {userId === user.id &&
+                    detailed &&
+                    typeof handleDelete === 'function' && (
+                        <Button
+                            onClick={() => {
+                                handleDelete(id)
+                            }}
+                        >
+                            Delete
+                        </Button>
+                    )}
             </Card>
             {detailed && (
                 <div className="comment-action ml-5 mt-2">

@@ -11,7 +11,10 @@ import { apiAcceptRejectInvitation } from '@/services/UserService'
 import { ActionLink } from '@/components/shared'
 import { CommunityType } from '@/@types/community'
 import { useNavigate } from 'react-router-dom'
-import { apiLeaveCommunity } from '@/services/CommunityService'
+import {
+    apiDeleteCommunity,
+    apiLeaveCommunity,
+} from '@/services/CommunityService'
 
 const CommunitiesTable = ({
     communities,
@@ -30,6 +33,31 @@ const CommunitiesTable = ({
         'Error leaving the community',
         () => dispatch(toggleFetchTrigger())
     )
+
+    const [handleDeleteCommunity, isDeletingCommunity] =
+        useRequestWithNotification(
+            apiDeleteCommunity,
+            'You have left the community!',
+            'Error leaving the community',
+            () => dispatch(toggleFetchTrigger())
+        )
+
+    const canUserDeleteCommunity = (row: any) => {
+        if (row.is_owner) {
+            if (row.members.length < 2) {
+                return true
+            }
+        }
+    }
+
+    const canUserLeaveCommunity = (row: any) => {
+        console.log('row', row)
+        if (row.is_owner) {
+            return false
+        }
+
+        return true
+    }
 
     const columns: ColumnDef<any>[] = [
         {
@@ -79,6 +107,8 @@ const CommunitiesTable = ({
             cell: (props) => {
                 const row = props.row.original
 
+                console.log('row', row)
+
                 return (
                     <div>
                         <Button
@@ -91,20 +121,40 @@ const CommunitiesTable = ({
                         >
                             Visit
                         </Button>
-                        <Button
-                            className="bg-red-500 text-white ml-5"
-                            size="sm"
-                            variant="solid"
-                            onClick={() => {
-                                if (
-                                    typeof handleLeaveCommunity === 'function'
-                                ) {
-                                    handleLeaveCommunity(row.id, userId, 0)
-                                }
-                            }}
-                        >
-                            Leave
-                        </Button>
+                        {canUserLeaveCommunity(row) && (
+                            <Button
+                                className="bg-red-500 text-white ml-5"
+                                size="sm"
+                                variant="solid"
+                                onClick={() => {
+                                    if (
+                                        typeof handleLeaveCommunity ===
+                                        'function'
+                                    ) {
+                                        handleLeaveCommunity(row.id, userId, 0)
+                                    }
+                                }}
+                            >
+                                Leave
+                            </Button>
+                        )}
+                        {canUserDeleteCommunity(row) && (
+                            <Button
+                                className="bg-red-500 text-white ml-5"
+                                size="sm"
+                                variant="solid"
+                                onClick={() => {
+                                    if (
+                                        typeof handleDeleteCommunity ===
+                                        'function'
+                                    ) {
+                                        handleDeleteCommunity(row.id)
+                                    }
+                                }}
+                            >
+                                Delete
+                            </Button>
+                        )}
                     </div>
                 )
             },

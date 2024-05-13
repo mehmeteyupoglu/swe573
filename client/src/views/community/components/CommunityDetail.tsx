@@ -7,8 +7,13 @@ import {
 import { toggleFetchTrigger, useAppSelector } from '@/store'
 import { formatDate } from '@/utils/helpers'
 import useRequestWithNotification from '@/utils/hooks/useRequestWithNotification'
-import { FaCrown } from 'react-icons/fa'
-import { HiLockClosed, HiLockOpen, HiOutlineDocumentAdd } from 'react-icons/hi'
+import { FaCrown, FaRegEdit } from 'react-icons/fa'
+import {
+    HiLockClosed,
+    HiLockOpen,
+    HiOutlineDocumentAdd,
+    HiPencil,
+} from 'react-icons/hi'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
@@ -77,9 +82,27 @@ export default function CommunityDetail({
         }
     }
 
+    const renderEditButton = () => {
+        return (
+            <Button
+                className="bg-blue-500 text-white flex items-center gap-x-1"
+                size="sm"
+                variant="solid"
+                onClick={() => navigate(`/community/${id}/edit`)}
+            >
+                Edit
+                <HiPencil />
+            </Button>
+        )
+    }
+
     const cardFooter = (
         <div className="flex items-center justify-between">
-            {renderButton()}
+            <div className="flex items-center gap-5">
+                {renderButton()}
+                {is_owner && renderEditButton()}
+            </div>
+
             <span className="flex items-center">
                 <div>
                     <h6 className="text-sm">Last Activity</h6>
@@ -137,6 +160,7 @@ export default function CommunityDetail({
                                 <HiLockClosed className="inline-block ml-2" />
                             </p>
                         )}
+                        <FaRegEdit className="inline-block ml-2" />
                     </span>
                 </div>
                 <h4 className="font-bold my-3">{name}</h4>

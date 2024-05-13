@@ -14,26 +14,32 @@ import {
     HiOutlineMail,
     HiOutlineUser,
     HiCheck,
+    HiOutlineMap,
+    HiOutlineAcademicCap,
 } from 'react-icons/hi'
 import * as Yup from 'yup'
 import type { OptionProps } from 'react-select'
 import type { FormikProps, FieldInputProps, FieldProps } from 'formik'
 import { useTranslation } from 'react-i18next'
-import { updateProfile } from '@/services/UserService'
-import { UserType } from '@/@types/user'
+import { deleteUser, updateProfile } from '@/services/UserService'
+import { UserResponseType } from '@/@types/user'
+import { useDispatch } from 'react-redux'
+import { setUser, toggleFetchTrigger } from '@/store'
+import useRequestWithNotification from '@/utils/hooks/useRequestWithNotification'
+import useAuth from '@/utils/hooks/useAuth'
 
 type ProfileProps = {
-    data?: UserType
+    data?: UserResponseType
 }
 
 // TODO: translation needed
 const validationSchema = Yup.object().shape({
     username: Yup.string().required('Username Required'),
-    firstName: Yup.string()
+    firstname: Yup.string()
         .min(3, 'Too Short!')
         .max(12, 'Too Long!')
         .required('First Name Required'),
-    lastName: Yup.string()
+    lastname: Yup.string()
         .min(3, 'Too Short!')
         .max(12, 'Too Long!')
         .required('Last Name Required'),
@@ -70,30 +76,31 @@ const CustomSelectOption = ({
 
 const Profile = ({
     data = {
-        id: '',
-        username: '',
-        firstName: '',
-        lastName: '',
+        id: -1,
+        country: '',
+        dob: '',
         email: '',
+        firstname: '',
+        lastname: '',
         phone: '',
-        gender: '',
-        avatar: '',
-        verified: 0,
-        subscription: '',
-        authority: [],
+        short_bio: '',
+        username: '',
     },
 }: ProfileProps) => {
     const { t } = useTranslation()
+    const { signOut } = useAuth()
+
+    const dispatch = useDispatch()
     const onSetFormFile = (
-        form: FormikProps<UserType>,
-        field: FieldInputProps<UserType>,
+        form: FormikProps<UserResponseType>,
+        field: FieldInputProps<UserResponseType>,
         file: File[]
     ) => {
         form.setFieldValue(field.name, URL.createObjectURL(file[0]))
     }
 
     const onFormSubmit = async (
-        values: UserType,
+        values: UserResponseType,
         setSubmitting: (isSubmitting: boolean) => void
     ) => {
         try {
@@ -101,6 +108,7 @@ const Profile = ({
             console.log('resp', resp)
 
             if (resp.data) {
+                dispatch(setUser(resp.data as UserResponseType))
                 // TODO: add english i18n version
                 toast.push(
                     <Notification
@@ -140,6 +148,18 @@ const Profile = ({
         { value: 'other', label: t(`settings.profile.genders.Other`) },
     ]
 
+    const [handleDelete, isDeleting] = useRequestWithNotification(
+        deleteUser,
+        'You have left the community!',
+        'Error leaving the community',
+        () => postAction()
+    )
+
+    const postAction = () => {
+        dispatch(toggleFetchTrigger())
+        signOut()
+    }
+
     return (
         <Formik
             enableReinitialize
@@ -175,14 +195,14 @@ const Profile = ({
                                 />
                             </FormRow>
                             <FormRow
-                                name="firstName"
+                                name="firstname"
                                 label={t('application.user.firstName')}
                                 {...validatorProps}
                             >
                                 <Field
                                     type="text"
                                     autoComplete="off"
-                                    name="firstName"
+                                    name="firstname"
                                     placeholder={t(
                                         'application.user.firstName'
                                     )}
@@ -193,14 +213,14 @@ const Profile = ({
                                 />
                             </FormRow>
                             <FormRow
-                                name="lastName"
+                                name="lastname"
                                 label={t('application.user.lastName')}
                                 {...validatorProps}
                             >
                                 <Field
                                     type="text"
                                     autoComplete="off"
-                                    name="lastName"
+                                    name="lastname"
                                     placeholder={t('application.user.lastName')}
                                     component={Input}
                                     prefix={
@@ -225,87 +245,64 @@ const Profile = ({
                                 />
                             </FormRow>
                             <FormRow
-                                name="avatar"
-                                label={t('application.user.avatar')}
+                                name="dob"
+                                label={t('Date of Birth')}
                                 {...validatorProps}
                             >
-                                <Field name="avatar">
-                                    {({ field, form }: FieldProps) => {
-                                        const avatarProps = field.value
-                                            ? { src: field.value }
-                                            : {}
-                                        return (
-                                            <Upload
-                                                className="cursor-pointer"
-                                                showList={false}
-                                                uploadLimit={1}
-                                                onChange={(files) =>
-                                                    onSetFormFile(
-                                                        form,
-                                                        field,
-                                                        files
-                                                    )
-                                                }
-                                                onFileRemove={(files) =>
-                                                    onSetFormFile(
-                                                        form,
-                                                        field,
-                                                        files
-                                                    )
-                                                }
-                                            >
-                                                <Avatar
-                                                    className="border-2 border-white dark:border-gray-800 shadow-lg"
-                                                    size={60}
-                                                    shape="circle"
-                                                    icon={<HiOutlineUser />}
-                                                    {...avatarProps}
-                                                />
-                                            </Upload>
-                                        )
-                                    }}
-                                </Field>
+                                <Field
+                                    autoComplete="off"
+                                    name="dob"
+                                    type="date"
+                                    placeholder={t('Date of Birth')}
+                                    component={Input}
+                                    prefix={
+                                        <HiOutlineUser className="text-xl" />
+                                    }
+                                />
                             </FormRow>
                             <FormRow
-                                name="gender"
-                                label={t('application.user.gender')}
+                                name="country"
+                                label={t('Country')}
                                 {...validatorProps}
                             >
-                                <Field name="gender">
-                                    {({ field, form }: FieldProps) => (
-                                        <Select<GenderOption>
-                                            field={field}
-                                            form={form}
-                                            options={genderOptions}
-                                            placeholder={t(
-                                                'application.select.placeholder'
-                                            )}
-                                            components={{
-                                                Option: CustomSelectOption,
-                                                // Control: CustomControl,
-                                            }}
-                                            value={genderOptions.filter(
-                                                (option) =>
-                                                    option.value ===
-                                                    values?.gender
-                                            )}
-                                            onChange={(option) =>
-                                                form.setFieldValue(
-                                                    field.name,
-                                                    option?.value
-                                                )
-                                            }
-                                        />
-                                    )}
-                                </Field>
+                                <Field
+                                    type="text"
+                                    autoComplete="off"
+                                    name="country"
+                                    placeholder={t('Country')}
+                                    component={Input}
+                                    prefix={
+                                        <HiOutlineMap className="text-xl" />
+                                    }
+                                />
+                            </FormRow>
+                            <FormRow
+                                name="short_bio"
+                                label={t('Short Bio')}
+                                {...validatorProps}
+                            >
+                                <Field
+                                    type="text"
+                                    textArea
+                                    autoComplete="off"
+                                    name="short_bio"
+                                    placeholder={t('Short Bio')}
+                                    component={Input}
+                                    prefix={
+                                        <HiOutlineAcademicCap className="text-xl" />
+                                    }
+                                />
                             </FormRow>
                             <div className="mt-4 ltr:text-right">
                                 <Button
                                     className="ltr:mr-2 rtl:ml-2"
                                     type="button"
-                                    onClick={() => resetForm()}
+                                    onClick={() =>
+                                        typeof handleDelete === 'function' &&
+                                        handleDelete(data.id)
+                                    }
                                 >
-                                    {t('settings.profile.buttons.reset')}
+                                    {t('Delete Account')}
                                 </Button>
                                 <Button
                                     variant="solid"
