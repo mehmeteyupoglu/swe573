@@ -10,13 +10,14 @@ import { Field, Form, Formik } from 'formik'
 import { components } from 'react-select'
 import { HiOutlineBriefcase } from 'react-icons/hi'
 import * as Yup from 'yup'
-import type { FormikProps, FieldInputProps, FieldProps } from 'formik'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { CommunityFormModel } from '@/@types/community'
-import { apiAddCommunity } from '@/services/CommunityService'
+import { apiAddCommunity, apiGetCommunity } from '@/services/CommunityService'
 import { t } from 'i18next'
 import CommunitySpecificTemplates from './components/CommunitySpecificTemplates'
 import { useAppSelector } from '@/store'
+import { useEffect, useState } from 'react'
+import useFetchData from '@/utils/hooks/useFetchData'
 
 type CommunityProps = {
     data?: CommunityFormModel
@@ -42,14 +43,9 @@ const CreateCommunity = ({
         isPublic: false,
     },
 }: CommunityProps) => {
-    const onSetFormFile = (
-        form: FormikProps<CommunityFormModel>,
-        field: FieldInputProps<CommunityFormModel>,
-        file: File[]
-    ) => {
-        form.setFieldValue(field.name, URL.createObjectURL(file[0]))
-    }
-
+    const cid = useParams<{ id: string }>().id
+    const [editMode, setEditMode] = useState(false)
+    const navigate = useNavigate()
     const userId = useAppSelector((state) => state.auth.user?.id)
 
     const onFormSubmit = async (
@@ -99,8 +95,11 @@ const CreateCommunity = ({
         }
     }
 
-    const navigate = useNavigate()
-
+    useEffect(() => {
+        if (cid) {
+            setEditMode(true)
+        }
+    }, [cid])
     return (
         <div>
             <Formik
@@ -153,48 +152,6 @@ const CreateCommunity = ({
                                         }
                                     />
                                 </FormRow>
-                                {/* <FormRow
-                                name="avatar"
-                                label="Avatar"
-                                {...validatorProps}
-                            >
-                                <Field name="avatar">
-                                    {({ field, form }: FieldProps) => {
-                                        const avatarProps = field.value
-                                            ? { src: field.value }
-                                            : {}
-                                        return (
-                                            <Upload
-                                                className="cursor-pointer"
-                                                showList={false}
-                                                uploadLimit={1}
-                                                onChange={(files) =>
-                                                    onSetFormFile(
-                                                        form,
-                                                        field,
-                                                        files
-                                                    )
-                                                }
-                                                onFileRemove={(files) =>
-                                                    onSetFormFile(
-                                                        form,
-                                                        field,
-                                                        files
-                                                    )
-                                                }
-                                            >
-                                                <Avatar
-                                                    className="border-2 border-white dark:border-gray-800 shadow-lg"
-                                                    size={60}
-                                                    shape="circle"
-                                                    icon={<HiOutlineUser />}
-                                                    {...avatarProps}
-                                                />
-                                            </Upload>
-                                        )
-                                    }}
-                                </Field>
-                            </FormRow> */}
 
                                 <FormRow
                                     name="isPublic"
@@ -229,7 +186,7 @@ const CreateCommunity = ({
                                         loading={isSubmitting}
                                         type="submit"
                                     >
-                                        {isSubmitting ? 'Creating' : 'Create'}
+                                        {editMode ? 'Update' : 'Create'}
                                     </Button>
                                 </div>
                             </FormContainer>
