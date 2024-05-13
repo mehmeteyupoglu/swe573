@@ -160,7 +160,6 @@ export default function CommunityDetail({
                                 <HiLockClosed className="inline-block ml-2" />
                             </p>
                         )}
-                        <FaRegEdit className="inline-block ml-2" />
                     </span>
                 </div>
                 <h4 className="font-bold my-3">{name}</h4>
