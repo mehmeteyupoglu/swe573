@@ -40,6 +40,13 @@ export async function apiGetPost(postId: string, userId?: string) {
     })
 }
 
+export async function apiDeletePost(postId: string) {
+    return ApiService.fetchData({
+        url: `/post/${postId}/delete/`,
+        method: 'delete',
+    })
+}
+
 export async function apiLikePost(userId: string, postId: string) {
     return ApiService.fetchData({
         url: `/user/${userId}/likes/${postId}`,

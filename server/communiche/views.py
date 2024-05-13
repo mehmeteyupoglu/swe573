@@ -560,6 +560,16 @@ def post(request):
     
     return Response(status=status.HTTP_201_CREATED)
 
+@api_view(['DELETE'])
+def delete_post(request, post_id):
+    try:
+        post = Posts.objects.get(pk=post_id)
+    except Posts.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    post.delete()
+    return Response(status=status.HTTP_200_OK)
+
 @api_view(['GET'])
 def posts(request):
     posts = Posts.objects.all().order_by('-created_at')
