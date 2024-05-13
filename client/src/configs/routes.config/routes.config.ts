@@ -91,6 +91,15 @@ export const protectedRoutes = [
         },
     },
     {
+        key: 'edit-community',
+        path: `community/:id/edit`,
+        component: lazy(() => import('@/views/community/CreateCommunity')),
+        meta: {
+            header: i18n.t('Edit Community'),
+            headerContainer: true,
+        },
+    },
+    {
         key: 'post',
         path: `community/:id/post`,
         component: lazy(() => import('@/views/post/Post')),
