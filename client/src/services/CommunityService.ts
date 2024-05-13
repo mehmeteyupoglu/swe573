@@ -48,6 +48,13 @@ export async function apiGetCommunity(id: string, userId: string) {
     })
 }
 
+export async function apiDeleteCommunity(communityId: string) {
+    return ApiService.fetchData({
+        url: `/community/${communityId}/`,
+        method: 'delete',
+    })
+}
+
 export async function apiJoinCommunity(communityId: string, userId: string) {
     return ApiService.fetchData({
         url: `/join_community/${communityId}/${userId}/`,

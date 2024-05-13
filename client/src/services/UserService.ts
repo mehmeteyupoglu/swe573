@@ -43,10 +43,14 @@ export async function apiGetInvitations(userId: string) {
         method: 'get',
     })
 }
+
 export async function apiGetUserCommunities(userId: string) {
     return ApiService.fetchData({
-        url: `/user/${userId}/communities/`,
+        url: `/user/communities/`,
         method: 'get',
+        params: {
+            user_id: userId,
+        },
     })
 }
 

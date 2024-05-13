@@ -131,7 +131,9 @@ def communities(request):
         return Response(serializer.data)
 
 @api_view(['GET'])
-def user_communities(request, user_id):
+def user_communities(request):
+    
+    user_id = request.query_params.get('user_id')
     try:
         user = User.objects.get(pk=user_id)
     except User.DoesNotExist:
