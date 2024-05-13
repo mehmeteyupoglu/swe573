@@ -13,6 +13,7 @@ from django.http import JsonResponse
 from . import constants
 from datetime import datetime, timedelta
 from .models import Community, TemplateCommunity
+from django.utils import timezone
 
 @api_view(['GET', 'POST'])
 def user_list(request):
@@ -419,6 +420,22 @@ def join_requests(request, community_id):
     
     combined_requests = pending_serializer.data + accepted_or_rejected_serializer.data
     return Response(combined_requests)
+
+def auto_accept_old_requests():
+    # Get the date a week ago
+    one_week_ago = timezone.now() - timezone.timedelta(weeks=1)
+
+    # Get pending requests that are older than a week
+    old_requests = JoinRequest.objects.filter(status=0, created_at__lte=one_week_ago)
+
+    # Loop through the old requests and accept them
+    for join_request in old_requests:
+        join_request.status = 1  # 1 is the status for accepted requests
+        join_request.save()
+
+        # Add the user to the community
+        community = join_request.community
+        community.members.add(join_request.user)
 
 @api_view(['POST'])
 def accept_reject_join_request(request, request_id):
