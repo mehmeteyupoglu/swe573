@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
-import IngredientTableSearch from '../account/Settings/components/Ingredients/components/IngredientTableSearch'
+import { useRef, useState } from 'react'
 import { apiSearch } from '@/services/SearchService'
 import { SearchType } from '@/@types/search'
 import { CommunityType } from '@/@types/community'
@@ -13,10 +12,10 @@ const Search = () => {
     const inputRef = useRef<HTMLInputElement>(null)
     const [data, setData] = useState<any>(null)
 
-    const [value, setValue] = useState('Community')
+    const [searchValue, setSearchValue] = useState('Community')
 
     const onChange = (val: string) => {
-        setValue(val)
+        setSearchValue(val)
     }
 
     const handleInputChange = async (val: string) => {
@@ -34,7 +33,7 @@ const Search = () => {
 
     return (
         <div className="">
-            <Radio.Group value={value} onChange={onChange}>
+            <Radio.Group value={searchValue} onChange={onChange}>
                 <Radio value={'Community'}>Community</Radio>
                 <Radio value={'User'}>User</Radio>
                 <Radio value={'Post'}>Post</Radio>
