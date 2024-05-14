@@ -33,12 +33,19 @@ const Search = () => {
 
     return (
         <div className="">
+            <p className="text-gray-700 dark:text-gray-200 font-semibold">
+                Search all
+            </p>
+            <TableSearch ref={inputRef} onInputChange={handleInputChange} />
+            <div className="py-5">
+                <span>or search by </span>
+            </div>
+
             <Radio.Group value={searchValue} onChange={onChange}>
                 <Radio value={'community'}>Community</Radio>
                 <Radio value={'user'}>User</Radio>
                 <Radio value={'post'}>Post</Radio>
             </Radio.Group>
-            <TableSearch ref={inputRef} onInputChange={handleInputChange} />
             {data && data.communities && (
                 <Card>
                     <h5>Communities:</h5>
