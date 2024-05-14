@@ -12,7 +12,7 @@ const Search = () => {
     const inputRef = useRef<HTMLInputElement>(null)
     const [data, setData] = useState<any>(null)
 
-    const [searchValue, setSearchValue] = useState('Community')
+    const [searchValue, setSearchValue] = useState('community')
 
     const onChange = (val: string) => {
         setSearchValue(val)
@@ -34,9 +34,9 @@ const Search = () => {
     return (
         <div className="">
             <Radio.Group value={searchValue} onChange={onChange}>
-                <Radio value={'Community'}>Community</Radio>
-                <Radio value={'User'}>User</Radio>
-                <Radio value={'Post'}>Post</Radio>
+                <Radio value={'community'}>Community</Radio>
+                <Radio value={'user'}>User</Radio>
+                <Radio value={'post'}>Post</Radio>
             </Radio.Group>
             <TableSearch ref={inputRef} onInputChange={handleInputChange} />
             {data && data.communities && (
