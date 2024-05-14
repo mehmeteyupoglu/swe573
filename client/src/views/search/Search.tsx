@@ -4,13 +4,20 @@ import { apiSearch } from '@/services/SearchService'
 import { SearchType } from '@/@types/search'
 import { CommunityType } from '@/@types/community'
 import Community from '../search/components/Community'
-import { Card } from '@/components/ui'
+import { Card, Radio } from '@/components/ui'
 import Post from './components/Post'
 import { PostData } from '@/@types/post'
+import TableSearch from '../account/Settings/components/Search/TableSearch'
 
 const Search = () => {
     const inputRef = useRef<HTMLInputElement>(null)
     const [data, setData] = useState<any>(null)
+
+    const [value, setValue] = useState('Community')
+
+    const onChange = (val: string) => {
+        setValue(val)
+    }
 
     const handleInputChange = async (val: string) => {
         const query = val
@@ -27,10 +34,12 @@ const Search = () => {
 
     return (
         <div className="">
-            <IngredientTableSearch
-                ref={inputRef}
-                onInputChange={handleInputChange}
-            />
+            <Radio.Group value={value} onChange={onChange}>
+                <Radio value={'Community'}>Community</Radio>
+                <Radio value={'User'}>User</Radio>
+                <Radio value={'Post'}>Post</Radio>
+            </Radio.Group>
+            <TableSearch ref={inputRef} onInputChange={handleInputChange} />
             {data && data.communities && (
                 <Card>
                     <h5>Communities:</h5>
