@@ -51,6 +51,18 @@ export const protectedRoutes = [
         },
     },
     {
+        key: 'search-2',
+        path: '/search-2',
+        component: lazy(
+            () => import('@/views/AdvanceSearchList/AdvanceSearchList')
+        ),
+        authority: [],
+        meta: {
+            header: i18n.t('Advance Search'),
+            headerContainer: true,
+        },
+    },
+    {
         key: 'post',
         path: '/post/:id',
         component: lazy(() => import('@/views/post/PostView')),

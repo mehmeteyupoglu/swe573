@@ -711,3 +711,26 @@ def comments(request, post_id):
     comments = PComment.objects.filter(post=post).order_by('-created_at')
     serializer = CommentSerializer(comments, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+def advance_search(request):
+    search_type = 'community'
+    query = request.data.get('query', '')
+    communities = Community.objects.filter(Q(name__icontains=query) | Q(description__icontains=query))
+    posts = Posts.objects.filter(content__icontains=query)
+
+    community_serializer = CommunitySerializer(communities, many=True)
+    post_serializer = PostSerializer(posts, many=True)
+
+    if(search_type == 'community'):
+        return Response({
+            'search_type': search_type,
+            'data': community_serializer.data,
+            'total': len(community_serializer.data)
+        })
+    else:
+        return Response({
+            'search_type': search_type,
+            'data': post_serializer.data,
+            'total': len(post_serializer.data)
+        })
