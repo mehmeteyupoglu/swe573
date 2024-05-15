@@ -714,7 +714,7 @@ def comments(request, post_id):
 
 @api_view(['POST'])
 def advance_search(request):
-    search_type = 'community'
+    search_type = 0
     query = request.data.get('query', '')
     communities = Community.objects.filter(Q(name__icontains=query) | Q(description__icontains=query))
     posts = Posts.objects.filter(content__icontains=query)
@@ -722,11 +722,17 @@ def advance_search(request):
     community_serializer = CommunitySerializer(communities, many=True)
     post_serializer = PostSerializer(posts, many=True)
 
-    if(search_type == 'community'):
+    if(search_type == 0):
         return Response({
-            'search_type': search_type,
+            'search_type': 'community',
             'data': community_serializer.data,
             'total': len(community_serializer.data)
+        })
+    elif search_type == 1:
+        return Response({
+            'search_type': 'post',
+            'data': post_serializer.data,
+            'total': len(post_serializer.data)
         })
     else:
         return Response({

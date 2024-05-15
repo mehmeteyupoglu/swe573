@@ -23,7 +23,7 @@ type FormModel = {
     name: string
     dataTypes: string[]
     status: number[]
-    advanceSearchStatus: number
+    search_type: number
 }
 
 type FilterFormProps = {
@@ -55,10 +55,14 @@ const FilterForm = forwardRef<FormikProps<FormModel>, FilterFormProps>(
             (state) => state.advanceSearchList.data.filterData
         )
 
+        const tableData = useAppSelector(
+            (state) => state.advanceSearchList.data.tableData
+        )
+
         const handleSubmit = (values: FormModel) => {
             onSubmitComplete?.()
             dispatch(setFilterData(values))
-            dispatch(getAdvanceSearch(initialTableData))
+            dispatch(getAdvanceSearch(tableData))
         }
         useEffect(() => {
             const fetchDataType = async () => {
@@ -134,17 +138,16 @@ const FilterForm = forwardRef<FormikProps<FormModel>, FilterFormProps>(
                             </FormItem>
                             <FormItem
                                 invalid={
-                                    errors.advanceSearchStatus &&
-                                    touched.advanceSearchStatus
+                                    errors.search_type && touched.search_type
                                 }
-                                errorMessage={errors.advanceSearchStatus}
+                                errorMessage={errors.search_type}
                             >
                                 <h6 className="mb-4">Search in . . .</h6>
-                                <Field name="advanceSearchStatus">
+                                <Field name="search_type">
                                     {({ field, form }: FieldProps) => (
                                         <Radio.Group
                                             vertical
-                                            value={values.advanceSearchStatus}
+                                            value={values.search_type}
                                             onChange={(val) =>
                                                 form.setFieldValue(
                                                     field.name,

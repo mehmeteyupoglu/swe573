@@ -23,8 +23,7 @@ type GetAdvanceSearchResponse = {
 type FilterQueries = {
     name: string
     dataTypes: string[]
-    status: number[]
-    advanceSearchStatus: number
+    search_type: number
 }
 
 export type AdvanceSearchListState = {
@@ -80,8 +79,7 @@ const initialState: AdvanceSearchListState = {
     filterData: {
         name: '',
         dataTypes: [],
-        status: [0, 1, 2],
-        advanceSearchStatus: 0,
+        search_type: 0,
     },
 }
 
@@ -96,7 +94,7 @@ const advanceSearchListSlice = createSlice({
             state.tableData = action.payload
         },
         setFilterData: (state, action) => {
-            state.filterData = action.payload
+            getAdvanceSearch({ ...state.tableData, filterData: action.payload })
         },
         toggleDeleteConfirmation: (state, action) => {
             state.deleteConfirmation = action.payload
@@ -108,7 +106,6 @@ const advanceSearchListSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(getAdvanceSearch.fulfilled, (state, action) => {
-                console.log('action.payload', action.payload)
                 state.advanceSearchList = action.payload.data // Wrap action.payload.data in an array
                 state.tableData.total = action.payload.total
                 state.loading = false
