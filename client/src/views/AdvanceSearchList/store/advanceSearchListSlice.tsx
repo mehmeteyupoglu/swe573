@@ -15,7 +15,7 @@ type AdvanceSearch = {
 
 type AdvanceSearchList = AdvanceSearch[]
 
-type GetSalesAdvanceSearchResponse = {
+type GetAdvanceSearchResponse = {
     data: AdvanceSearch
     total: number
 }
@@ -27,7 +27,7 @@ type FilterQueries = {
     advanceSearchStatus: number
 }
 
-export type SalesAdvanceSearchListState = {
+export type AdvanceSearchListState = {
     loading: boolean
     deleteConfirmation: boolean
     selectedAdvanceSearch: string
@@ -36,7 +36,7 @@ export type SalesAdvanceSearchListState = {
     advanceSearchList: AdvanceSearch[]
 }
 
-type GetSalesAdvanceSearchRequest = TableQueries & {
+type GetAdvanceSearchRequest = TableQueries & {
     filterData?: FilterQueries
 }
 
@@ -44,10 +44,10 @@ export const SLICE_NAME = 'advanceSearchList'
 
 export const getAdvanceSearch = createAsyncThunk(
     SLICE_NAME + '/getAdvanceSearch',
-    async (data: GetSalesAdvanceSearchRequest) => {
+    async (data: GetAdvanceSearchRequest) => {
         const response = await apiAdvanceSearch<
-            GetSalesAdvanceSearchResponse,
-            GetSalesAdvanceSearchRequest
+            GetAdvanceSearchResponse,
+            GetAdvanceSearchRequest
         >(data)
         return response.data
     }
@@ -71,7 +71,7 @@ export const initialTableData: TableQueries = {
     },
 }
 
-const initialState: SalesAdvanceSearchListState = {
+const initialState: AdvanceSearchListState = {
     loading: false,
     deleteConfirmation: false,
     selectedAdvanceSearch: '',
@@ -79,7 +79,7 @@ const initialState: SalesAdvanceSearchListState = {
     tableData: initialTableData,
     filterData: {
         name: '',
-        dataTypes: ['bags', 'cloths', 'devices', 'shoes', 'watches'],
+        dataTypes: [],
         status: [0, 1, 2],
         advanceSearchStatus: 0,
     },
