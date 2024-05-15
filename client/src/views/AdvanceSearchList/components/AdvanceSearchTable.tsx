@@ -21,6 +21,8 @@ import type {
     OnSortParam,
     ColumnDef,
 } from '@/components/shared/DataTable'
+import { formatDate, truncateText } from '@/utils/helpers'
+import { CommunityType } from '@/@types/community'
 
 type AdvanceSearch = {
     id: string
@@ -58,7 +60,7 @@ const inventoryStatusColor: Record<
     },
 }
 
-const ActionColumn = ({ row }: { row: AdvanceSearch }) => {
+const ActionColumn = ({ row }: { row: CommunityType }) => {
     const dispatch = useAppDispatch()
     const { textTheme } = useThemeClass()
     const navigate = useNavigate()
@@ -86,21 +88,6 @@ const ActionColumn = ({ row }: { row: AdvanceSearch }) => {
             >
                 <HiOutlineTrash />
             </span>
-        </div>
-    )
-}
-
-const AdvanceSearchColumn = ({ row }: { row: AdvanceSearch }) => {
-    const avatar = row.img ? (
-        <Avatar src={row.img} />
-    ) : (
-        <Avatar icon={<FiPackage />} />
-    )
-
-    return (
-        <div className="flex items-center">
-            {avatar}
-            <span className={`ml-2 rtl:mr-2 font-semibold`}>{row.name}</span>
         </div>
     )
 }
@@ -148,41 +135,51 @@ const AdvanceSearchTable = () => {
         )
     }
 
-    const columns: ColumnDef<AdvanceSearch>[] = useMemo(
+    const columns: ColumnDef<CommunityType>[] = useMemo(
         () => [
             {
-                header: 'Name',
+                header: 'Community Name',
                 accessorKey: 'name',
+            },
+            {
+                header: 'Community Description',
+                accessorKey: 'description',
                 cell: (props) => {
                     const row = props.row.original
-                    return <AdvanceSearchColumn row={row} />
+                    return <span>{truncateText(row.description, 40)}</span>
                 },
             },
             {
-                header: 'Category',
-                accessorKey: 'dataTypes',
+                header: 'Number of Members',
+                accessorKey: 'members',
                 cell: (props) => {
                     const row = props.row.original
-                    return <span className="capitalize">{row.dataTypes}</span>
+                    return (
+                        <Badge
+                            className="mr-4"
+                            content={row.members.length}
+                            innerClass="bg-blue-500"
+                        />
+                    )
                 },
             },
             {
-                header: 'Quantity',
-                accessorKey: 'stock',
-                sortable: true,
-            },
-            {
-                header: 'Price',
-                accessorKey: 'price',
+                header: 'Date Created',
+                accessorKey: 'created_at',
                 cell: (props) => {
-                    const { price } = props.row.original
-                    return <span>${price}</span>
+                    const row = props.row.original
+                    const formattedDate = formatDate(row.updated_at)
+                    return <div className="flex">{formattedDate}</div>
                 },
             },
             {
-                header: '',
-                id: 'action',
-                cell: (props) => <ActionColumn row={props.row.original} />,
+                header: 'Last Activity',
+                accessorKey: 'updated_at',
+                cell: (props) => {
+                    const row = props.row.original
+                    const formattedDate = formatDate(row.updated_at)
+                    return <div className="flex">{formattedDate}</div>
+                },
             },
         ],
         []
