@@ -21,6 +21,8 @@ export const mapRoleToLabel = (role: number) => {
 }
 
 export const truncateText = (text: string, maxLength: number) => {
+    if (!text) return text
+
     if (text.length <= maxLength) {
         return text
     } else {
@@ -48,6 +50,8 @@ export const extractTitleAndDescription = (content: _Field[]) => {
         title: '',
         description: '',
     }
+
+    if (!content) return result
 
     content.forEach((item) => {
         if (item.field_name === 'title') {
