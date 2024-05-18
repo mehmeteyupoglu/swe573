@@ -43,22 +43,12 @@ export const protectedRoutes = [
     {
         key: 'search',
         path: '/search',
-        component: lazy(() => import('@/views/search/Search')),
-        authority: [],
-        meta: {
-            header: i18n.t('nav.search'),
-            headerContainer: true,
-        },
-    },
-    {
-        key: 'search-2',
-        path: '/search-2',
         component: lazy(
             () => import('@/views/AdvanceSearchList/AdvanceSearchList')
         ),
         authority: [],
         meta: {
-            header: i18n.t('Advance Search'),
+            header: i18n.t('nav.search'),
             headerContainer: true,
         },
     },

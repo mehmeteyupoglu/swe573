@@ -13,7 +13,7 @@ import Button from '@/components/ui/Button'
 import Checkbox from '@/components/ui/Checkbox'
 import Radio from '@/components/ui/Radio'
 import Drawer from '@/components/ui/Drawer'
-import { DataTypeOption, DataTypeResponse, FieldType } from '@/@types/community'
+import { DataTypeResponse } from '@/@types/community'
 
 import { Field, Form, Formik, FormikProps, FieldProps } from 'formik'
 import type { MouseEvent } from 'react'
@@ -22,7 +22,6 @@ import { apiGetDataTypes } from '@/services/CommunityService'
 type FormModel = {
     name: string
     dataTypes: string[]
-    status: number[]
     search_type: number
 }
 
