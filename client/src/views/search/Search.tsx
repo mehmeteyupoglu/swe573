@@ -65,6 +65,8 @@ const Search = () => {
                     dataTypes: checkboxList,
                     searchType,
                 })
+
+                setData(_response.data)
                 // Handle the response data here
             } catch (error) {
                 // Handle any errors here
@@ -89,7 +91,7 @@ const Search = () => {
                     <Radio.Group
                         value={searchType}
                         onChange={onChange}
-                        className="ml-4 h-10 flex items-center"
+                        className="mr-2 h-10 flex items-center"
                     >
                         <Radio value={'community'}>Community</Radio>
                         <Radio value={'post'}>Post</Radio>
@@ -120,7 +122,7 @@ const Search = () => {
             {searchType == 'community' && data && (
                 <Card>
                     <h5>Communities:</h5>
-                    {data.communities.map((community: CommunityType) => {
+                    {data.data.map((community: CommunityType) => {
                         return <Community community={community} />
                     })}
                 </Card>
@@ -129,7 +131,7 @@ const Search = () => {
             {searchType === 'post' && data && (
                 <Card className="mt-5">
                     <h5>Posts:</h5>
-                    {data.posts.map((post: PostData) => {
+                    {data.data.map((post: PostData) => {
                         return <Post post={post} />
                     })}
                 </Card>
