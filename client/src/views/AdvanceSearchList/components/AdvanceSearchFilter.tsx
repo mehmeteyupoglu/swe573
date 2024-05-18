@@ -134,32 +134,37 @@ const FilterForm = forwardRef<FormikProps<FormModel>, FilterFormProps>(
                                     )}
                                 </Field>
                             </FormItem>
-                            <FormItem
-                                invalid={
-                                    errors.search_type && touched.search_type
-                                }
-                                errorMessage={errors.search_type}
-                            >
-                                <h6 className="mb-4">Search in . . .</h6>
-                                <Field name="search_type">
-                                    {({ field, form }: FieldProps) => (
-                                        <Radio.Group
-                                            vertical
-                                            value={values.search_type}
-                                            onChange={(val) =>
-                                                form.setFieldValue(
-                                                    field.name,
-                                                    val
-                                                )
-                                            }
-                                        >
-                                            <Radio value={0}>Community</Radio>
-                                            <Radio value={1}>Post</Radio>
-                                            <Radio value={2}>User</Radio>
-                                        </Radio.Group>
-                                    )}
-                                </Field>
-                            </FormItem>
+                            {false && (
+                                <FormItem
+                                    invalid={
+                                        errors.search_type &&
+                                        touched.search_type
+                                    }
+                                    errorMessage={errors.search_type}
+                                >
+                                    <h6 className="mb-4">Search in . . .</h6>
+                                    <Field name="search_type">
+                                        {({ field, form }: FieldProps) => (
+                                            <Radio.Group
+                                                vertical
+                                                value={values.search_type}
+                                                onChange={(val) =>
+                                                    form.setFieldValue(
+                                                        field.name,
+                                                        val
+                                                    )
+                                                }
+                                            >
+                                                <Radio value={0}>
+                                                    Community
+                                                </Radio>
+                                                <Radio value={1}>Post</Radio>
+                                                <Radio value={2}>User</Radio>
+                                            </Radio.Group>
+                                        )}
+                                    </Field>
+                                </FormItem>
+                            )}
                         </FormContainer>
                     </Form>
                 )}
