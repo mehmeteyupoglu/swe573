@@ -1,15 +1,16 @@
 import { PostData } from '@/@types/post'
-import React from 'react'
+import { ActionLink } from '@/components/shared'
+import { truncateText } from '@/utils/helpers'
 
 export default function Post({ post }: { post: PostData }) {
     return (
-        <div>
+        <ActionLink to={`/post/${post.id}`}>
             {post.content && (
                 <>
-                    <div>{post.content[0].field_value}</div>
-                    <div>{post.content[1].field_value}</div>
+                    {post.content[0].field_value} -{' '}
+                    {truncateText(post.content[1].field_value, 40)}
                 </>
             )}
-        </div>
+        </ActionLink>
     )
 }
