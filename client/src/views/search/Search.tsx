@@ -1,20 +1,27 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, SyntheticEvent, useEffect } from 'react'
 import { apiSearch } from '@/services/SearchService'
 import { SearchType } from '@/@types/search'
-import { CommunityType } from '@/@types/community'
+import { CommunityType, DataTypeResponse } from '@/@types/community'
 import Community from '../search/components/Community'
-import { Card, Checkbox, FormItem, Radio } from '@/components/ui'
+import { Button, Card, Checkbox, Radio } from '@/components/ui'
 import Post from './components/Post'
 import { PostData } from '@/@types/post'
 import TableSearch from '../account/Settings/components/Search/TableSearch'
-import { Field, FieldProps } from 'formik'
+import { apiGetDataTypes } from '@/services/CommunityService'
 
 const Search = () => {
     const inputRef = useRef<HTMLInputElement>(null)
-    const [selectedDataTypes, setSelectedDataTypes] = useState<string[]>([
-        'text',
-    ])
     const [data, setData] = useState<any>(null)
+    const [checkboxList, setCheckboxList] = useState<(string | number)[]>([
+        'Selection A',
+    ])
+
+    const onCheckboxChange = (
+        options: (string | number)[],
+        e: SyntheticEvent
+    ) => {
+        setCheckboxList(options)
+    }
     const [dataTypes, setDataTypes] = useState<
         (
             | 'text'
@@ -26,18 +33,35 @@ const Search = () => {
             | 'audio'
             | 'file'
         )[]
-    >([])
+    >(['text'])
 
-    const [searchValue, setSearchValue] = useState('community')
+    useEffect(() => {
+        const fetchDataType = async () => {
+            const resp = await apiGetDataTypes()
+            if (resp.status == 200) {
+                setDataTypes(
+                    (resp.data as DataTypeResponse['data_types']) || []
+                )
+            }
+        }
+        fetchDataType()
+    }, [])
+
+    const [searchType, setSearchType] = useState('community')
 
     const onChange = (val: string) => {
-        setSearchValue(val)
+        setSearchType(val)
     }
 
     const handleInputChange = async (val: string) => {
         const query = val
 
         try {
+            console.log({
+                query,
+                checkboxList,
+                searchType,
+            })
             const response = await apiSearch(query)
             console.log('response', response.data)
             setData(response.data as SearchType)
@@ -57,7 +81,7 @@ const Search = () => {
                         onInputChange={handleInputChange}
                     />
                     <Radio.Group
-                        value={searchValue}
+                        value={searchType}
                         onChange={onChange}
                         className="ml-4 h-10 flex items-center"
                     >
@@ -68,7 +92,26 @@ const Search = () => {
                 </div>
             </div>
 
-            {searchValue == 'community' && data && (
+            {(searchType === 'community' || searchType === 'post') && (
+                <Checkbox.Group
+                    value={checkboxList}
+                    onChange={onCheckboxChange}
+                >
+                    {dataTypes.map((dataType) => {
+                        return (
+                            <Checkbox
+                                className="mb-3"
+                                name="dataTypes"
+                                value={dataType}
+                            >
+                                {dataType.toLocaleUpperCase()}
+                            </Checkbox>
+                        )
+                    })}
+                </Checkbox.Group>
+            )}
+
+            {searchType == 'community' && data && (
                 <Card>
                     <h5>Communities:</h5>
                     {data.communities.map((community: CommunityType) => {
@@ -78,7 +121,7 @@ const Search = () => {
                 </Card>
             )}
 
-            {searchValue === 'post' && data && (
+            {searchType === 'post' && data && (
                 <Card className="mt-5">
                     <h5>Posts:</h5>
                     {data.posts.map((post: PostData) => {
