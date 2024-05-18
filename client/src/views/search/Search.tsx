@@ -93,14 +93,16 @@ const Search = () => {
                         onChange={onChange}
                         className="mr-2 h-10 flex items-center"
                     >
-                        <Radio value={'community'}>Community</Radio>
+                        <Radio value={'community'} className="ml-2">
+                            Community
+                        </Radio>
                         <Radio value={'post'}>Post</Radio>
                         <Radio value={'user'}>User</Radio>
                     </Radio.Group>
                 </div>
             </div>
 
-            {(searchType === 'community' || searchType === 'post') && (
+            {searchType === 'post' && (
                 <Checkbox.Group
                     value={checkboxList}
                     onChange={onCheckboxChange}
