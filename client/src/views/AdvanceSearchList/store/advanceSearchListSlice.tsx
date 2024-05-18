@@ -100,7 +100,7 @@ const advanceSearchListSlice = createSlice({
             state.tableData = action.payload
         },
         setFilterData: (state, action) => {
-            getAdvanceSearch({ ...state.tableData, filterData: action.payload })
+            state.filterData = action.payload
         },
         toggleDeleteConfirmation: (state, action) => {
             state.deleteConfirmation = action.payload
