@@ -1,6 +1,5 @@
 import { useRef, useState, SyntheticEvent, useEffect, useCallback } from 'react'
-import { apiSearch } from '@/services/SearchService'
-import { SearchType } from '@/@types/search'
+import { apiAdvanceSearch, apiSearch } from '@/services/SearchService'
 import { CommunityType, DataTypeResponse } from '@/@types/community'
 import Community from '../search/components/Community'
 import { Button, Card, Checkbox, Radio } from '@/components/ui'
@@ -12,9 +11,7 @@ import { apiGetDataTypes } from '@/services/CommunityService'
 const Search = () => {
     const inputRef = useRef<HTMLInputElement>(null)
     const [data, setData] = useState<any>(null)
-    const [checkboxList, setCheckboxList] = useState<(string | number)[]>([
-        'Selection A',
-    ])
+    const [checkboxList, setCheckboxList] = useState<(string | number)[]>([])
 
     const onCheckboxChange = (
         options: (string | number)[],
@@ -63,9 +60,11 @@ const Search = () => {
                     checkboxList,
                     searchType,
                 })
-                const response = await apiSearch(query)
-                console.log('response', response.data)
-                setData(response.data as SearchType)
+                const _response = await apiAdvanceSearch({
+                    query,
+                    dataTypes: checkboxList,
+                    searchType,
+                })
                 // Handle the response data here
             } catch (error) {
                 // Handle any errors here
