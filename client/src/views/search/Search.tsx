@@ -3,15 +3,23 @@ import { apiAdvanceSearch, apiSearch } from '@/services/SearchService'
 import { CommunityType, DataTypeResponse } from '@/@types/community'
 import Community from '../search/components/Community'
 import { Button, Card, Checkbox, Radio } from '@/components/ui'
+import DatePicker from '@/components/ui/DatePicker'
 import Post from './components/Post'
 import { PostData } from '@/@types/post'
 import TableSearch from '../account/Settings/components/Search/TableSearch'
 import { apiGetDataTypes } from '@/services/CommunityService'
+import { DatePickerRangeValue } from '@/components/ui/DatePicker/DatePickerRange'
+
+const { DatePickerRange } = DatePicker
 
 const Search = () => {
     const inputRef = useRef<HTMLInputElement>(null)
     const [data, setData] = useState<any>(null)
     const [checkboxList, setCheckboxList] = useState<(string | number)[]>([])
+    const [range, setRange] = useState<DatePickerRangeValue>([
+        new Date(),
+        new Date(),
+    ])
 
     const onCheckboxChange = (
         options: (string | number)[],
@@ -55,15 +63,11 @@ const Search = () => {
             const query = val
 
             try {
-                console.log({
-                    query,
-                    checkboxList,
-                    searchType,
-                })
                 const _response = await apiAdvanceSearch({
                     query,
                     dataTypes: checkboxList,
                     searchType,
+                    range,
                 })
 
                 setData(_response.data)
@@ -72,12 +76,23 @@ const Search = () => {
                 // Handle any errors here
             }
         },
-        [checkboxList, searchType]
+        [checkboxList, searchType] // Add the missing dependencies: range
     )
 
     useEffect(() => {
         handleInputChange(inputRef.current?.value || '')
     }, [handleInputChange])
+
+    useEffect(() => {
+        console.log(range)
+        if (!range[0] && !range[1]) {
+            handleInputChange(inputRef.current?.value || '')
+        }
+
+        if (range[0] && range[1]) {
+            handleInputChange(inputRef.current?.value || '')
+        }
+    }, [range, handleInputChange])
 
     return (
         <div className="">
@@ -101,6 +116,16 @@ const Search = () => {
                     </Radio.Group>
                 </div>
             </div>
+
+            {/* <DatePickerRange
+                placeholder="Select dates range"
+                value={range}
+                onChange={(value: DatePickerRangeValue) => {
+                    console.log(value)
+                    setRange(value as DatePickerRangeValue)
+                }}
+                className="mb-4"
+            /> */}
 
             {searchType === 'post' && (
                 <Checkbox.Group
