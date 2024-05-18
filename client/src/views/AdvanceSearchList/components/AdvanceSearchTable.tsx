@@ -1,20 +1,13 @@
 import { useEffect, useMemo, useRef } from 'react'
-import Avatar from '@/components/ui/Avatar'
 import Badge from '@/components/ui/Badge'
 import DataTable from '@/components/shared/DataTable'
-import { HiOutlinePencil, HiOutlineTrash } from 'react-icons/hi'
-import { FiPackage } from 'react-icons/fi'
 import {
     getAdvanceSearch,
     setTableData,
-    setSelectedAdvanceSearch,
-    toggleDeleteConfirmation,
     useAppDispatch,
     useAppSelector,
 } from '../store'
-import useThemeClass from '@/utils/hooks/useThemeClass'
 import AdvanceSearchDeleteConfirmation from './AdvanceSearchDeleteConfirmation'
-import { useNavigate } from 'react-router-dom'
 import cloneDeep from 'lodash/cloneDeep'
 import type {
     DataTableResetHandle,
@@ -23,74 +16,6 @@ import type {
 } from '@/components/shared/DataTable'
 import { formatDate, truncateText } from '@/utils/helpers'
 import { CommunityType } from '@/@types/community'
-
-type AdvanceSearch = {
-    id: string
-    name: string
-    advanceSearchCode: string
-    img: string
-    dataTypes: string
-    price: number
-    stock: number
-    status: number
-}
-
-const inventoryStatusColor: Record<
-    number,
-    {
-        label: string
-        dotClass: string
-        textClass: string
-    }
-> = {
-    0: {
-        label: 'In Stock',
-        dotClass: 'bg-emerald-500',
-        textClass: 'text-emerald-500',
-    },
-    1: {
-        label: 'Limited',
-        dotClass: 'bg-amber-500',
-        textClass: 'text-amber-500',
-    },
-    2: {
-        label: 'Out of Stock',
-        dotClass: 'bg-red-500',
-        textClass: 'text-red-500',
-    },
-}
-
-const ActionColumn = ({ row }: { row: CommunityType }) => {
-    const dispatch = useAppDispatch()
-    const { textTheme } = useThemeClass()
-    const navigate = useNavigate()
-
-    const onEdit = () => {
-        navigate(`/app/sales/advanceSearch-edit/${row.id}`)
-    }
-
-    const onDelete = () => {
-        dispatch(toggleDeleteConfirmation(true))
-        dispatch(setSelectedAdvanceSearch(row.id))
-    }
-
-    return (
-        <div className="flex justify-end text-lg">
-            <span
-                className={`cursor-pointer p-2 hover:${textTheme}`}
-                onClick={onEdit}
-            >
-                <HiOutlinePencil />
-            </span>
-            <span
-                className="cursor-pointer p-2 hover:text-red-500"
-                onClick={onDelete}
-            >
-                <HiOutlineTrash />
-            </span>
-        </div>
-    )
-}
 
 const AdvanceSearchTable = () => {
     const tableRef = useRef<DataTableResetHandle>(null)
