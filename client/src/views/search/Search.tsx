@@ -1,4 +1,4 @@
-import { useRef, useState, SyntheticEvent, useEffect } from 'react'
+import { useRef, useState, SyntheticEvent, useEffect, useCallback } from 'react'
 import { apiSearch } from '@/services/SearchService'
 import { SearchType } from '@/@types/search'
 import { CommunityType, DataTypeResponse } from '@/@types/community'
@@ -53,23 +53,30 @@ const Search = () => {
         setSearchType(val)
     }
 
-    const handleInputChange = async (val: string) => {
-        const query = val
+    const handleInputChange = useCallback(
+        async (val: string) => {
+            const query = val
 
-        try {
-            console.log({
-                query,
-                checkboxList,
-                searchType,
-            })
-            const response = await apiSearch(query)
-            console.log('response', response.data)
-            setData(response.data as SearchType)
-            // Handle the response data here
-        } catch (error) {
-            // Handle any errors here
-        }
-    }
+            try {
+                console.log({
+                    query,
+                    checkboxList,
+                    searchType,
+                })
+                const response = await apiSearch(query)
+                console.log('response', response.data)
+                setData(response.data as SearchType)
+                // Handle the response data here
+            } catch (error) {
+                // Handle any errors here
+            }
+        },
+        [checkboxList, searchType]
+    )
+
+    useEffect(() => {
+        handleInputChange(inputRef.current?.value || '')
+    }, [handleInputChange])
 
     return (
         <div className="">
@@ -115,7 +122,6 @@ const Search = () => {
                 <Card>
                     <h5>Communities:</h5>
                     {data.communities.map((community: CommunityType) => {
-                        // console.log('community', community)
                         return <Community community={community} />
                     })}
                 </Card>
