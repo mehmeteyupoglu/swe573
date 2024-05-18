@@ -3,14 +3,30 @@ import { apiSearch } from '@/services/SearchService'
 import { SearchType } from '@/@types/search'
 import { CommunityType } from '@/@types/community'
 import Community from '../search/components/Community'
-import { Card, Radio } from '@/components/ui'
+import { Card, Checkbox, FormItem, Radio } from '@/components/ui'
 import Post from './components/Post'
 import { PostData } from '@/@types/post'
 import TableSearch from '../account/Settings/components/Search/TableSearch'
+import { Field, FieldProps } from 'formik'
 
 const Search = () => {
     const inputRef = useRef<HTMLInputElement>(null)
+    const [selectedDataTypes, setSelectedDataTypes] = useState<string[]>([
+        'text',
+    ])
     const [data, setData] = useState<any>(null)
+    const [dataTypes, setDataTypes] = useState<
+        (
+            | 'text'
+            | 'date'
+            | 'geolocation'
+            | 'number'
+            | 'image'
+            | 'video'
+            | 'audio'
+            | 'file'
+        )[]
+    >([])
 
     const [searchValue, setSearchValue] = useState('community')
 
@@ -52,7 +68,7 @@ const Search = () => {
                 </div>
             </div>
 
-            {searchValue == 'community' && (
+            {searchValue == 'community' && data && (
                 <Card>
                     <h5>Communities:</h5>
                     {data.communities.map((community: CommunityType) => {
@@ -61,7 +77,8 @@ const Search = () => {
                     })}
                 </Card>
             )}
-            {searchValue === 'post' && (
+
+            {searchValue === 'post' && data && (
                 <Card className="mt-5">
                     <h5>Posts:</h5>
                     {data.posts.map((post: PostData) => {
