@@ -49,10 +49,6 @@ export const getAdvanceSearch = createAsyncThunk(
         }
         const filterData = state[SLICE_NAME].data.filterData
 
-        console.log('data', data)
-        console.log('state', state)
-        console.log('filterData', filterData)
-
         const response = await apiAdvanceSearch<
             GetAdvanceSearchResponse,
             GetAdvanceSearchRequest & { filterData: FilterQueries }
