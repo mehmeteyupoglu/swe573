@@ -716,11 +716,21 @@ def comments(request, post_id):
 def advance_search(request):
     search_type = 0
     query = request.data.get('query', '')
+    data = request.data.copy()
+
+    filter_data = {
+        'name': data.get('filterData[name]', ''),
+        'dataTypes': data.getlist('filterData[dataTypes]'),
+        'search_type': int(data.get('filterData[search_type]', 0))
+    }
+
     communities = Community.objects.filter(Q(name__icontains=query) | Q(description__icontains=query))
     posts = Posts.objects.filter(content__icontains=query)
 
     community_serializer = CommunitySerializer(communities, many=True)
     post_serializer = PostSerializer(posts, many=True)
+
+    search_type = filter_data['search_type']
 
     if(search_type == 0):
         return Response({
