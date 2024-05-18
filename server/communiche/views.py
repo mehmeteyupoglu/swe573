@@ -718,10 +718,10 @@ def advance_search(request):
     query = request.data.get('query', '')
     data = request.data.copy()
 
-    filter_data = {
-        'name': data.get('filterData[name]', ''),
-        'dataTypes': data.getlist('filterData[dataTypes]'),
-        'search_type': int(data.get('filterData[search_type]', 0))
+    params = {
+        'query': request.data.get('query', ''),
+        'dataTypes': request.data.getlist('dataTypes[]'),
+        'searchType': request.data.get('searchType', '')
     }
 
     communities = Community.objects.filter(Q(name__icontains=query) | Q(description__icontains=query))
@@ -730,18 +730,16 @@ def advance_search(request):
     community_serializer = CommunitySerializer(communities, many=True)
     post_serializer = PostSerializer(posts, many=True)
 
-    search_type = filter_data['search_type']
+    users = User.objects.filter(Q(username__icontains=query) | Q(email__icontains=query) | Q(firstname__icontains=query) | Q(lastname__icontains=query))
+    user_serializer = UserSerializer(users, many=True)
 
-    print(search_type)
-    print(type(search_type))
-
-    if(search_type == 0):
+    if(params['searchType'] == 'community'):
         return Response({
             'search_type': 'community',
             'data': community_serializer.data,
             'total': len(community_serializer.data)
         })
-    elif search_type == 1:
+    elif params['searchType'] == 'post':
         return Response({
             'search_type': 'post',
             'data': post_serializer.data,
@@ -750,6 +748,6 @@ def advance_search(request):
     else:
         return Response({
             'search_type': 'user',
-            'data': post_serializer.data,
-            'total': len(post_serializer.data)
+            'data': user_serializer.data,
+            'total': len(user_serializer.data)
         })
