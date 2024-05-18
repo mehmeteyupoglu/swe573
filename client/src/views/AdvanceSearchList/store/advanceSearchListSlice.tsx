@@ -43,11 +43,21 @@ export const SLICE_NAME = 'advanceSearchList'
 
 export const getAdvanceSearch = createAsyncThunk(
     SLICE_NAME + '/getAdvanceSearch',
-    async (data: GetAdvanceSearchRequest) => {
+    async (data: GetAdvanceSearchRequest, thunkAPI) => {
+        const state = thunkAPI.getState() as {
+            [SLICE_NAME]: AdvanceSearchListState
+        }
+        const filterData = state[SLICE_NAME].data.filterData
+
+        console.log('data', data)
+        console.log('state', state)
+        console.log('filterData', filterData)
+
         const response = await apiAdvanceSearch<
             GetAdvanceSearchResponse,
-            GetAdvanceSearchRequest
-        >(data)
+            GetAdvanceSearchRequest & { filterData: FilterQueries }
+        >({ ...data, filterData })
+
         return response.data
     }
 )
