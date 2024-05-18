@@ -33,20 +33,26 @@ const Search = () => {
 
     return (
         <div className="">
-            <p className="text-gray-700 dark:text-gray-200 font-semibold">
-                Search all
-            </p>
-            <TableSearch ref={inputRef} onInputChange={handleInputChange} />
-            <div className="py-5">
-                <span>or search by </span>
+            <div className="lg:flex justify-between mb-4">
+                <h3>Advance Community Search</h3>
+                <div className="flex flex-col lg:flex-row">
+                    <TableSearch
+                        ref={inputRef}
+                        onInputChange={handleInputChange}
+                    />
+                    <Radio.Group
+                        value={searchValue}
+                        onChange={onChange}
+                        className="ml-4 h-10 flex items-center"
+                    >
+                        <Radio value={'community'}>Community</Radio>
+                        <Radio value={'post'}>Post</Radio>
+                        <Radio value={'user'}>User</Radio>
+                    </Radio.Group>
+                </div>
             </div>
 
-            <Radio.Group value={searchValue} onChange={onChange}>
-                <Radio value={'community'}>Community</Radio>
-                <Radio value={'user'}>User</Radio>
-                <Radio value={'post'}>Post</Radio>
-            </Radio.Group>
-            {data && data.communities && (
+            {searchValue == 'community' && (
                 <Card>
                     <h5>Communities:</h5>
                     {data.communities.map((community: CommunityType) => {
@@ -55,7 +61,7 @@ const Search = () => {
                     })}
                 </Card>
             )}
-            {data && data.posts && (
+            {searchValue === 'post' && (
                 <Card className="mt-5">
                     <h5>Posts:</h5>
                     {data.posts.map((post: PostData) => {
