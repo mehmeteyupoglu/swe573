@@ -1,3 +1,4 @@
+import { _Field } from '@/@types/post'
 import dayjs from 'dayjs'
 
 export function toSentenceCase(str: String) {
@@ -40,4 +41,21 @@ export const defaultTemplate = () => {
             isRequired: false,
         },
     ]
+}
+
+export const extractTitleAndDescription = (content: _Field[]) => {
+    let result = {
+        title: '',
+        description: '',
+    }
+
+    content.forEach((item) => {
+        if (item.field_name === 'title') {
+            result.title = item.field_value ?? ''
+        } else if (item.field_name === 'description') {
+            result.description = item.field_value ?? ''
+        }
+    })
+
+    return result
 }

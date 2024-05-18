@@ -732,6 +732,9 @@ def advance_search(request):
 
     search_type = filter_data['search_type']
 
+    print(search_type)
+    print(type(search_type))
+
     if(search_type == 0):
         return Response({
             'search_type': 'community',
@@ -746,7 +749,7 @@ def advance_search(request):
         })
     else:
         return Response({
-            'search_type': search_type,
+            'search_type': 'user',
             'data': post_serializer.data,
             'total': len(post_serializer.data)
         })
