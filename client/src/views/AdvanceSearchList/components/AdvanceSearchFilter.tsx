@@ -3,7 +3,6 @@ import { HiOutlineFilter, HiOutlineSearch } from 'react-icons/hi'
 import {
     getAdvanceSearch,
     setFilterData,
-    initialTableData,
     useAppDispatch,
     useAppSelector,
 } from '../store'
