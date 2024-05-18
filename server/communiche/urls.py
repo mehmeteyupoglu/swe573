@@ -66,4 +66,7 @@ urlpatterns = [
     path('comment/<int:comment_id>/remove', views.remove_comment, name='remove-comment'),
     path('comment/<int:comment_id>/edit', views.edit_comment, name='edit-comment'),
     path('post/<int:post_id>/comments', views.comments, name='comments'),
+
+    # search
+    path('advance_search/', views.advance_search, name='advance-search'),
 ]

@@ -661,6 +661,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import Posts, User, CommunityUser
 from . import constants
+from .models import Community
+from .serializers import CommunitySerializer
 
 @api_view(['DELETE'])
 def remove_post(request, post_id):
@@ -711,3 +713,52 @@ def comments(request, post_id):
     comments = PComment.objects.filter(post=post).order_by('-created_at')
     serializer = CommentSerializer(comments, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+def advance_search(request):
+    search_type = 0
+    query = request.data.get('query', '')
+    data = request.data.copy()
+
+    params = {
+        'query': request.data.get('query', ''),
+        'dataTypes': request.data.getlist('dataTypes[]'),
+        'searchType': request.data.get('searchType', '')
+    }
+
+    fields = params['dataTypes']
+
+    # Construct a Q object for each field
+    q_objects = Q()
+    for field in fields:
+        q_objects |= Q(content__icontains=field)
+
+    # Filter posts that contain any of the fields in their content
+    posts = Posts.objects.filter(q_objects, content__icontains=query)
+
+    post_serializer = PostSerializer(posts, many=True)
+
+    communities = Community.objects.filter(Q(name__icontains=query) | Q(description__icontains=query))
+    community_serializer = CommunitySerializer(communities, many=True)
+
+    users = User.objects.filter(Q(username__icontains=query) | Q(email__icontains=query) | Q(firstname__icontains=query) | Q(lastname__icontains=query))
+    user_serializer = UserSerializer(users, many=True)
+
+    if(params['searchType'] == 'community'):
+        return Response({
+            'search_type': 'community',
+            'data': community_serializer.data,
+            'total': len(community_serializer.data)
+        })
+    elif params['searchType'] == 'post':
+        return Response({
+            'search_type': 'post',
+            'data': post_serializer.data,
+            'total': len(post_serializer.data)
+        })
+    else:
+        return Response({
+            'search_type': 'user',
+            'data': user_serializer.data,
+            'total': len(user_serializer.data)
+        })

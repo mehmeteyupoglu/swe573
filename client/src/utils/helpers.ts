@@ -1,3 +1,4 @@
+import { _Field } from '@/@types/post'
 import dayjs from 'dayjs'
 
 export function toSentenceCase(str: String) {
@@ -20,6 +21,8 @@ export const mapRoleToLabel = (role: number) => {
 }
 
 export const truncateText = (text: string, maxLength: number) => {
+    if (!text) return text
+
     if (text.length <= maxLength) {
         return text
     } else {
@@ -40,4 +43,23 @@ export const defaultTemplate = () => {
             isRequired: false,
         },
     ]
+}
+
+export const extractTitleAndDescription = (content: _Field[]) => {
+    let result = {
+        title: '',
+        description: '',
+    }
+
+    if (!content) return result
+
+    content.forEach((item) => {
+        if (item.field_name === 'title') {
+            result.title = item.field_value ?? ''
+        } else if (item.field_name === 'description') {
+            result.description = item.field_value ?? ''
+        }
+    })
+
+    return result
 }

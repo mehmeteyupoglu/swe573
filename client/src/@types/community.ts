@@ -1,9 +1,9 @@
 export type CommunityFormModel = {
     name: string
     description: string
-    avatar: string
-    isPublic: boolean
+    is_public: boolean
     userId?: string
+    cid?: string
 }
 
 export type FieldType = {

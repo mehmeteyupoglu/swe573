@@ -9,3 +9,13 @@ export async function apiSearch(query: string) {
         },
     })
 }
+
+export async function apiAdvanceSearch<T, U extends Record<string, unknown>>(
+    data: U
+) {
+    return ApiService.fetchData<T>({
+        url: `/advance_search/`,
+        method: 'post',
+        data,
+    })
+}
