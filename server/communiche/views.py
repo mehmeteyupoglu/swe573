@@ -725,9 +725,9 @@ def advance_search(request):
     }
 
     communities = Community.objects.filter(Q(name__icontains=query) | Q(description__icontains=query))
-    posts = Posts.objects.filter(content__icontains=query)
-
     community_serializer = CommunitySerializer(communities, many=True)
+
+    posts = Posts.objects.filter(content__icontains=query)
     post_serializer = PostSerializer(posts, many=True)
 
     users = User.objects.filter(Q(username__icontains=query) | Q(email__icontains=query) | Q(firstname__icontains=query) | Q(lastname__icontains=query))
