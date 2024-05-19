@@ -1,7 +1,7 @@
 import pytest
 from django.test import TestCase
-from .serializers import CommunityUserSerializer, UserSerializer
-from .models import CommunityUser, User
+from .serializers import CommunityUserSerializer, UserSerializer, TemplateSerializer
+from .models import CommunityUser, User, Template, Community
 
 class TestUserSerializer(TestCase):
     def setUp(self):
@@ -58,3 +58,38 @@ class TestUserSerializer(TestCase):
         serializer = UserSerializer(data=self.user_attributes)
         self.assertFalse(serializer.is_valid())
         self.assertIn('dob', serializer.errors)
+
+class TestTemplateSerializer(TestCase):
+    def setUp(self):
+        self.community = Community.objects.create(name="Test Community")
+        self.template_attributes = {
+            'name': 'Test Template',
+            'description': 'This is a test template',
+            'fields': [],
+            'community': self.community,
+        }
+        self.template = Template.objects.create(**self.template_attributes)
+
+    def test_template_serializer(self):
+        serializer = TemplateSerializer(instance=self.template)
+        expected_data = {
+            'id': self.template.id,
+            'name': 'Test Template',
+            'description': 'This is a test template',
+            'created_at': self.template.created_at.isoformat().replace('+00:00', 'Z'),
+            'updated_at': self.template.updated_at.isoformat().replace('+00:00', 'Z'),
+            'fields': [],
+        }
+        self.assertEqual(serializer.data, expected_data)
+
+    def test_template_serializer_invalid_name(self):
+        self.template_attributes['name'] = ''  # empty string is invalid
+        serializer = TemplateSerializer(data=self.template_attributes)
+        self.assertFalse(serializer.is_valid())
+        self.assertIn('name', serializer.errors)
+
+    def test_template_serializer_invalid_description(self):
+        self.template_attributes['description'] = ''  # empty string is invalid
+        serializer = TemplateSerializer(data=self.template_attributes)
+        self.assertFalse(serializer.is_valid())
+        self.assertIn('description', serializer.errors)
