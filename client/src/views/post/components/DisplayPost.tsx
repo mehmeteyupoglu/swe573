@@ -20,6 +20,7 @@ import { useEffect, useState } from 'react'
 import useFetchData from '@/utils/hooks/useFetchData'
 import { AxiosResponse } from 'axios'
 import RenderField from './RenderField'
+import RenderGeo from './RenderGeo'
 
 export default function DisplayPost({
     post,
@@ -110,6 +111,15 @@ export default function DisplayPost({
                     {detailed && (
                         <div className="mt-5">
                             {content.map((item: _Field) => {
+                                if (item.field_type === 'geolocation') {
+                                    const coordinates = JSON.parse(
+                                        item.field_value
+                                    )
+
+                                    return (
+                                        <RenderGeo coordinates={coordinates} />
+                                    )
+                                }
                                 return (
                                     <p key={item.field_name}>
                                         <RenderField field={item} />

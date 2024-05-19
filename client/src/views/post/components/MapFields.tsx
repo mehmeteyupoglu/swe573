@@ -34,7 +34,7 @@ const FieldComponent = ({
                 // what to do if supported
                 navigator.geolocation.getCurrentPosition((position) => {
                     onChange(
-                        `latitude: ${position.coords.latitude}, longitude: ${position.coords.longitude}`
+                        `[${position.coords.latitude}, ${position.coords.longitude}]`
                     )
                     console.log('Latitude: ', position.coords.latitude)
                     console.log('Longitude: ', position.coords.longitude)
