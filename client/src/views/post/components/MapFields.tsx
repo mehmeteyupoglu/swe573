@@ -37,7 +37,9 @@ const FieldComponent = ({
         >
             {Component && (
                 <Component
-                    type={field.field_type}
+                    type={
+                        field.field_type == 'image' ? 'text' : field.field_type
+                    }
                     name={field_name}
                     placeholder={field_name}
                     value={value}

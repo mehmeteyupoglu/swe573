@@ -1,4 +1,4 @@
-import { CommentResponseType, PostData } from '@/@types/post'
+import { CommentResponseType, PostData, _Field } from '@/@types/post'
 import { ActionLink } from '@/components/shared'
 import { Button, Card, Input } from '@/components/ui'
 import {
@@ -19,6 +19,7 @@ import Comment from './Comment'
 import { useEffect, useState } from 'react'
 import useFetchData from '@/utils/hooks/useFetchData'
 import { AxiosResponse } from 'axios'
+import RenderField from './RenderField'
 
 export default function DisplayPost({
     post,
@@ -100,11 +101,23 @@ export default function DisplayPost({
                     )}
                 </div>
                 <div className="body mt-5 mb-5">
-                    <p>
+                    {/* <p>
                         {!detailed
                             ? truncateText(content[1].field_value, 60)
                             : content[1].field_value}
-                    </p>
+                    </p> */}
+
+                    {detailed && (
+                        <div className="mt-5">
+                            {content.map((item: _Field) => {
+                                return (
+                                    <p key={item.field_name}>
+                                        <RenderField field={item} />
+                                    </p>
+                                )
+                            })}
+                        </div>
+                    )}
                 </div>
                 <div className="footer flex justify-between">
                     <p>
