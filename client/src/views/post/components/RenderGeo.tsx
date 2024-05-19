@@ -3,7 +3,7 @@ import React from 'react'
 export default function RenderGeo({
     coordinates,
 }: {
-    coordinates: [number, number]
+    coordinates: [number | null, number | null]
 }) {
     const mapInfo = {
         latitude: 40.7371776,
