@@ -27,6 +27,26 @@ const FieldComponent = ({
         onChange(e.target.value)
     }
 
+    useEffect(() => {
+        if (field.field_type === 'geolocation') {
+            // Geolocation API
+            if (navigator.geolocation) {
+                // what to do if supported
+                navigator.geolocation.getCurrentPosition((position) => {
+                    onChange(
+                        `latitude: ${position.coords.latitude}, longitude: ${position.coords.longitude}`
+                    )
+                    console.log('Latitude: ', position.coords.latitude)
+                    console.log('Longitude: ', position.coords.longitude)
+                })
+            } else {
+                // display an error if not supported
+                console.error('Geolocation is not supported by this browser.')
+                onChange('Geolocation is not supported by this browser.')
+            }
+        }
+    }, [field.field_type])
+
     return (
         <FormItem
             key={field_name}
