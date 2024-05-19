@@ -84,7 +84,6 @@ const Search = () => {
     }, [handleInputChange])
 
     useEffect(() => {
-        console.log(range)
         if (!range[0] && !range[1]) {
             handleInputChange(inputRef.current?.value || '')
         }
