@@ -41,6 +41,18 @@ class TestUserSerializer(TestCase):
         self.assertFalse(serializer.is_valid())
         self.assertIn('firstname', serializer.errors)
 
+    def test_invalid_lastname(self):
+        self.user_attributes['lastname'] = ''  # empty string is invalid
+        serializer = UserSerializer(data=self.user_attributes)
+        self.assertFalse(serializer.is_valid())
+        self.assertIn('lastname', serializer.errors)
+
+    def test_invalid_username(self):
+        self.user_attributes['username'] = ''  # empty string is invalid
+        serializer = UserSerializer(data=self.user_attributes)
+        self.assertFalse(serializer.is_valid())
+        self.assertIn('username', serializer.errors)
+
     def test_invalid_dob(self):
         self.user_attributes['dob'] = '2000-13-01'  # not a valid date
         serializer = UserSerializer(data=self.user_attributes)
