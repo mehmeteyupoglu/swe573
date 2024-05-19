@@ -723,7 +723,8 @@ def advance_search(request):
     params = {
         'query': request.data.get('query', ''),
         'dataTypes': request.data.getlist('dataTypes[]'),
-        'searchType': request.data.get('searchType', '')
+        'searchType': request.data.get('searchType', ''),
+        'date_range': request.data.getlist('range[]')
     }
 
     fields = params['dataTypes']
@@ -734,8 +735,10 @@ def advance_search(request):
         q_objects |= Q(content__icontains=field)
 
     # Filter posts that contain any of the fields in their content
+    date_range = params['date_range']
+    start_date, end_date = date_range if len(date_range) == 2 else (None, None)
+    # print(start_date, end_date)
     posts = Posts.objects.filter(q_objects, content__icontains=query)
-
     post_serializer = PostSerializer(posts, many=True)
 
     communities = Community.objects.filter(Q(name__icontains=query) | Q(description__icontains=query))
