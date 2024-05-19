@@ -1,5 +1,6 @@
 import pytest
-from django.test import TestCase
+from django.test import TestCase, Client
+from django.urls import reverse
 from .serializers import CommunityUserSerializer, UserSerializer, TemplateSerializer
 from .models import CommunityUser, User, Template, Community
 
@@ -93,3 +94,17 @@ class TestTemplateSerializer(TestCase):
         serializer = TemplateSerializer(data=self.template_attributes)
         self.assertFalse(serializer.is_valid())
         self.assertIn('description', serializer.errors)
+
+class UserListViewTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user1 = User.objects.create(username='user1', password='password1')
+        self.user2 = User.objects.create(username='user2', password='password2')
+
+    def test_user_list(self):
+        response = self.client.get(reverse('user_list'))
+        users = User.objects.all()
+        serializer = UserSerializer(users, many=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, serializer.data)

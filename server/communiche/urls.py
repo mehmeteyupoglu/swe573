@@ -20,7 +20,7 @@ from communiche import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('users/', views.user_list),
+    path('users/', views.user_list, name='user_list'),
     path('users/<int:id>/', views.user_detail, name='user-detail'),
     path('user/<int:user_id>/invitations/', views.invitations, name='invitations'),
     path('user/<int:invitation_id>/accept_reject_invitation/', views.accept_reject_invitation, name='accept_reject_invitation'),
