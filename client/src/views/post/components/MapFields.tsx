@@ -10,6 +10,7 @@ import { toggleFetchTrigger, useAppSelector } from '@/store'
 import useRequestWithNotification from '@/utils/hooks/useRequestWithNotification'
 import { apiPost } from '@/services/PostService'
 import { useDispatch } from 'react-redux'
+import RenderGeo from './RenderGeo'
 
 const FieldComponent = ({
     field,
@@ -20,12 +21,37 @@ const FieldComponent = ({
     value: string
     onChange: (value: string) => void
 }) => {
+    const [latitude, setLatitude] = useState<number | null>(null)
+    const [longitude, setLongitude] = useState<number | null>(null)
     const Component = useFieldToComponent(field.field_type)
     const field_name = toSentenceCase(field.field_name)
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         onChange(e.target.value)
     }
+
+    useEffect(() => {
+        if (field.field_type === 'geolocation') {
+            // Geolocation API
+            if (navigator.geolocation) {
+                // what to do if supported
+                navigator.geolocation.getCurrentPosition((position) => {
+                    onChange(
+                        `[${position.coords.latitude}, ${position.coords.longitude}]`
+                    )
+
+                    setLatitude(position.coords.latitude)
+                    setLongitude(position.coords.longitude)
+                    console.log('Latitude: ', position.coords.latitude)
+                    console.log('Longitude: ', position.coords.longitude)
+                })
+            } else {
+                // display an error if not supported
+                console.error('Geolocation is not supported by this browser.')
+                onChange('Geolocation is not supported by this browser.')
+            }
+        }
+    }, [field.field_type])
 
     return (
         <FormItem
@@ -37,12 +63,21 @@ const FieldComponent = ({
         >
             {Component && (
                 <Component
-                    type={field.field_type}
+                    type={
+                        field.field_type == 'image' ? 'text' : field.field_type
+                    }
+                    className={
+                        field.field_type == 'geolocation' ? 'hidden' : ''
+                    }
                     name={field_name}
                     placeholder={field_name}
                     value={value}
                     onChange={handleChange}
                 />
+            )}
+
+            {field.field_type === 'geolocation' && (
+                <RenderGeo coordinates={[latitude, longitude]} />
             )}
         </FormItem>
     )
